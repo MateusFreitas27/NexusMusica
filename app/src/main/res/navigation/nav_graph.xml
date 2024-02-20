@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/menu_item_home">
+
+    <fragment
+        android:id="@+id/menu_item_home"
+        android:name="br.com.nexus.nexusmusica.fragments.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_ir_Tela_Musicas_Adicionadas_Recentes"
+            app:destination="@id/listaMusicasRecentesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/menu_item_musica"
+        android:name="br.com.nexus.nexusmusica.fragments.listaMusica.ListaMusicaFragment"
+        android:label="fragment_lista_musica"
+        tools:layout="@layout/fragment_lista_musica" >
+        <action
+            android:id="@+id/action_menu_item_musica_to_playerMusicaFragment"
+            app:destination="@id/playerMusicaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/menu_item_album"
+        android:name="br.com.nexus.nexusmusica.fragments.listaAlbum.ListaAlbumFragment"
+        android:label="fragment_lista_album"
+        tools:layout="@layout/fragment_lista_album" >
+        <action
+            android:id="@+id/action_menu_item_album_to_detalheAlbumFragment"
+            app:destination="@id/detalheAlbumFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/listaMusicasRecentesFragment"
+        android:name="br.com.nexus.nexusmusica.fragments.musicasRecentes.ListaMusicasRecentesFragment"
+        android:label="fragment_lista_musicas_recentes"
+        tools:layout="@layout/fragment_lista_musicas_recentes" >
+        <action
+            android:id="@+id/action_listaMusicasRecentesFragment_to_playerMusicaFragment"
+            app:destination="@id/playerMusicaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detalheAlbumFragment"
+        android:name="br.com.nexus.nexusmusica.fragments.detalheAlbum.DetalheAlbumFragment"
+        android:label="fragment_detalhe_album"
+        tools:layout="@layout/fragment_detalhe_album" >
+        <argument
+            android:name="album"
+            app:argType="br.com.nexus.nexusmusica.modelo.Album" />
+        <action
+            android:id="@+id/action_detalheAlbumFragment_to_playerMusicaFragment"
+            app:destination="@id/playerMusicaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerMusicaFragment"
+        android:name="br.com.nexus.nexusmusica.fragments.playerMusica.PlayerMusicaFragment"
+        android:label="fragment_player_musica"
+        tools:layout="@layout/fragment_player_musica" >
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
+</navigation>

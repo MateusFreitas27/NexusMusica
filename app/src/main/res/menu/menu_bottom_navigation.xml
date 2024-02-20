@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_item_home"
+        android:enabled="true"
+        android:icon="@drawable/home"
+        android:title="@string/menu_bottom_home"/>
+
+    <item
+        android:id="@+id/menu_item_musica"
+        android:enabled="true"
+        android:icon="@drawable/musica"
+        android:title="@string/menu_bottom_musica"/>
+
+    <item
+        android:id="@+id/menu_item_album"
+        android:enabled="true"
+        android:icon="@drawable/album_musica"
+        android:title="@string/menu_bottom_album"/>
+</menu>
