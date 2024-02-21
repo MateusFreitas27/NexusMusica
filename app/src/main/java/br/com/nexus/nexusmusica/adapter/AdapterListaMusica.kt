@@ -14,16 +14,22 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nexus.nexusmusica.R
+import br.com.nexus.nexusmusica.databinding.AdapterListaMusicaBinding
 import br.com.nexus.nexusmusica.interfaces.InterfaceClickeListenerListaMusica
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import br.com.nexus.nexusmusica.util.VersaoUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import org.koin.core.parameter.parameterArrayOf
 
 class AdapterListaMusica(private val intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>, private val clickeListenerListaMusica: InterfaceClickeListenerListaMusica): RecyclerView.Adapter<AdapterListaMusica.ViewHodel>() {
     private var posicao: Int = -1
     private var listaMusica: MutableList<Musica> = mutableListOf()
+
+    init {
+        setHasStableIds(true)
+    }
 
     fun atualizarListaDados(lista: MutableList<Musica>){
         listaMusica.clear()
@@ -31,25 +37,25 @@ class AdapterListaMusica(private val intentSenderLauncher: ActivityResultLaunche
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHodel {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_lista_musica,parent,false)
-        return ViewHodel(view)
+        return ViewHodel(AdapterListaMusicaBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
+    override fun getItemId(position: Int): Long {
+        val musica = listaMusica[position]
+        return musica.id
+    }
     override fun getItemCount(): Int = listaMusica.size
 
     override fun onBindViewHolder(holder: ViewHodel, position: Int) {
-        holder.textTitulo.text = listaMusica[position].titulo
-        holder.textAlbum.text = listaMusica[position].albumNome
+        val musica = listaMusica[position]
+        holder.textTitulo.text = musica.titulo
+        holder.textAlbum.text = musica.albumNome
 
-        val imagem: ByteArray? = FuncoesUtil.carregarCapaMusica(listaMusica[position].data)
-        if (imagem != null){
-            Glide.with(holder.itemView).load(imagem).into(holder.imagemCapa)
-        }else{
-            Glide.with(holder.itemView).load(R.drawable.sem_album).into(holder.imagemCapa)
-        }
+        val imagem: ByteArray? = FuncoesUtil.carregarCapaMusica(musica.data)
+        Glide.with(holder.itemView).load(imagem).centerCrop().dontAnimate().error(R.drawable.sem_album).into(holder.imagemCapa)
 
         holder.itemView.setOnClickListener {
-            clickeListenerListaMusica.onClick(listaMusica[position])
+            clickeListenerListaMusica.onClick(musica)
         }
 
         holder.menuPopupListaMusica.setOnClickListener {
@@ -69,18 +75,11 @@ class AdapterListaMusica(private val intentSenderLauncher: ActivityResultLaunche
         }
     }
 
-    inner class ViewHodel(itemView: View): RecyclerView.ViewHolder(itemView){
-        val imagemCapa: ImageView
-        val textTitulo: TextView
-        val textAlbum: TextView
-        val menuPopupListaMusica: ImageView
-
-        init {
-            imagemCapa = itemView.findViewById(R.id.imgCapaMusica)
-            textTitulo = itemView.findViewById(R.id.textNomeMusica)
-            textAlbum = itemView.findViewById(R.id.textNomeAlbum)
-            menuPopupListaMusica = itemView.findViewById(R.id.menuListaMusica)
-        }
+    inner class ViewHodel(binding: AdapterListaMusicaBinding): RecyclerView.ViewHolder(binding.root){
+        val imagemCapa: ImageView = binding.imgCapaMusica
+        val textTitulo: TextView = binding.textNomeMusica
+        val textAlbum: TextView = binding.textNomeAlbum
+        val menuPopupListaMusica: ImageView = binding.menuListaMusica
 
         fun deletarMusicaDispositivo(musica: Musica){
             val uri: Uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, musica.id)

@@ -61,8 +61,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0")
     implementation("androidx.media:media:1.7.0")
     implementation("io.insert-koin:koin-android:3.5.0")
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    implementation("com.github.bumptech.glide:ksp:4.15.1")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.github.bumptech.glide:ksp:4.16.0")
     implementation("com.squareup.leakcanary:leakcanary-android:2.12")
 
     testImplementation("io.insert-koin:koin-test-junit4:3.5.0")

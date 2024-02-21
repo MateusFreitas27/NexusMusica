@@ -62,10 +62,13 @@ class ListaMusicaFragment : Fragment(), InterfaceClickeListenerListaMusica {
     private fun iniciarObservers() {
         listaMusicaViewModel.listaMusicas.observe(viewLifecycleOwner) {lista ->
             val adapterListaMusica = AdapterListaMusica(intentSLDeletarArquivo,  this)
-            adapterListaMusica.atualizarListaDados(lista)
-            val recycler = binding.recyclerViewListaMusica
-            recycler.layoutManager = LinearLayoutManager(context)
-            recycler.adapter = adapterListaMusica
+            with(binding.recyclerViewListaMusica){
+                setHasFixedSize(true)
+                setItemViewCacheSize(20)
+                adapterListaMusica.atualizarListaDados(lista)
+                layoutManager = LinearLayoutManager(context)
+                adapter= adapterListaMusica
+            }
         }
     }
 
