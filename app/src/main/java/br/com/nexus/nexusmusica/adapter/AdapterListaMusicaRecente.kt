@@ -26,13 +26,9 @@ class AdapterListaMusicaRecente(private val listaMusica: List<Musica>, private v
         holder.textNomeMusicaRecente.text = listaMusica[position].titulo
         holder.textNomeAlbumMusicaRecente.text = listaMusica[position].albumNome
 
-        val imagem: ByteArray? = FuncoesUtil.carregarCapaMusica(listaMusica[position].data)
-        if (imagem != null){
-            Glide.with(holder.itemView).asBitmap().load(imagem).into(holder.imagemCapa)
-        }else{
-            Glide.with(holder.itemView).asDrawable().load(R.drawable.sem_album).into(holder.imagemCapa)
-        }
-
+        val imagem = FuncoesUtil.carregarCapaMusica(listaMusica[position])
+        Glide.with(holder.itemView).load(imagem).error(R.drawable.sem_album).into(holder.imagemCapa)
+        
         holder.itemView.setOnClickListener {
             clickListenerAdicoesRecentes.onClick(listaMusica[position])
         }

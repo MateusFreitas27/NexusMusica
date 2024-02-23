@@ -17,16 +17,23 @@ import java.text.Collator
 
 interface MusicaRepositorio{
     fun musicas(): List<Musica>
+
+    fun musicasAleatorias(): List<Musica>
     fun musicas(cursor: Cursor?): List<Musica>
     fun musicasOrdenadas(cursor: Cursor?): List<Musica>
     fun musicas(query: String): List<Musica>
     fun musica(cursor: Cursor?): Musica
     fun musica(musicaId: Long): Musica
+
 }
 
 class RealMusicaRepositorio(private val context: Context): MusicaRepositorio {
     override fun musicas(): List<Musica> {
         return musicasOrdenadas(montarCursor(null, null))
+    }
+
+    override fun musicasAleatorias(): List<Musica> {
+        return musicasOrdenadas(montarCursor(null, null)).shuffled()
     }
 
     override fun musicas(cursor: Cursor?): List<Musica> {

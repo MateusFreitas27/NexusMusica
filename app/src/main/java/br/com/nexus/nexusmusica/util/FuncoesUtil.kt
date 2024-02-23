@@ -1,11 +1,10 @@
 package br.com.nexus.nexusmusica.util
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.content.ContentUris
 import android.media.MediaMetadataRetriever
-import androidx.core.graphics.drawable.toBitmap
-import br.com.nexus.nexusmusica.APP
-import br.com.nexus.nexusmusica.R
+import android.net.Uri
+import androidx.core.net.toUri
+import br.com.nexus.nexusmusica.modelo.Musica
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -16,6 +15,11 @@ object FuncoesUtil {
         val byte = retriever.embeddedPicture
         retriever.release()
         return byte
+    }
+
+    fun carregarCapaMusica(musica: Musica): Uri {
+        val artWork = "content://media/external/audio/albumart".toUri()
+        return ContentUris.withAppendedId(artWork, musica.albumId)
     }
 
     fun formatarDuracaoMusica(duracao: Long): String{

@@ -12,6 +12,7 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.databinding.AdapterListaMusicaBinding
@@ -51,7 +52,7 @@ class AdapterListaMusica(private val intentSenderLauncher: ActivityResultLaunche
         holder.textTitulo.text = musica.titulo
         holder.textAlbum.text = musica.albumNome
 
-        val imagem: ByteArray? = FuncoesUtil.carregarCapaMusica(musica.data)
+        val imagem = FuncoesUtil.carregarCapaMusica(musica)
         Glide.with(holder.itemView).load(imagem).centerCrop().dontAnimate().error(R.drawable.sem_album).into(holder.imagemCapa)
 
         holder.itemView.setOnClickListener {

@@ -59,7 +59,7 @@
         android:label="fragment_player_musica"
         tools:layout="@layout/fragment_player_musica" >
         <argument
-            android:name="id"
-            app:argType="long" />
+            android:name="musica"
+            app:argType="br.com.nexus.nexusmusica.modelo.Musica" />
     </fragment>
 </navigation>

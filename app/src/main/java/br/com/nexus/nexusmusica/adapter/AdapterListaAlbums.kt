@@ -26,12 +26,8 @@ class AdapterListaAlbums(private val listaAlbums: List<Album>, private val click
         val album = listaAlbums[position]
         holder.txtTituloAlbum.text = album.titulo
         holder.txtNomeArtista.text = album.artistaNome
-        val imagemCapa: ByteArray? = FuncoesUtil.carregarCapaMusica(album.obterPrimeiraMusicaSegura().data)
-        if (imagemCapa != null){
-            Glide.with(holder.itemView).asBitmap().load(imagemCapa).into(holder.imagemCapaAlbum)
-        }else{
-            Glide.with(holder.itemView).asDrawable().load(R.drawable.sem_album).into(holder.imagemCapaAlbum)
-        }
+        val imagemCapa = FuncoesUtil.carregarCapaMusica(album.obterPrimeiraMusicaSegura())
+        Glide.with(holder.itemView).load(imagemCapa).error(R.drawable.sem_album).into(holder.imagemCapaAlbum)
 
         holder.itemView.setOnClickListener {
             clickListenerListaAlbum.onItemClick(listaAlbums[position])

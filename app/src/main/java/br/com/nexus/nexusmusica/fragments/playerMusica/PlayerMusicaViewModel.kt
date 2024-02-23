@@ -3,6 +3,7 @@ package br.com.nexus.nexusmusica.fragments.playerMusica
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserCompat.SubscriptionCallback
 import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,6 @@ import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.services.MusicaConector
 import br.com.nexus.nexusmusica.util.FuncoesUtil
-import br.com.nexus.nexusmusica.util.Repeticao
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -32,16 +32,16 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
     val imgCapa: MutableLiveData<ByteArray?> = _imgCapa
     private val _progressoMusica: MutableLiveData<Long> = MutableLiveData<Long>()
     val progressoMusica: MutableLiveData<Long> = _progressoMusica
-    private var _modoRepeticao: MutableLiveData<String> = MutableLiveData<String>()
-    val modoRepeticao: MutableLiveData<String> = _modoRepeticao
-    private var _modoAleatorio: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-    val modoAleatorio: MutableLiveData<Boolean> = _modoAleatorio
+    private var _modoRepeticao: MutableLiveData<Int> = MutableLiveData<Int>()
+    val modoRepeticao: MutableLiveData<Int> = _modoRepeticao
+    private var _modoAleatorio: MutableLiveData<Int> = MutableLiveData<Int>()
+    val modoAleatorio: MutableLiveData<Int> = _modoAleatorio
     private var _listaMusicas: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> = MutableLiveData()
     val listaMusica: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> = _listaMusicas
     private val _tocandoMusica: MutableLiveData<Int> = MutableLiveData<Int>()
     val tocandoMusica: MutableLiveData<Int> = _tocandoMusica
-
     private var id: String = ""
+    private var alterarInfoMusica = false
 
     private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback(){
         override fun onChildrenLoaded(
@@ -76,11 +76,16 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
     }
 
     fun setMusica(args: PlayerMusicaFragmentArgs) {
-        id = args.id.toString()
+        val musica = args.musica
+        id = musica.id.toString()
+        _duracaoMusica.value = musica.duracao.toInt()
+        _nomeMusica.value = musica.titulo
+        _nomeAlbum.value = musica.albumNome
+        _imgCapa.value = FuncoesUtil.carregarCapaMusica(musica.data)
     }
 
     fun iniciar(){
-        musicaConector.transportControls.playFromMediaId(id,null)
+       musicaConector.transportControls.playFromMediaId(id,null)
     }
 
     fun playPlause(){
@@ -100,10 +105,14 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
     }
 
     fun carregarDadosMusica(media: MediaMetadataCompat?){
-        _duracaoMusica.value = media!!.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt()
-        _nomeMusica.value = media.description?.title.toString()
-        _nomeAlbum.value = media.description?.subtitle.toString()
-        _imgCapa.value = FuncoesUtil.carregarCapaMusica(media.description?.mediaUri.toString())
+        if (media?.description?.mediaId != id && alterarInfoMusica){
+            _duracaoMusica.value =
+                media!!.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt()
+            _nomeMusica.value = media.description?.title.toString()
+            _nomeAlbum.value = media.description?.subtitle.toString()
+            _imgCapa.value = FuncoesUtil.carregarCapaMusica(media.description?.mediaUri.toString())
+        } else alterarInfoMusica = true
+
     }
 
     fun seekToMusica(posicao: Long) {
@@ -117,32 +126,34 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
 
     fun trocarModorepetirMusica() {
         when(_modoRepeticao.value){
-            Repeticao.DESATIVADO.toString() -> {
-                SharedPreferenceUtil.modoRepeticaoMusica = Repeticao.TODAS.toString()
-                _modoRepeticao.value = Repeticao.TODAS.toString()
-                musicaConector.transportControls.setRepeatMode(Repeticao.TODAS.codigo)
+            PlaybackStateCompat.REPEAT_MODE_NONE -> {
+                SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_ALL
+                _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ALL
+                musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ALL)
             }
-            Repeticao.TODAS.toString() -> {
-                SharedPreferenceUtil.modoRepeticaoMusica = Repeticao.UMA.toString()
-                _modoRepeticao.value = Repeticao.UMA.toString()
-                musicaConector.transportControls.setRepeatMode(Repeticao.UMA.codigo)
+            PlaybackStateCompat.REPEAT_MODE_ALL -> {
+                SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_ONE
+                _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ONE
+                musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE)
             }
-            Repeticao.UMA.toString() -> {
-                SharedPreferenceUtil.modoRepeticaoMusica = Repeticao.DESATIVADO.toString()
-                _modoRepeticao.value = Repeticao.DESATIVADO.toString()
-                musicaConector.transportControls.setRepeatMode(Repeticao.DESATIVADO.codigo)
+            PlaybackStateCompat.REPEAT_MODE_ONE -> {
+                SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_NONE
+                _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_NONE
+                musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE)
             }
         }
     }
 
     fun modoAleatorio() {
-        if (_modoAleatorio.value == true){
-            SharedPreferenceUtil.modoAleatorio = false
+        if (_modoAleatorio.value == PlaybackStateCompat.SHUFFLE_MODE_ALL){
+            SharedPreferenceUtil.modoAleatorio = PlaybackStateCompat.SHUFFLE_MODE_NONE
             _modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
             SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ALEATORIO
+            musicaConector.transportControls.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_NONE)
         } else {
-            SharedPreferenceUtil.modoAleatorio = true
+            SharedPreferenceUtil.modoAleatorio = PlaybackStateCompat.SHUFFLE_MODE_ALL
             _modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
+            musicaConector.transportControls.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_ALL)
         }
     }
 

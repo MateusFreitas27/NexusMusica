@@ -1,6 +1,7 @@
 package br.com.nexus.nexusmusica.fragments.playerMusica
 
 import android.os.Bundle
+import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.TAG_MODAL_LISTA_MUSICAS
 import br.com.nexus.nexusmusica.databinding.FragmentPlayerMusicaBinding
 import br.com.nexus.nexusmusica.sheets.BottomFilaReproducao
-import br.com.nexus.nexusmusica.util.Repeticao
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -42,10 +42,6 @@ class PlayerMusicaFragment : Fragment() {
         _binding = null
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
-
     private fun configurarObservers() {
         playerMusicaViewModel.conectado.observe(viewLifecycleOwner){
             playerMusicaViewModel.iniciar()
@@ -66,7 +62,7 @@ class PlayerMusicaFragment : Fragment() {
         }
         playerMusicaViewModel.imgCapa.observe(viewLifecycleOwner){
             if (it != null){
-                Glide.with(this).asBitmap().load(it).into(binding.imgPlayerCapaMusica)
+                Glide.with(this).load(it).into(binding.imgPlayerCapaMusica)
             }else{
                 Glide.with(this).load(R.drawable.sem_album).into(binding.imgPlayerCapaMusica)
             }
@@ -78,13 +74,13 @@ class PlayerMusicaFragment : Fragment() {
         }
         playerMusicaViewModel.modoRepeticao.observe(viewLifecycleOwner){
             when(it){
-                Repeticao.DESATIVADO.toString() -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_desativado)
-                Repeticao.TODAS.toString() -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_todas)
-                Repeticao.UMA.toString() -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_um)
+                PlaybackStateCompat.REPEAT_MODE_NONE -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_desativado)
+                PlaybackStateCompat.REPEAT_MODE_ALL -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_todas)
+                PlaybackStateCompat.REPEAT_MODE_ONE -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_um)
             }
         }
         playerMusicaViewModel.modoAleatorio.observe(viewLifecycleOwner){
-            if (it){
+            if (it == PlaybackStateCompat.SHUFFLE_MODE_ALL){
                 binding.imgBtnAleatorio.setImageResource(R.drawable.icon_aleatorio_ativado)
             } else {
                 binding.imgBtnAleatorio.setImageResource(R.drawable.icon_aleatorio_desativado)

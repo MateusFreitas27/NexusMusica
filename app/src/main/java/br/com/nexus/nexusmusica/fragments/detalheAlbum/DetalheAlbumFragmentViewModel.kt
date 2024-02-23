@@ -29,7 +29,7 @@ class DetalheAlbumFragmentViewModel: ViewModel() {
         SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ALBUM
         SharedPreferenceUtil.modoReproducaoPlayerAnterior = SharedPreferenceUtil.modoReproducaoPlayer
         SharedPreferenceUtil.idAlbumMusica = musica.albumId
-        val action = DetalheAlbumFragmentDirections.actionDetalheAlbumFragmentToPlayerMusicaFragment(musica.id)
+        val action = DetalheAlbumFragmentDirections.actionDetalheAlbumFragmentToPlayerMusicaFragment(musica)
         navController.navigate(action)
     }
 

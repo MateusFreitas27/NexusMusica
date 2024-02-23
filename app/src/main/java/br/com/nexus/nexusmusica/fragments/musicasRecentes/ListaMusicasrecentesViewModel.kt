@@ -30,7 +30,7 @@ class ListaMusicasrecentesViewModel(private val repositorio: Repositorio): ViewM
     fun irParaReproducaoMusica(findNavController: NavController, musica: Musica) {
         SharedPreferenceUtil.modoReproducaoPlayerAnterior = SharedPreferenceUtil.modoReproducaoPlayer
         SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ADICOES_RECENTES
-        val action = ListaMusicasRecentesFragmentDirections.actionListaMusicasRecentesFragmentToPlayerMusicaFragment(musica.id)
+        val action = ListaMusicasRecentesFragmentDirections.actionListaMusicasRecentesFragmentToPlayerMusicaFragment(musica)
         findNavController.navigate(action)
     }
 }

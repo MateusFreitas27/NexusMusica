@@ -1,6 +1,7 @@
 package br.com.nexus.nexusmusica.util
 
 import android.content.Context
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.edit
 import br.com.nexus.nexusmusica.ALBUM_DETALHE_MUSICA_ORDEM_ORDENACAO
 import br.com.nexus.nexusmusica.ALBUM_ORDENADO
@@ -69,20 +70,20 @@ object SharedPreferenceUtil {
             return (System.currentTimeMillis() - intervalo) / 1000
         }
     var modoRepeticaoMusica
-        get() = contextShared.getSharedPreferences(MODO_REPETIR_MUSICA, Context.MODE_PRIVATE).getString(
-            MODO_REPETIR_MUSICA, Repeticao.DESATIVADO.toString()
+        get() = contextShared.getSharedPreferences(MODO_REPETIR_MUSICA, Context.MODE_PRIVATE).getInt(
+            MODO_REPETIR_MUSICA, PlaybackStateCompat.REPEAT_MODE_NONE
         )
         set(value) {
             val sharedPreferences = contextShared.getSharedPreferences(MODO_REPETIR_MUSICA, Context.MODE_PRIVATE)
-            sharedPreferences.edit { putString(MODO_REPETIR_MUSICA, value) }
+            sharedPreferences.edit { putInt(MODO_REPETIR_MUSICA, value) }
         }
-    var modoAleatorio: Boolean
-        get() = contextShared.getSharedPreferences(MODO_ALEATORIO, Context.MODE_PRIVATE).getBoolean(
-            MODO_ALEATORIO, false
+    var modoAleatorio: Int
+        get() = contextShared.getSharedPreferences(MODO_ALEATORIO, Context.MODE_PRIVATE).getInt(
+            MODO_ALEATORIO, 0
         )
         set(value) {
             val sharedPreferences = contextShared.getSharedPreferences(MODO_ALEATORIO, Context.MODE_PRIVATE)
-            sharedPreferences.edit{putBoolean(MODO_ALEATORIO, value)}
+            sharedPreferences.edit{putInt(MODO_ALEATORIO, value)}
         }
     var modoReproducaoPlayer
         get() = contextShared.getSharedPreferences(MODO_REPRO_PLAYER, Context.MODE_PRIVATE).getString(

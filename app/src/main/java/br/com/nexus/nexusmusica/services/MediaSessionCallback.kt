@@ -52,8 +52,12 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
     }
 
     override fun onSetPlaybackSpeed(speed: Float) {
-        super.onSetPlaybackSpeed(speed)
+        //super.onSetPlaybackSpeed(speed)
         musicaService.alterarVelocidadePlayer(speed)
+    }
+
+    override fun onSetShuffleMode(shuffleMode: Int) {
+        musicaService.alterarModoAleatorio(shuffleMode)
     }
 
     override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
