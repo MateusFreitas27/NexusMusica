@@ -7,7 +7,9 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.net.toUri
 import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
 import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
+import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
+import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicasRecentesRepositorio
@@ -72,14 +74,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
                         posicaoMusicaId = indice
                     }
                 }
-                musicas.forEach { musica ->
-                    val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                        .setMediaId(musica.id.toString())
-                        .setMediaUri(musica.data.toUri())
-                        .setTitle(musica.titulo)
-                        .setSubtitle(musica.albumNome)
-                    listaMusicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(),MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
-                }
+                listaMusicas.addAll(formatarListaMusica(musicas))
             }
             REPRODUCAO_ALBUM -> {
                 val idAlbum: Long = SharedPreferenceUtil.idAlbumMusica
@@ -89,14 +84,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
                         posicaoMusicaId = indice
                     }
                 }
-                musicas.forEach { musica ->
-                    val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                        .setMediaId(musica.id.toString())
-                        .setMediaUri(musica.data.toUri())
-                        .setTitle(musica.titulo)
-                        .setSubtitle(musica.albumNome)
-                    listaMusicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(),MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
-                }
+                listaMusicas.addAll(formatarListaMusica(musicas))
             }
             REPRODUCAO_ADICOES_RECENTES -> {
                 val musicas = ArrayList(musicasRecentesRepositorio.musicasRecentes())
@@ -105,16 +93,22 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
                         posicaoMusicaId = indice
                     }
                 }
-                musicas.forEach { musica ->
-                    val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                        .setMediaId(musica.id.toString())
-                        .setMediaUri(musica.data.toUri())
-                        .setTitle(musica.titulo)
-                        .setSubtitle(musica.albumNome)
-                    listaMusicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(),MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
-                }
+                listaMusicas.addAll(formatarListaMusica(musicas))
             }
         }
         musicaService.abrirFilaReproducao(listaMusicas, posicaoMusicaId, true)
+    }
+
+    private fun formatarListaMusica(lista: List<Musica>): MutableList<MediaBrowserCompat.MediaItem>{
+        val musicas: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
+        lista.forEach {
+            val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
+                .setMediaId(it.id.toString())
+                .setMediaUri(it.data.toUri())
+                .setTitle(it.titulo)
+                .setSubtitle(it.artistaNome)
+            musicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
+        }
+        return musicas
     }
 }

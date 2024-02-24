@@ -1,23 +1,22 @@
 package br.com.nexus.nexusmusica.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nexus.nexusmusica.R
-import com.bumptech.glide.Glide
+import br.com.nexus.nexusmusica.databinding.AdapterListaAlbunsBinding
+import br.com.nexus.nexusmusica.interfaces.InterfaceClickListenerListaAlbum
 import br.com.nexus.nexusmusica.modelo.Album
 import br.com.nexus.nexusmusica.util.FuncoesUtil
-import br.com.nexus.nexusmusica.interfaces.InterfaceClickListenerListaAlbum
+import com.bumptech.glide.Glide
 
 
 class AdapterListaAlbums(private val listaAlbums: List<Album>, private val clickListenerListaAlbum: InterfaceClickListenerListaAlbum): RecyclerView.Adapter<AdapterListaAlbums.ViewHodel>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHodel {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_lista_albuns,parent,false)
-        return ViewHodel(view)
+        return ViewHodel(AdapterListaAlbunsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemCount(): Int = listaAlbums.size
@@ -34,16 +33,11 @@ class AdapterListaAlbums(private val listaAlbums: List<Album>, private val click
         }
     }
 
-    inner class ViewHodel(itemView: View): RecyclerView.ViewHolder(itemView){
-        val imagemCapaAlbum: ImageView
-        val txtTituloAlbum: TextView
-        val txtNomeArtista: TextView
+    inner class ViewHodel(binding: AdapterListaAlbunsBinding): RecyclerView.ViewHolder(binding.root){
+        val imagemCapaAlbum: ImageView = binding.imgCapaAlbum
+        val txtTituloAlbum: TextView = binding.txtNomeAlbum
+        val txtNomeArtista: TextView = binding.txtNomeArtistaAlbum
 
-        init {
-            imagemCapaAlbum = itemView.findViewById(R.id.imgCapaAlbum)
-            txtTituloAlbum = itemView.findViewById(R.id.txtNomeAlbum)
-            txtNomeArtista = itemView.findViewById(R.id.txtNomeArtistaAlbum)
-        }
     }
 
 }

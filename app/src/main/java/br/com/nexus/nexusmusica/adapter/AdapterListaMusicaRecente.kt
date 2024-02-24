@@ -7,17 +7,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nexus.nexusmusica.R
+import br.com.nexus.nexusmusica.databinding.AdapterListaMusicaRecenteBinding
 import br.com.nexus.nexusmusica.interfaces.InterfaceClickListenerAdicoesRecentes
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
 
-class AdapterListaMusicaRecente(private val listaMusica: List<Musica>, private val clickListenerAdicoesRecentes: InterfaceClickListenerAdicoesRecentes): RecyclerView.Adapter<AdapterListaMusicaRecente.viewHodel>() {
-    //private var listaMusica:List<Musica> = ArrayList()
+class AdapterListaMusicaRecente(private val clickListenerAdicoesRecentes: InterfaceClickListenerAdicoesRecentes): RecyclerView.Adapter<AdapterListaMusicaRecente.viewHodel>() {
+    private var listaMusica:MutableList<Musica> = ArrayList()
+
+    fun atualizarDados(listaMusica: List<Musica>){
+        this.listaMusica.clear()
+        this.listaMusica.addAll(listaMusica)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHodel {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_lista_musica_recente,parent,false)
-        return viewHodel(view)
+        return viewHodel(AdapterListaMusicaRecenteBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemCount(): Int = listaMusica.size
@@ -34,17 +39,10 @@ class AdapterListaMusicaRecente(private val listaMusica: List<Musica>, private v
         }
     }
 
-    inner class viewHodel(itemView : View): RecyclerView.ViewHolder(itemView){
-        val imagemCapa: ImageView
-        val textNomeMusicaRecente: TextView
-        val textNomeAlbumMusicaRecente: TextView
-
-
-        init {
-            imagemCapa = itemView.findViewById(R.id.imgCapaMusicaRecente)
-            textNomeMusicaRecente = itemView.findViewById(R.id.textNomeMusicaRecente)
-            textNomeAlbumMusicaRecente = itemView.findViewById(R.id.textNomeAlbumRecente)
-        }
+    inner class viewHodel(binding : AdapterListaMusicaRecenteBinding): RecyclerView.ViewHolder(binding.root){
+        val imagemCapa: ImageView = binding.imgCapaMusicaRecente
+        val textNomeMusicaRecente: TextView = binding.textNomeMusicaRecente
+        val textNomeAlbumMusicaRecente: TextView = binding.textNomeAlbumRecente
     }
 
 }

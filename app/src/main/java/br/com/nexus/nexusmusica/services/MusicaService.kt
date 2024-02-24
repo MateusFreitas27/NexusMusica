@@ -20,8 +20,10 @@ import androidx.media.MediaBrowserServiceCompat
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
 import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
+import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.SERVICE_TAG
+import br.com.nexus.nexusmusica.helper.EmbaralharHelper
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
@@ -44,6 +46,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
     private var listaMusicasReproducao: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
+    private var listaMusicasOriginal: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
     private var posicaoAtualReproducao: Int = -1
     private val musicasRepositorio by inject<MusicaRepositorio>()
     private val albumRepositorio by inject<AlbumRepositorio>()
@@ -62,39 +65,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-        when(parentId){
-            REPRODUCAO_MUSICAS -> {
-                result.sendResult(formatarListaMusica(musicasRepositorio.musicas()))
-            }
-            REPRODUCAO_ALBUM -> {
-                val musicas: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
-                val idalbum: Long = SharedPreferenceUtil.idAlbumMusica
-                albumRepositorio.album(idalbum).let {album ->
-                    /*album.musicas.forEach {
-                        val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                            .setMediaId(it.id.toString())
-                            .setMediaUri(it.data.toUri())
-                            .setTitle(it.titulo)
-                            .setSubtitle(it.artistaNome)
-                        musicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), 0))
-                    }*/
-                    musicas.addAll(formatarListaMusica(album.musicas))
-                }
-                result.sendResult(musicas)
-            }
-            REPRODUCAO_ADICOES_RECENTES -> {
-                /*musicasRecentesRepositorio.musicasRecentes().forEach {
-                    val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                        .setMediaId(it.id.toString())
-                        .setMediaUri(it.data.toUri())
-                        .setTitle(it.titulo)
-                        .setSubtitle(it.artistaNome)
-                    musicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), 0))
-                }*/
-                result.sendResult(formatarListaMusica(musicasRecentesRepositorio.musicasRecentes()))
-            }
-            else -> result.detach()
-        }
+        if (parentId.isNotEmpty()) result.sendResult(listaMusicasReproducao) else result.detach()
     }
 
     override fun onCompletion(player: MediaPlayer?) {
@@ -178,7 +149,8 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
 
     fun abrirFilaReproducao(musicas: ArrayList<MediaBrowserCompat.MediaItem>, posicaoInicial: Int, iniciarPlayer: Boolean){
         if (musicas.isNotEmpty() && posicaoInicial >= 0){
-            listaMusicasReproducao = musicas
+            listaMusicasOriginal = ArrayList(musicas)
+            listaMusicasReproducao = ArrayList(listaMusicasOriginal)
             posicaoAtualReproducao = posicaoInicial
             iniciaReproducao()
         }
@@ -264,33 +236,15 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     fun alterarModoAleatorio(modoAleatorio: Int){
         when(modoAleatorio){
             PlaybackStateCompat.SHUFFLE_MODE_ALL ->{
+                EmbaralharHelper.embaralharLista(listaMusicasReproducao, posicaoAtualReproducao)
                 posicaoAtualReproducao = 0
-                val musicaInicial = listaMusicasReproducao[posicaoAtualReproducao]
-                listaMusicasReproducao = formatarListaMusica(musicasRepositorio.musicasAleatorias())
-                val posicaoTroca = listaMusicasReproducao.indexOfFirst { it.description.mediaId == musicaInicial.description.mediaId }
-                val musicaTroca = listaMusicasReproducao[posicaoTroca]
-                listaMusicasReproducao[0] = musicaInicial
-                listaMusicasReproducao[posicaoTroca] = musicaTroca
             } else -> {
                 val musica = listaMusicasReproducao[posicaoAtualReproducao]
-                listaMusicasReproducao = formatarListaMusica(musicasRepositorio.musicas())
+                listaMusicasReproducao = ArrayList(listaMusicasOriginal)
                 val posicao = listaMusicasReproducao.indexOfFirst { it.description.mediaId == musica.description.mediaId }
                 posicaoAtualReproducao = posicao
             }
         }
-    }
-
-    private fun formatarListaMusica(lista: List<Musica>): MutableList<MediaBrowserCompat.MediaItem>{
-        val musicas: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
-        lista.forEach {
-            val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                .setMediaId(it.id.toString())
-                .setMediaUri(it.data.toUri())
-                .setTitle(it.titulo)
-                .setSubtitle(it.artistaNome)
-            musicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), 0))
-        }
-        return musicas
     }
 
     private fun retornaBitmapCapaMusica(uri: String): Bitmap {

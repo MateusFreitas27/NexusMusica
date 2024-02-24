@@ -46,9 +46,11 @@ class ListaMusicasRecentesFragment : Fragment(), InterfaceClickListenerAdicoesRe
 
     private fun iniciarObservers() {
         musicasRecentesViewModel.listaMusicarecente.observe(viewLifecycleOwner) {
+            val adapter = AdapterListaMusicaRecente(this)
             val recycler = binding.recyclerViewListaMusicaRecentes
+            adapter.atualizarDados(it)
             recycler.layoutManager = LinearLayoutManager(context)
-            recycler.adapter = AdapterListaMusicaRecente(it, this)
+            recycler.adapter = adapter
         }
     }
 

@@ -162,6 +162,7 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
             REPRODUCAO_MUSICAS -> musicaConector.subcribe(REPRODUCAO_MUSICAS, subcribeCallback)
             REPRODUCAO_ALBUM -> musicaConector.subcribe(REPRODUCAO_ALBUM, subcribeCallback)
             REPRODUCAO_ADICOES_RECENTES -> musicaConector.subcribe(REPRODUCAO_ADICOES_RECENTES, subcribeCallback)
+            REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
         }
     }
 
@@ -170,6 +171,7 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
             REPRODUCAO_MUSICAS -> musicaConector.unsubscribe(REPRODUCAO_MUSICAS, subcribeCallback)
             REPRODUCAO_ALBUM -> musicaConector.unsubscribe(REPRODUCAO_ALBUM, subcribeCallback)
             REPRODUCAO_ADICOES_RECENTES -> musicaConector.unsubscribe(REPRODUCAO_ADICOES_RECENTES, subcribeCallback)
+            REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
         }
         super.onCleared()
     }

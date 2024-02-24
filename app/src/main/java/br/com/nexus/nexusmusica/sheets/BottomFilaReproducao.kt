@@ -22,11 +22,18 @@ class BottomFilaReproducao : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBottomFilaReproducaoBinding.inflate(inflater, container, false)
+
         playerMusicaViewModel.carregarListaMusica()
         playerMusicaViewModel.listaMusica.observe(viewLifecycleOwner){
-            val recycler = binding?.recyclerListaFilaReproducao
-            recycler?.layoutManager = LinearLayoutManager(context)
-            recycler?.adapter = AdapterFilaReproducao(it)
+            val adapterFilaReproducao = AdapterFilaReproducao()
+            with(binding?.recyclerListaFilaReproducao){
+                this?.setHasFixedSize(true)
+                this?.setItemViewCacheSize(20)
+                adapterFilaReproducao.atualizarListaDados(it)
+                this?.layoutManager = LinearLayoutManager(context)
+                this?.adapter = adapterFilaReproducao
+            }
+
         }
         return binding!!.root
     }

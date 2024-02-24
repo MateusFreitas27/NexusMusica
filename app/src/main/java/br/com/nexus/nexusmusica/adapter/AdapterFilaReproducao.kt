@@ -2,20 +2,33 @@ package br.com.nexus.nexusmusica.adapter
 
 import android.support.v4.media.MediaBrowserCompat
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nexus.nexusmusica.R
+import br.com.nexus.nexusmusica.databinding.AdapterListaFilaReproducaoBinding
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
 
-class AdapterFilaReproducao(private val listaMusica: MutableList<MediaBrowserCompat.MediaItem>):
-    RecyclerView.Adapter<AdapterFilaReproducao.ViewHodel>() {
+class AdapterFilaReproducao(): RecyclerView.Adapter<AdapterFilaReproducao.ViewHodel>() {
+    private var listaMusica: MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
+
+    init {
+        this.setHasStableIds(true)
+    }
+    fun atualizarListaDados(lista: MutableList<MediaBrowserCompat.MediaItem>){
+        listaMusica.clear()
+        listaMusica.addAll(lista)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHodel{
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.adapter_lista_fila_reproducao,parent, false)
-        return ViewHodel(view)
+        return ViewHodel(AdapterListaFilaReproducaoBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    }
+
+    override fun getItemId(position: Int): Long {
+        val musica = listaMusica[position]
+        return musica.mediaId!!.toLong()
     }
 
     override fun getItemCount(): Int = listaMusica.size
@@ -31,14 +44,10 @@ class AdapterFilaReproducao(private val listaMusica: MutableList<MediaBrowserCom
             Glide.with(holder.itemView).asDrawable().load(R.drawable.sem_album).into(holder.imagemCapa)
         }
     }
-    inner class ViewHodel(itemView: View): RecyclerView.ViewHolder(itemView){
-        val imagemCapa: ImageView
-        val txtNomeMusica: TextView
-        val txtNomeAlbum: TextView
-        init {
-            imagemCapa = itemView.findViewById(R.id.imgLstFilaCapaMusica)
-            txtNomeMusica = itemView.findViewById(R.id.txtFilaNomeMusica)
-            txtNomeAlbum = itemView.findViewById(R.id.txtFilaNomeAlbum)
-        }
+    inner class ViewHodel(binding: AdapterListaFilaReproducaoBinding): RecyclerView.ViewHolder(binding.root){
+        val imagemCapa: ImageView = binding.imgLstFilaCapaMusica
+        val txtNomeMusica: TextView = binding.txtFilaNomeMusica
+        val txtNomeAlbum: TextView = binding.txtFilaNomeAlbum
+
     }
 }
