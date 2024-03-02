@@ -31,8 +31,8 @@
             </intent-filter>
         </activity>
         <service android:name=".services.MusicaService"
-            android:exported="true"
-            android:foregroundServiceType="mediaPlayback">
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.Media_Button"/>
                 <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
