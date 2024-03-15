@@ -70,6 +70,7 @@ private val viewModelModulo = module {
 
     viewModel{
         PlayerMusicaViewModel(
+            get(),
             get()
         )
     }

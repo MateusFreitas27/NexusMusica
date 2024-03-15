@@ -8,17 +8,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.nexus.nexusmusica.DELAY_INTERVALO_PLAYER_POSICAO
+import br.com.nexus.nexusmusica.MusicaVazia
 import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
 import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
 import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
+import br.com.nexus.nexusmusica.modelo.Musica
+import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.services.MusicaConector
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewModel() {
+class PlayerMusicaViewModel(
+    private val musicaConector: MusicaConector,
+    private val repositorio: Repositorio
+): ViewModel() {
     private val playbackState = musicaConector.playbackState
     val conectado = musicaConector.conectado
     val infoMusicaTocando = musicaConector.infoMusicaTocando
@@ -40,7 +49,7 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
     val listaMusica: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> = _listaMusicas
     private val _tocandoMusica: MutableLiveData<Int> = MutableLiveData<Int>()
     val tocandoMusica: MutableLiveData<Int> = _tocandoMusica
-    private var id: String = ""
+    private var media: Musica = MusicaVazia
     private var alterarInfoMusica = false
 
     private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback(){
@@ -76,16 +85,12 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
     }
 
     fun setMusica(args: PlayerMusicaFragmentArgs) {
-        val musica = args.musica
-        id = musica.id.toString()
-        _duracaoMusica.value = musica.duracao.toInt()
-        _nomeMusica.value = musica.titulo
-        _nomeAlbum.value = musica.albumNome
-        _imgCapa.value = FuncoesUtil.carregarCapaMusica(musica.data)
+        media = args.musica
+        atualizaMediaReproducao()
     }
 
     fun iniciar(){
-       musicaConector.transportControls.playFromMediaId(id,null)
+       musicaConector.transportControls.playFromMediaId(media.id.toString(),null)
     }
 
     fun playPlause(){
@@ -104,15 +109,24 @@ class PlayerMusicaViewModel(private val musicaConector: MusicaConector): ViewMod
         musicaConector.transportControls.skipToPrevious()
     }
 
-    fun carregarDadosMusica(media: MediaMetadataCompat?){
-        if (media?.description?.mediaId != id && alterarInfoMusica){
-            _duracaoMusica.value =
-                media!!.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt()
-            _nomeMusica.value = media.description?.title.toString()
-            _nomeAlbum.value = media.description?.subtitle.toString()
-            _imgCapa.value = FuncoesUtil.carregarCapaMusica(media.description?.mediaUri.toString())
+    fun carregarDadosMusica(infoMedia: MediaMetadataCompat?){
+        if (infoMedia?.description?.mediaId != media.id.toString() && alterarInfoMusica){
+            CoroutineScope(Dispatchers.IO).launch{
+                val musica = repositorio.consultaMusica(infoMedia!!.description!!.mediaId!!.toLong())
+                withContext(Dispatchers.Main){
+                    media = musica
+                    atualizaMediaReproducao()
+                }
+            }
         } else alterarInfoMusica = true
 
+    }
+
+    private fun atualizaMediaReproducao(){
+        _duracaoMusica.value = media.duracao.toInt()
+        _nomeMusica.value = media.titulo
+        _nomeAlbum.value = media.albumNome
+        _imgCapa.value = FuncoesUtil.carregarCapaMusica(media.data)
     }
 
     fun seekToMusica(posicao: Long) {

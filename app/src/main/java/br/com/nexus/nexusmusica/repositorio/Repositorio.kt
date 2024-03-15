@@ -7,6 +7,7 @@ interface Repositorio {
     suspend fun listaMusicas(): List<Musica>
     suspend fun listaMusicasRecentes(): List<Musica>
     suspend fun listaTodosAlbums(): List<Album>
+    suspend fun consultaMusica(id:Long): Musica
 }
 
 class RealRepositorio(
@@ -24,5 +25,9 @@ class RealRepositorio(
 
     override suspend fun listaTodosAlbums(): List<Album> {
         return albumRepositorio.albums()
+    }
+
+    override suspend fun consultaMusica(id: Long): Musica {
+        return musicaRepositorio.musica(id)
     }
 }
