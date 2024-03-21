@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/menu_item_home"
         android:name="br.com.nexus.nexusmusica.fragments.home.HomeFragment"
-        android:label="fragment_home"
+        android:label="Home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_ir_Tela_Musicas_Adicionadas_Recentes"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/menu_item_musica"
         android:name="br.com.nexus.nexusmusica.fragments.listaMusica.ListaMusicaFragment"
-        android:label="fragment_lista_musica"
+        android:label="Musicas"
         tools:layout="@layout/fragment_lista_musica" >
         <action
             android:id="@+id/action_menu_item_musica_to_playerMusicaFragment"
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/menu_item_album"
         android:name="br.com.nexus.nexusmusica.fragments.listaAlbum.ListaAlbumFragment"
-        android:label="fragment_lista_album"
+        android:label="Album"
         tools:layout="@layout/fragment_lista_album" >
         <action
             android:id="@+id/action_menu_item_album_to_detalheAlbumFragment"

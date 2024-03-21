@@ -8,19 +8,16 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.adapter.AdapterListaMusica
 import br.com.nexus.nexusmusica.databinding.FragmentListaMusicaBinding
-import br.com.nexus.nexusmusica.interfaces.InterfaceClickeListenerListaMusica
-import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.VersaoUtil
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ListaMusicaFragment : Fragment(), InterfaceClickeListenerListaMusica {
+class ListaMusicaFragment : Fragment() {
     private var _binding: FragmentListaMusicaBinding? = null
     private val binding get() = _binding!!
     private val listaMusicaViewModel: ListaMusicaViewModel by viewModel()
@@ -32,13 +29,12 @@ class ListaMusicaFragment : Fragment(), InterfaceClickeListenerListaMusica {
             }
         }
     }
+    private var adapterListaMusica: AdapterListaMusica? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        bottomNavigationView?.visibility = View.VISIBLE
         _binding = FragmentListaMusicaBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -46,6 +42,14 @@ class ListaMusicaFragment : Fragment(), InterfaceClickeListenerListaMusica {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapterListaMusica = AdapterListaMusica(intentSLDeletarArquivo) {musica ->
+            listaMusicaViewModel.abrirPlayerMusica(findNavController(), musica)
+        }
+        with(binding.recyclerViewListaMusica){
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter= adapterListaMusica
+        }
         iniciarObservers()
     }
 
@@ -57,22 +61,12 @@ class ListaMusicaFragment : Fragment(), InterfaceClickeListenerListaMusica {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        adapterListaMusica = null
     }
 
     private fun iniciarObservers() {
         listaMusicaViewModel.listaMusicas.observe(viewLifecycleOwner) {lista ->
-            val adapterListaMusica = AdapterListaMusica(intentSLDeletarArquivo,  this)
-            with(binding.recyclerViewListaMusica){
-                setHasFixedSize(true)
-                setItemViewCacheSize(20)
-                adapterListaMusica.atualizarListaDados(lista)
-                layoutManager = LinearLayoutManager(context)
-                adapter= adapterListaMusica
-            }
+            adapterListaMusica?.atualizarListaDados(lista)
         }
-    }
-
-    override fun onClick(musica: Musica) {
-        listaMusicaViewModel.abrirPlayerMusica(findNavController(), musica)
     }
 }

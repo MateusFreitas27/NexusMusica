@@ -5,26 +5,24 @@ import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.databinding.AdapterListaMusicaBinding
-import br.com.nexus.nexusmusica.interfaces.InterfaceClickeListenerListaMusica
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import br.com.nexus.nexusmusica.util.VersaoUtil
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import org.koin.core.parameter.parameterArrayOf
 
-class AdapterListaMusica(private val intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>, private val clickeListenerListaMusica: InterfaceClickeListenerListaMusica): RecyclerView.Adapter<AdapterListaMusica.ViewHodel>() {
+class AdapterListaMusica(
+    private val intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>,
+    private val reproduzirMusica: (Musica) -> Unit
+): RecyclerView.Adapter<AdapterListaMusica.MusicaViewHodel>() {
     private var posicao: Int = -1
     private var listaMusica: MutableList<Musica> = mutableListOf()
 
@@ -35,10 +33,11 @@ class AdapterListaMusica(private val intentSenderLauncher: ActivityResultLaunche
     fun atualizarListaDados(lista: MutableList<Musica>){
         listaMusica.clear()
         listaMusica.addAll(lista)
+        notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHodel {
-        return ViewHodel(AdapterListaMusicaBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicaViewHodel {
+        return MusicaViewHodel(AdapterListaMusicaBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemId(position: Int): Long {
@@ -47,16 +46,16 @@ class AdapterListaMusica(private val intentSenderLauncher: ActivityResultLaunche
     }
     override fun getItemCount(): Int = listaMusica.size
 
-    override fun onBindViewHolder(holder: ViewHodel, position: Int) {
+    override fun onBindViewHolder(holder: MusicaViewHodel, position: Int) {
         val musica = listaMusica[position]
         holder.textTitulo.text = musica.titulo
         holder.textAlbum.text = musica.albumNome
 
         val imagem = FuncoesUtil.carregarCapaMusica(musica)
-        Glide.with(holder.itemView).load(imagem).centerCrop().dontAnimate().error(R.drawable.sem_album).into(holder.imagemCapa)
+        Glide.with(holder.itemView).load(imagem).centerCrop().dontAnimate().into(holder.imagemCapa)
 
         holder.itemView.setOnClickListener {
-            clickeListenerListaMusica.onClick(musica)
+            reproduzirMusica(musica)
         }
 
         holder.menuPopupListaMusica.setOnClickListener {
@@ -76,7 +75,7 @@ class AdapterListaMusica(private val intentSenderLauncher: ActivityResultLaunche
         }
     }
 
-    inner class ViewHodel(binding: AdapterListaMusicaBinding): RecyclerView.ViewHolder(binding.root){
+    inner class MusicaViewHodel(binding: AdapterListaMusicaBinding): RecyclerView.ViewHolder(binding.root){
         val imagemCapa: ImageView = binding.imgCapaMusica
         val textTitulo: TextView = binding.textNomeMusica
         val textAlbum: TextView = binding.textNomeAlbum
