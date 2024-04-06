@@ -24,14 +24,12 @@ import br.com.nexus.nexusmusica.util.VersaoUtil
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var permissaoArmazenamento: ActivityResultLauncher<String>
-    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
 
         permissaoArmazenamento = registerForActivityResult(ActivityResultContracts.RequestPermission()){
                 resultadoPermissao: Boolean ->
@@ -60,30 +58,16 @@ class MainActivity : AppCompatActivity() {
     private fun configurarNavHost(){
         val navHostFragement = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragement.navController
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.menu_item_home, R.id.menu_item_musica, R.id.menu_item_album))
         binding.bottomNavigationView.setupWithNavController(navController)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+
         navController.addOnDestinationChangedListener{_,destino,_ ->
             when(destino.id){
-                R.id.menu_item_home, R.id.menu_item_musica, R.id.menu_item_album -> {
-                    binding.toolbar.visibility = View.VISIBLE
+                R.id.menu_item_home, R.id.menu_item_musica, R.id.menu_item_album ->
                     binding.bottomNavigationView.visibility = View.VISIBLE
-                }
-                R.id.playerMusicaFragment ->{
-                    binding.toolbar.visibility = View.GONE
+                else ->
                     binding.bottomNavigationView.visibility = View.GONE
-                }
-                else ->{
-                    binding.bottomNavigationView.visibility = View.GONE
-                    binding.toolbar.visibility = View.VISIBLE
-                }
+
             }
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
     }
 }

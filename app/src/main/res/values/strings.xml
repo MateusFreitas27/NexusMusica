@@ -4,8 +4,8 @@
     <string name="boas_vindas">Bem-vindo ao Nexus Musica</string>
     <string name="num_1">1</string>
     <string name="menu_lista_musica_excluir">Excluir do dispositivo</string>
-    <string name="menu_bottom_musica">Musica</string>
-    <string name="menu_bottom_album">Album</string>
+    <string name="menu_bottom_musica">Músicas</string>
+    <string name="menu_bottom_album">Álbuns</string>
     <string name="menu_bottom_home">Home</string>
     <string name="btn_home_adicoes_recentes">Adições Recentes</string>
     <string name="btn_home_historico">Histórico</string>
@@ -17,5 +17,9 @@
     <string name="btn_positivo_dialog_controle">Aplicar</string>
     <string name="btn_negativo_dialog_controle">Cancelar</string>
     <string name="btn_redefinir_dialog_controle">Redefinir</string>
-
+    
+    <string name="nome_tela_home">Home</string>
+    <string name="nome_tela_musicas">Músicas</string>
+    <string name="nome_tela_album">Álbuns</string>
+    <string name="nome_tela_add_recentes">Adições recentes</string>
 </resources>
