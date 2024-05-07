@@ -22,4 +22,5 @@
     <string name="nome_tela_musicas">Músicas</string>
     <string name="nome_tela_album">Álbuns</string>
     <string name="nome_tela_add_recentes">Adições recentes</string>
+    <string name="nome_tela_detalhamento_album">Detalhe álbum</string>
 </resources>

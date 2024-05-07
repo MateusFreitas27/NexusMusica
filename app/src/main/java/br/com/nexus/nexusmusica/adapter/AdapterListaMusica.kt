@@ -49,7 +49,7 @@ class AdapterListaMusica(
     override fun onBindViewHolder(holder: MusicaViewHodel, position: Int) {
         val musica = listaMusica[position]
         holder.textTitulo.text = musica.titulo
-        holder.textAlbum.text = musica.albumNome
+        holder.textNomeArtista.text = musica.artistaNome
 
         val imagem = FuncoesUtil.carregarCapaMusica(musica)
         Glide.with(holder.itemView).load(imagem).centerCrop().dontAnimate().into(holder.imagemCapa)
@@ -78,7 +78,7 @@ class AdapterListaMusica(
     inner class MusicaViewHodel(binding: AdapterListaMusicaBinding): RecyclerView.ViewHolder(binding.root){
         val imagemCapa: ImageView = binding.imgCapaMusica
         val textTitulo: TextView = binding.textNomeMusica
-        val textAlbum: TextView = binding.textNomeAlbum
+        val textNomeArtista: TextView = binding.textNomeArtista
         val menuPopupListaMusica: ImageView = binding.menuListaMusica
 
         fun deletarMusicaDispositivo(musica: Musica){

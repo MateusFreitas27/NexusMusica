@@ -43,6 +43,9 @@ class DetalheAlbumFragment : Fragment(), InterfaceClickListernerDetalheAlbum {
         binding.txtNomeAlbumDetalhe.text = detalheViewModel.infoalbum.titulo
         binding.txtNomeArtistaAlbumDetalhe.text = detalheViewModel.infoalbum.artistaNome
         binding.txtDuracaoTotalAlbumDetalhe.text = FuncoesUtil.formatarDuracaoMusica(detalheViewModel.totalDuracaoAlbum)
+        binding.toolbarDetalhamentoAlbum.setNavigationOnClickListener {
+            activity?.onBackPressedDispatcher?.onBackPressed()
+        }
         iniciarObservers()
     }
 
