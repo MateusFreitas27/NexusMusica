@@ -62,8 +62,8 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
         musicaService.alterarModoAleatorio(shuffleMode)
     }
 
-    override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
-        super.onPlayFromMediaId(mediaId, extras)
+    override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle?) {
+        super.onPrepareFromMediaId(mediaId, extras)
         var listaMusicas: ArrayList<MediaBrowserCompat.MediaItem> = ArrayList()
         var posicaoMusicaId = 0
         when(SharedPreferenceUtil.modoReproducaoPlayer){
@@ -97,6 +97,11 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
             }
         }
         musicaService.abrirFilaReproducao(listaMusicas, posicaoMusicaId, true)
+    }
+
+    override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
+        super.onPlayFromMediaId(mediaId, extras)
+
     }
 
     private fun formatarListaMusica(lista: List<Musica>): MutableList<MediaBrowserCompat.MediaItem>{

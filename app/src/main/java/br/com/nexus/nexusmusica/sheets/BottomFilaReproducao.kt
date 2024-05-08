@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.adapter.AdapterFilaReproducao
 import br.com.nexus.nexusmusica.databinding.FragmentBottomFilaReproducaoBinding
@@ -25,7 +26,9 @@ class BottomFilaReproducao : BottomSheetDialogFragment() {
 
         playerMusicaViewModel.carregarListaMusica()
         playerMusicaViewModel.listaMusica.observe(viewLifecycleOwner){
-            val adapterFilaReproducao = AdapterFilaReproducao()
+            val adapterFilaReproducao = AdapterFilaReproducao(){
+                Toast.makeText(context, "executar musica ${it.description.title}", Toast.LENGTH_LONG).show()
+            }
             with(binding?.recyclerListaFilaReproducao){
                 this?.setHasFixedSize(true)
                 this?.setItemViewCacheSize(20)

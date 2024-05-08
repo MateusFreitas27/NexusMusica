@@ -5,7 +5,9 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import br.com.nexus.nexusmusica.R
@@ -127,29 +129,51 @@ class PlayerMusicaFragment : Fragment() {
                 val modalBottomSheet = BottomFilaReproducao()
                 modalBottomSheet.show(parentFragmentManager, TAG_MODAL_LISTA_MUSICAS)
             }
-            btnPlayerVelocidade.setOnClickListener {
-                MaterialAlertDialogBuilder(requireContext()).apply {
-                    var valorSlider: Float = SharedPreferenceUtil.velocidadeReproducaoMedia
-                    val view = layoutInflater.inflate(R.layout.fragment_controle_velocidade_media, null)
-                    val slide = view.findViewById<Slider>(R.id.slider_controle_velocidade)
-                    slide.value = valorSlider
-                    slide.addOnChangeListener { _, value, _ ->
-                        valorSlider = value
-                    }
-                    setTitle(R.string.txt_titulo_dialog_velocidade_reproducao)
-                    setView(view)
-                    setCancelable(false)
-                    setPositiveButton(R.string.btn_positivo_dialog_controle) { _, _ ->
-                        playerMusicaViewModel.alterarVelocidadePlayer(valorSlider)
-                    }
-                    setNegativeButton(R.string.btn_negativo_dialog_controle){ _, _ ->}
-                    setNeutralButton(R.string.btn_redefinir_dialog_controle){ _, _ ->
-                        playerMusicaViewModel.alterarVelocidadePlayer(1.0f)
-                    }
-                    create()
-                    show()
-                }
+            btnMenuPlayermusica.setOnClickListener{
+                abrirMenuPlayerMusica(it)
             }
+            btnPlayerVelocidade.setOnClickListener {
+                abrirSheetListaMusica()
+            }
+        }
+    }
+
+    private fun abrirMenuPlayerMusica(it: View) {
+        val menuPopUp = PopupMenu(context,it)
+        menuPopUp.inflate(R.menu.menu_player_musica)
+        menuPopUp.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.menu_player_musica_excluir -> {
+                    Toast.makeText(context, "excluido musica ${playerMusicaViewModel.nomeMusica.value}",Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
+        }
+        menuPopUp.show()
+    }
+
+    private fun abrirSheetListaMusica() {
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            var valorSlider: Float = SharedPreferenceUtil.velocidadeReproducaoMedia
+            val view = layoutInflater.inflate(R.layout.fragment_controle_velocidade_media, null)
+            val slide = view.findViewById<Slider>(R.id.slider_controle_velocidade)
+            slide.value = valorSlider
+            slide.addOnChangeListener { _, value, _ ->
+                valorSlider = value
+            }
+            setTitle(R.string.txt_titulo_dialog_velocidade_reproducao)
+            setView(view)
+            setCancelable(false)
+            setPositiveButton(R.string.btn_positivo_dialog_controle) { _, _ ->
+                playerMusicaViewModel.alterarVelocidadePlayer(valorSlider)
+            }
+            setNegativeButton(R.string.btn_negativo_dialog_controle){ _, _ ->}
+            setNeutralButton(R.string.btn_redefinir_dialog_controle){ _, _ ->
+                playerMusicaViewModel.alterarVelocidadePlayer(1.0f)
+            }
+            create()
+            show()
         }
     }
 

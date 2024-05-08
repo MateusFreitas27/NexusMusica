@@ -27,7 +27,7 @@ import kotlinx.coroutines.withContext
 class PlayerMusicaViewModel(
     private val musicaConector: MusicaConector,
     private val repositorio: Repositorio
-): ViewModel() {
+) : ViewModel() {
     private val playbackState = musicaConector.playbackState
     val conectado = musicaConector.conectado
     val infoMusicaTocando = musicaConector.infoMusicaTocando
@@ -45,14 +45,15 @@ class PlayerMusicaViewModel(
     val modoRepeticao: MutableLiveData<Int> = _modoRepeticao
     private var _modoAleatorio: MutableLiveData<Int> = MutableLiveData<Int>()
     val modoAleatorio: MutableLiveData<Int> = _modoAleatorio
-    private var _listaMusicas: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> = MutableLiveData()
+    private var _listaMusicas: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> =
+        MutableLiveData()
     val listaMusica: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> = _listaMusicas
     private val _tocandoMusica: MutableLiveData<Int> = MutableLiveData<Int>()
     val tocandoMusica: MutableLiveData<Int> = _tocandoMusica
     private var media: Musica = MusicaVazia
     private var alterarInfoMusica = false
 
-    private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback(){
+    private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback() {
         override fun onChildrenLoaded(
             parentId: String,
             children: MutableList<MediaBrowserCompat.MediaItem>
@@ -73,10 +74,10 @@ class PlayerMusicaViewModel(
 
     private fun atualizaPosicaoMediaPlayer() {
         viewModelScope.launch {
-            while (true){
+            while (true) {
                 _tocandoMusica.value = playbackState.value?.state
                 val pos = playbackState.value?.position
-                if (_progressoMusica.value != pos){
+                if (_progressoMusica.value != pos) {
                     _progressoMusica.value = pos!!
                 }
                 delay(DELAY_INTERVALO_PLAYER_POSICAO)
@@ -89,31 +90,32 @@ class PlayerMusicaViewModel(
         atualizaMediaReproducao()
     }
 
-    fun iniciar(){
-       musicaConector.transportControls.playFromMediaId(media.id.toString(),null)
+    fun iniciar() {
+        musicaConector.transportControls.prepareFromMediaId(media.id.toString(), null)
     }
 
-    fun playPlause(){
-        if (playbackState.value?.state == 3){
+    fun playPlause() {
+        if (playbackState.value?.state == 3) {
             musicaConector.transportControls.pause()
-        }else{
+        } else {
             musicaConector.transportControls.play()
         }
     }
 
-    fun proximaMusica(){
+    fun proximaMusica() {
         musicaConector.transportControls.skipToNext()
     }
 
-    fun musicaAnterior(){
+    fun musicaAnterior() {
         musicaConector.transportControls.skipToPrevious()
     }
 
-    fun carregarDadosMusica(infoMedia: MediaMetadataCompat?){
-        if (infoMedia?.description?.mediaId != media.id.toString() && alterarInfoMusica){
-            CoroutineScope(Dispatchers.IO).launch{
-                val musica = repositorio.consultaMusica(infoMedia!!.description!!.mediaId!!.toLong())
-                withContext(Dispatchers.Main){
+    fun carregarDadosMusica(infoMedia: MediaMetadataCompat?) {
+        if (infoMedia?.description?.mediaId != media.id.toString() && alterarInfoMusica) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val musica =
+                    repositorio.consultaMusica(infoMedia!!.description!!.mediaId!!.toLong())
+                withContext(Dispatchers.Main) {
                     media = musica
                     atualizaMediaReproducao()
                 }
@@ -122,7 +124,7 @@ class PlayerMusicaViewModel(
 
     }
 
-    private fun atualizaMediaReproducao(){
+    private fun atualizaMediaReproducao() {
         _duracaoMusica.value = media.duracao.toInt()
         _nomeMusica.value = media.titulo
         _nomeAlbum.value = media.albumNome
@@ -139,17 +141,19 @@ class PlayerMusicaViewModel(
 
 
     fun trocarModorepetirMusica() {
-        when(_modoRepeticao.value){
+        when (_modoRepeticao.value) {
             PlaybackStateCompat.REPEAT_MODE_NONE -> {
                 SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_ALL
                 _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ALL
                 musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ALL)
             }
+
             PlaybackStateCompat.REPEAT_MODE_ALL -> {
                 SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_ONE
                 _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ONE
                 musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE)
             }
+
             PlaybackStateCompat.REPEAT_MODE_ONE -> {
                 SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_NONE
                 _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_NONE
@@ -159,7 +163,7 @@ class PlayerMusicaViewModel(
     }
 
     fun modoAleatorio() {
-        if (_modoAleatorio.value == PlaybackStateCompat.SHUFFLE_MODE_ALL){
+        if (_modoAleatorio.value == PlaybackStateCompat.SHUFFLE_MODE_ALL) {
             SharedPreferenceUtil.modoAleatorio = PlaybackStateCompat.SHUFFLE_MODE_NONE
             _modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
             SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ALEATORIO
@@ -172,19 +176,27 @@ class PlayerMusicaViewModel(
     }
 
     fun carregarListaMusica() {
-        when(SharedPreferenceUtil.modoReproducaoPlayer){
+        when (SharedPreferenceUtil.modoReproducaoPlayer) {
             REPRODUCAO_MUSICAS -> musicaConector.subcribe(REPRODUCAO_MUSICAS, subcribeCallback)
             REPRODUCAO_ALBUM -> musicaConector.subcribe(REPRODUCAO_ALBUM, subcribeCallback)
-            REPRODUCAO_ADICOES_RECENTES -> musicaConector.subcribe(REPRODUCAO_ADICOES_RECENTES, subcribeCallback)
+            REPRODUCAO_ADICOES_RECENTES -> musicaConector.subcribe(
+                REPRODUCAO_ADICOES_RECENTES,
+                subcribeCallback
+            )
+
             REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
         }
     }
 
     override fun onCleared() {
-        when(SharedPreferenceUtil.modoReproducaoPlayer){
+        when (SharedPreferenceUtil.modoReproducaoPlayer) {
             REPRODUCAO_MUSICAS -> musicaConector.unsubscribe(REPRODUCAO_MUSICAS, subcribeCallback)
             REPRODUCAO_ALBUM -> musicaConector.unsubscribe(REPRODUCAO_ALBUM, subcribeCallback)
-            REPRODUCAO_ADICOES_RECENTES -> musicaConector.unsubscribe(REPRODUCAO_ADICOES_RECENTES, subcribeCallback)
+            REPRODUCAO_ADICOES_RECENTES -> musicaConector.unsubscribe(
+                REPRODUCAO_ADICOES_RECENTES,
+                subcribeCallback
+            )
+
             REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
         }
         super.onCleared()

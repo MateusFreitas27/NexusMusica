@@ -181,7 +181,7 @@
         android:background="@drawable/round_selector"
         android:src="@drawable/icon_lista_musica"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/btnMenuPlayermusica"
         app:layout_constraintTop_toTopOf="@+id/guideline11" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -192,7 +192,7 @@
         app:layout_constraintGuide_percent="0.9" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/btnMenuPlayermusica"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="8dp"
