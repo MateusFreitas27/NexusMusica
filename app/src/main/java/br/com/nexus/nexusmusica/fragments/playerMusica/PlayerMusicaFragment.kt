@@ -132,9 +132,6 @@ class PlayerMusicaFragment : Fragment() {
             btnMenuPlayermusica.setOnClickListener{
                 abrirMenuPlayerMusica(it)
             }
-            btnPlayerVelocidade.setOnClickListener {
-                abrirSheetListaMusica()
-            }
         }
     }
 
@@ -145,6 +142,10 @@ class PlayerMusicaFragment : Fragment() {
             when(it.itemId){
                 R.id.menu_player_musica_excluir -> {
                     Toast.makeText(context, "excluido musica ${playerMusicaViewModel.nomeMusica.value}",Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.menu_player_velocidade_reproducao -> {
+                    abrirSheetListaMusica()
                     true
                 }
                 else -> false

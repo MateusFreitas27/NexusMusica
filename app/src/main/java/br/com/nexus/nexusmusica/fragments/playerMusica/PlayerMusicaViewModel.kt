@@ -139,6 +139,9 @@ class PlayerMusicaViewModel(
         musicaConector.transportControls.setPlaybackSpeed(valorSlider)
     }
 
+    fun reproduzirMusicaSelecionada(mediaId: String?) {
+        musicaConector.transportControls.playFromMediaId(mediaId, null)
+    }
 
     fun trocarModorepetirMusica() {
         when (_modoRepeticao.value) {

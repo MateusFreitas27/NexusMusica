@@ -9,19 +9,13 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.PowerManager
 import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.net.toUri
 import androidx.media.MediaBrowserServiceCompat
 import br.com.nexus.nexusmusica.R
-import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
-import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
-import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
-import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.SERVICE_TAG
 import br.com.nexus.nexusmusica.helper.EmbaralharHelper
 import br.com.nexus.nexusmusica.modelo.Musica
@@ -154,6 +148,15 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
             posicaoAtualReproducao = posicaoInicial
             iniciaReproducao()
         }
+    }
+
+    fun reproduzirMusica(mediaId: String?) {
+        for ( indice in listaMusicasReproducao.indices){
+            if (mediaId == listaMusicasReproducao[indice].mediaId){
+                posicaoAtualReproducao = indice
+            }
+        }
+        iniciaReproducao()
     }
 
     private fun iniciaReproducao(){

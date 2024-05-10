@@ -27,7 +27,7 @@ class BottomFilaReproducao : BottomSheetDialogFragment() {
         playerMusicaViewModel.carregarListaMusica()
         playerMusicaViewModel.listaMusica.observe(viewLifecycleOwner){
             val adapterFilaReproducao = AdapterFilaReproducao(){
-                Toast.makeText(context, "executar musica ${it.description.title}", Toast.LENGTH_LONG).show()
+                playerMusicaViewModel.reproduzirMusicaSelecionada(it.description.mediaId)
             }
             with(binding?.recyclerListaFilaReproducao){
                 this?.setHasFixedSize(true)

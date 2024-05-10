@@ -7,6 +7,7 @@
     <string name="menu_bottom_musica">Músicas</string>
     <string name="menu_bottom_album">Álbuns</string>
     <string name="menu_bottom_home">Home</string>
+    <string name="menu_player_velocidade_reproducao">Velocidade reprodução</string>
     <string name="btn_home_adicoes_recentes">Adições Recentes</string>
     <string name="btn_home_historico">Histórico</string>
     <string name="btn_home_aleatorio">Aleatório</string>

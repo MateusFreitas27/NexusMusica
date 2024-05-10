@@ -7,7 +7,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.net.toUri
 import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
 import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
-import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
@@ -101,7 +100,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
 
     override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
         super.onPlayFromMediaId(mediaId, extras)
-
+        musicaService.reproduzirMusica(mediaId)
     }
 
     private fun formatarListaMusica(lista: List<Musica>): MutableList<MediaBrowserCompat.MediaItem>{
