@@ -75,10 +75,10 @@ class PlayerMusicaFragment : Fragment() {
             binding.seekBarProgressoMusica.progress = it.toInt()
         }
         playerMusicaViewModel.modoRepeticao.observe(viewLifecycleOwner){
-            when(it){
-                PlaybackStateCompat.REPEAT_MODE_NONE -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_desativado)
-                PlaybackStateCompat.REPEAT_MODE_ALL -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_todas)
-                PlaybackStateCompat.REPEAT_MODE_ONE -> binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_um)
+            if (it == PlaybackStateCompat.REPEAT_MODE_ALL){
+                binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_todas)
+            } else {
+                binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_desativado)
             }
         }
         playerMusicaViewModel.modoAleatorio.observe(viewLifecycleOwner){

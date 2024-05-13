@@ -144,24 +144,14 @@ class PlayerMusicaViewModel(
     }
 
     fun trocarModorepetirMusica() {
-        when (_modoRepeticao.value) {
-            PlaybackStateCompat.REPEAT_MODE_NONE -> {
-                SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_ALL
-                _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ALL
-                musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ALL)
-            }
-
-            PlaybackStateCompat.REPEAT_MODE_ALL -> {
-                SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_ONE
-                _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ONE
-                musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE)
-            }
-
-            PlaybackStateCompat.REPEAT_MODE_ONE -> {
-                SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_NONE
-                _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_NONE
-                musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE)
-            }
+        if (_modoRepeticao.value == PlaybackStateCompat.REPEAT_MODE_ALL) {
+            SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_NONE
+            _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_NONE
+            musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE)
+        } else {
+            SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_ALL
+            _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ALL
+            musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ALL)
         }
     }
 

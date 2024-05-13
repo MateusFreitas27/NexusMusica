@@ -79,7 +79,7 @@ object SharedPreferenceUtil {
         }
     var modoAleatorio: Int
         get() = contextShared.getSharedPreferences(MODO_ALEATORIO, Context.MODE_PRIVATE).getInt(
-            MODO_ALEATORIO, 0
+            MODO_ALEATORIO, PlaybackStateCompat.SHUFFLE_MODE_ALL
         )
         set(value) {
             val sharedPreferences = contextShared.getSharedPreferences(MODO_ALEATORIO, Context.MODE_PRIVATE)

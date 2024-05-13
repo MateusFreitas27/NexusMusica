@@ -63,17 +63,15 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     }
 
     override fun onCompletion(player: MediaPlayer?) {
-        when(SharedPreferenceUtil.modoRepeticaoMusica){
-            PlaybackStateCompat.REPEAT_MODE_NONE -> proximaFaixa()
-            PlaybackStateCompat.REPEAT_MODE_ONE -> iniciaReproducao()
-            PlaybackStateCompat.REPEAT_MODE_ALL ->{
-                if (posicaoAtualReproducao == (listaMusicasReproducao.size - 1)){
-                    posicaoAtualReproducao = 0
-                    iniciaReproducao()
-                }else {
-                    proximaFaixa()
-                }
+        if (SharedPreferenceUtil.modoRepeticaoMusica == PlaybackStateCompat.REPEAT_MODE_ALL){
+            if (posicaoAtualReproducao == (listaMusicasReproducao.size - 1)){
+                posicaoAtualReproducao = 0
+                iniciaReproducao()
+            }else {
+                proximaFaixa()
             }
+        } else {
+            proximaFaixa()
         }
     }
 
@@ -190,7 +188,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     }
 
     fun proximaFaixa(){
-        if (repetiTodas) posicaoAtualReproducao = -1
+        //if (repetiTodas) posicaoAtualReproducao = -1
         if (posicaoAtualReproducao < (listaMusicasReproducao.size-1)){
             posicaoAtualReproducao += 1
             iniciaReproducao()

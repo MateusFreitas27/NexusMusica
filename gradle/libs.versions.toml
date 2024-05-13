@@ -14,7 +14,7 @@ lifeCycle = "2.7.0"
 media = "1.7.0"
 koin = "3.5.3"
 glide = "4.16.0"
-leakCanary = "3.0-alpha-1"
+leakCanary = "2.14"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
