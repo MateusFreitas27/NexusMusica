@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserCompat.SubscriptionCallback
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -25,6 +26,10 @@ class MusicaConector(val context: Context) {
     val mediaControllerCallback = MediaControllerCallback()
     val transportControls: MediaControllerCompat.TransportControls
         get() = mediaController.transportControls
+
+    fun removeMusica(description: MediaDescriptionCompat?) {
+        mediaController.removeQueueItem(description)
+    }
 
     fun subcribe(parentId: String, callback: MediaBrowserCompat.SubscriptionCallback){
         mediaBrowser.subscribe(parentId, callback)

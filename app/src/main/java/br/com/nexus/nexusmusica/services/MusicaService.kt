@@ -9,6 +9,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.PowerManager
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -99,6 +100,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
             setPlaybackState(stateBuilder.build())
             setCallback(MediaSessionCallback(this@MusicaService))
             setSessionToken(sessionToken)
+            setFlags(MediaSessionCompat.FLAG_HANDLES_QUEUE_COMMANDS)
             isActive = true
         }
     }
@@ -216,6 +218,16 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
 
     fun seek(pos: Int){
         mediaPlayer?.seekTo(pos)
+    }
+
+    fun removeMusica(description: MediaDescriptionCompat?) {
+        var novaListaReproducao: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
+        listaMusicasReproducao.forEach {
+            if (it.mediaId != description?.mediaId) novaListaReproducao.add(it)
+        }
+        listaMusicasReproducao = novaListaReproducao
+        listaMusicasOriginal = novaListaReproducao
+        iniciaReproducao()
     }
 
     fun trocarModoRepeticao(modoRepeticao: Int){

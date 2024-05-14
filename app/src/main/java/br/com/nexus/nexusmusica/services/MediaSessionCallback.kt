@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
 import androidx.core.net.toUri
 import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
 import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
@@ -61,6 +62,21 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
         musicaService.alterarModoAleatorio(shuffleMode)
     }
 
+    override fun onRemoveQueueItem(description: MediaDescriptionCompat?) {
+        super.onRemoveQueueItem(description)
+        musicaService.removeMusica(description)
+    }
+
+    override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
+        super.onPlayFromMediaId(mediaId, extras)
+        musicaService.reproduzirMusica(mediaId)
+    }
+
+    override fun onSkipToQueueItem(id: Long) {
+        super.onSkipToQueueItem(id)
+        musicaService.reproduzirMusica(id.toString())
+    }
+
     override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle?) {
         super.onPrepareFromMediaId(mediaId, extras)
         var listaMusicas: ArrayList<MediaBrowserCompat.MediaItem> = ArrayList()
@@ -96,11 +112,6 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
             }
         }
         musicaService.abrirFilaReproducao(listaMusicas, posicaoMusicaId, true)
-    }
-
-    override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
-        super.onPlayFromMediaId(mediaId, extras)
-        musicaService.reproduzirMusica(mediaId)
     }
 
     private fun formatarListaMusica(lista: List<Musica>): MutableList<MediaBrowserCompat.MediaItem>{

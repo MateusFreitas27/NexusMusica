@@ -1,5 +1,6 @@
 package br.com.nexus.nexusmusica.fragments.playerMusica
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.LayoutInflater
@@ -8,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import br.com.nexus.nexusmusica.R
@@ -15,6 +19,7 @@ import br.com.nexus.nexusmusica.TAG_MODAL_LISTA_MUSICAS
 import br.com.nexus.nexusmusica.databinding.FragmentPlayerMusicaBinding
 import br.com.nexus.nexusmusica.sheets.BottomFilaReproducao
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
+import br.com.nexus.nexusmusica.util.VersaoUtil
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
@@ -27,6 +32,15 @@ class PlayerMusicaFragment : Fragment() {
     private val binding get() = _binding!!
     private val playerMusicaViewModel: PlayerMusicaViewModel by viewModel()
     private val args: PlayerMusicaFragmentArgs by navArgs()
+    private val intentSLDeletarArquivo: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()){
+        if (it.resultCode == Activity.RESULT_OK){
+            if (VersaoUtil.androidQ()){
+                //listaMusicaViewModel.carregarListaMusica()
+                playerMusicaViewModel.removerMusicaListaReproducao(playerMusicaViewModel.infoMusicaTocando.value)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -142,6 +156,7 @@ class PlayerMusicaFragment : Fragment() {
             when(it.itemId){
                 R.id.menu_player_musica_excluir -> {
                     Toast.makeText(context, "excluido musica ${playerMusicaViewModel.nomeMusica.value}",Toast.LENGTH_SHORT).show()
+                    playerMusicaViewModel.deletarMusicaDispositivo(playerMusicaViewModel.media, intentSLDeletarArquivo)
                     true
                 }
                 R.id.menu_player_velocidade_reproducao -> {

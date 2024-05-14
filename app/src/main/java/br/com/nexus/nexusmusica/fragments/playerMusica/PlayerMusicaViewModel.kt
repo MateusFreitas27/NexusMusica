@@ -1,12 +1,19 @@
 package br.com.nexus.nexusmusica.fragments.playerMusica
 
+import android.app.RecoverableSecurityException
+import android.content.ContentUris
+import android.net.Uri
+import android.provider.MediaStore
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaBrowserCompat.SubscriptionCallback
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.nexus.nexusmusica.APP
 import br.com.nexus.nexusmusica.DELAY_INTERVALO_PLAYER_POSICAO
 import br.com.nexus.nexusmusica.MusicaVazia
 import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
@@ -18,6 +25,7 @@ import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.services.MusicaConector
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
+import br.com.nexus.nexusmusica.util.VersaoUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -50,7 +58,7 @@ class PlayerMusicaViewModel(
     val listaMusica: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> = _listaMusicas
     private val _tocandoMusica: MutableLiveData<Int> = MutableLiveData<Int>()
     val tocandoMusica: MutableLiveData<Int> = _tocandoMusica
-    private var media: Musica = MusicaVazia
+    var media: Musica = MusicaVazia
     private var alterarInfoMusica = false
 
     private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback() {
@@ -139,8 +147,12 @@ class PlayerMusicaViewModel(
         musicaConector.transportControls.setPlaybackSpeed(valorSlider)
     }
 
-    fun reproduzirMusicaSelecionada(mediaId: String?) {
-        musicaConector.transportControls.playFromMediaId(mediaId, null)
+    fun reproduzirMusicaSelecionada(mediaId: Long) {
+        musicaConector.transportControls.skipToQueueItem(mediaId)
+    }
+
+    fun removerMusicaListaReproducao(media: MediaMetadataCompat?) {
+        musicaConector.removeMusica(media?.description)
     }
 
     fun trocarModorepetirMusica() {
@@ -189,9 +201,38 @@ class PlayerMusicaViewModel(
                 REPRODUCAO_ADICOES_RECENTES,
                 subcribeCallback
             )
-
             REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
         }
         super.onCleared()
+    }
+
+    fun deletarMusicaDispositivo(
+        musica: Musica,
+        intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
+    ) {
+        val uri: Uri =
+            ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, musica.id)
+        val contentResolver = APP.getContext().contentResolver
+        try {
+            contentResolver.delete(uri, null, null)
+        } catch (e: SecurityException) {
+            val intentSender = when {
+                VersaoUtil.androidR() -> {
+                    MediaStore.createDeleteRequest(contentResolver, listOf(uri)).intentSender
+                }
+
+                VersaoUtil.androidQ() -> {
+                    val recoverableSecurityException = e as? RecoverableSecurityException
+                    recoverableSecurityException?.userAction?.actionIntent?.intentSender
+                }
+
+                else -> null
+            }
+            intentSender?.let { sender ->
+                intentSenderLauncher.launch(
+                    IntentSenderRequest.Builder(sender).build()
+                )
+            }
+        }
     }
 }
