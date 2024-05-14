@@ -221,7 +221,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     }
 
     fun removeMusica(description: MediaDescriptionCompat?) {
-        var novaListaReproducao: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
+        val novaListaReproducao: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
         listaMusicasReproducao.forEach {
             if (it.mediaId != description?.mediaId) novaListaReproducao.add(it)
         }

@@ -1,11 +1,8 @@
 package br.com.nexus.nexusmusica.util
 
-import android.app.RecoverableSecurityException
 import android.content.ContentUris
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import android.provider.MediaStore
-import androidx.activity.result.IntentSenderRequest
 import androidx.core.net.toUri
 import br.com.nexus.nexusmusica.modelo.Musica
 import java.text.SimpleDateFormat

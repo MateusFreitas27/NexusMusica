@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -155,7 +154,6 @@ class PlayerMusicaFragment : Fragment() {
         menuPopUp.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.menu_player_musica_excluir -> {
-                    Toast.makeText(context, "excluido musica ${playerMusicaViewModel.nomeMusica.value}",Toast.LENGTH_SHORT).show()
                     playerMusicaViewModel.deletarMusicaDispositivo(playerMusicaViewModel.media, intentSLDeletarArquivo)
                     true
                 }

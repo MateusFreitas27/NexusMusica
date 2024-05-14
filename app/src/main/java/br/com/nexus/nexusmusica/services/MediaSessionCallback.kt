@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
 import androidx.core.net.toUri
 import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
 import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
@@ -79,7 +78,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
 
     override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle?) {
         super.onPrepareFromMediaId(mediaId, extras)
-        var listaMusicas: ArrayList<MediaBrowserCompat.MediaItem> = ArrayList()
+        val listaMusicas: ArrayList<MediaBrowserCompat.MediaItem> = ArrayList()
         var posicaoMusicaId = 0
         when(SharedPreferenceUtil.modoReproducaoPlayer){
             REPRODUCAO_MUSICAS -> {
