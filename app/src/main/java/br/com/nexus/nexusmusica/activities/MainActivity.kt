@@ -9,16 +9,11 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.databinding.ActivityMainBinding
+import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import br.com.nexus.nexusmusica.util.VersaoUtil
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
         verificarPermissoes()
         configurarNavHost()
+        exibirMiniPlayer()
     }
 
     private fun verificarPermissoes() {
@@ -62,12 +58,29 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener{_,destino,_ ->
             when(destino.id){
-                R.id.menu_item_home, R.id.menu_item_musica, R.id.menu_item_album ->
+                R.id.menu_item_home, R.id.menu_item_musica, R.id.menu_item_album ->{
                     binding.bottomNavigationView.visibility = View.VISIBLE
-                else ->
+                    exibirMiniPlayer()
+                }
+                R.id.playerMusicaFragment -> {
                     binding.bottomNavigationView.visibility = View.GONE
+                    binding.fragmentMiniPlayer.visibility = View.GONE
+                }
+                else ->{
+                    binding.bottomNavigationView.visibility = View.GONE
+                    exibirMiniPlayer()
+                }
 
             }
+        }
+    }
+
+    private fun exibirMiniPlayer() {
+        if (SharedPreferenceUtil.musicaTocando!!.isNotEmpty()){
+            binding.fragmentMiniPlayer.visibility = View.VISIBLE
+
+        } else {
+            binding.fragmentMiniPlayer.visibility = View.GONE
         }
     }
 }

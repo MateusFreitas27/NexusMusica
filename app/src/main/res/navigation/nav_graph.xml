@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_ir_Tela_Musicas_Adicionadas_Recentes"
             app:destination="@id/listaMusicasRecentesFragment" />
+        <action
+            android:id="@+id/action_miniPlayerBottomFragment_to_playerMusicaFragment"
+            app:destination="@id/playerMusicaFragment" />
     </fragment>
     <fragment
         android:id="@+id/menu_item_musica"
@@ -61,5 +64,14 @@
         <argument
             android:name="musica"
             app:argType="br.com.nexus.nexusmusica.modelo.Musica" />
+    </fragment>
+    <fragment
+        android:id="@+id/miniPlayerBottomFragment"
+        android:name="br.com.nexus.nexusmusica.fragments.miniPlayerBottom.MiniPlayerBottomFragment"
+        android:label="fragment_mini_player_bottom"
+        tools:layout="@layout/fragment_mini_player_bottom" >
+        <action
+            android:id="@+id/action_miniPlayerBottomFragment_to_playerMusicaFragment"
+            app:destination="@id/playerMusicaFragment" />
     </fragment>
 </navigation>

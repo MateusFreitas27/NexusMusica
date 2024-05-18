@@ -14,9 +14,12 @@ import br.com.nexus.nexusmusica.MODO_REPETIR_MUSICA
 import br.com.nexus.nexusmusica.MODO_REPRO_ANTERIOR_ALEATORIO
 import br.com.nexus.nexusmusica.MODO_REPRO_PLAYER
 import br.com.nexus.nexusmusica.MUSICA_ORDENADO
+import br.com.nexus.nexusmusica.MUSICA_TOCANDO
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.VELOCIDADE_MEDIA
 import br.com.nexus.nexusmusica.helper.OrdemOrdenacao
+import br.com.nexus.nexusmusica.modelo.Musica
+import com.google.gson.Gson
 
 object SharedPreferenceUtil {
     private var contextShared = APP.getContext()
@@ -116,5 +119,15 @@ object SharedPreferenceUtil {
         set(value) {
             val sharedPreferences = contextShared.getSharedPreferences(VELOCIDADE_MEDIA, Context.MODE_PRIVATE)
             sharedPreferences.edit { putFloat(VELOCIDADE_MEDIA, value) }
+        }
+
+    var musicaTocando
+        get() =  contextShared.getSharedPreferences(MUSICA_TOCANDO,Context.MODE_PRIVATE).getString(
+        MUSICA_TOCANDO, "")
+        set(value) {
+            val gson = Gson()
+            val musicaJson = gson.toJson(value)
+            val sharedPreferences = contextShared.getSharedPreferences(MUSICA_TOCANDO, Context.MODE_PRIVATE)
+            sharedPreferences.edit { putString(MUSICA_TOCANDO, musicaJson) }
         }
 }

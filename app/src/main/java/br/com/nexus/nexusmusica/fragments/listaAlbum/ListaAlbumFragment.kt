@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.adapter.AdapterListaAlbums
 import br.com.nexus.nexusmusica.databinding.FragmentListaAlbumBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -23,8 +21,6 @@ class ListaAlbumFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val bottomNavigationView = activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        bottomNavigationView?.visibility = View.VISIBLE
         _binding = FragmentListaAlbumBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root

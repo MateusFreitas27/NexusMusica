@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.glide)
     implementation(libs.glide.ksp)
+    implementation(libs.gson)
 
     testImplementation(libs.junit)
     testImplementation(libs.koin.test)
