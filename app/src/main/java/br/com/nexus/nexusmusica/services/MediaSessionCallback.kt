@@ -53,7 +53,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
     }
 
     override fun onSetPlaybackSpeed(speed: Float) {
-        //super.onSetPlaybackSpeed(speed)
+        super.onSetPlaybackSpeed(speed)
         musicaService.alterarVelocidadePlayer(speed)
     }
 
@@ -68,12 +68,12 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
 
     override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
         super.onPlayFromMediaId(mediaId, extras)
-        musicaService.reproduzirMusica(mediaId)
+        musicaService.reproduzirMusicaSelecionada(mediaId)
     }
 
     override fun onSkipToQueueItem(id: Long) {
         super.onSkipToQueueItem(id)
-        musicaService.reproduzirMusica(id.toString())
+        musicaService.reproduzirMusicaSelecionada(id.toString())
     }
 
     override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle?) {
@@ -110,7 +110,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
                 listaMusicas.addAll(formatarListaMusica(musicas))
             }
         }
-        musicaService.abrirFilaReproducao(listaMusicas, posicaoMusicaId, true)
+        musicaService.abrirFilaReproducao(listaMusicas, posicaoMusicaId)
     }
 
     private fun formatarListaMusica(lista: List<Musica>): MutableList<MediaBrowserCompat.MediaItem>{

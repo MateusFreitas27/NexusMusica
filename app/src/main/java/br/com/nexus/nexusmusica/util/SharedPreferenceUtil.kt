@@ -15,11 +15,15 @@ import br.com.nexus.nexusmusica.MODO_REPRO_ANTERIOR_ALEATORIO
 import br.com.nexus.nexusmusica.MODO_REPRO_PLAYER
 import br.com.nexus.nexusmusica.MUSICA_ORDENADO
 import br.com.nexus.nexusmusica.MUSICA_TOCANDO
+import br.com.nexus.nexusmusica.POSICAO_MUSICA_LISTA_PLAYER
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
+import br.com.nexus.nexusmusica.TEMPO_EXECUCAO_MUSICA
 import br.com.nexus.nexusmusica.VELOCIDADE_MEDIA
 import br.com.nexus.nexusmusica.helper.OrdemOrdenacao
 import br.com.nexus.nexusmusica.modelo.Musica
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 object SharedPreferenceUtil {
     private var contextShared = APP.getContext()
@@ -125,9 +129,32 @@ object SharedPreferenceUtil {
         get() =  contextShared.getSharedPreferences(MUSICA_TOCANDO,Context.MODE_PRIVATE).getString(
         MUSICA_TOCANDO, "")
         set(value) {
-            val gson = Gson()
-            val musicaJson = gson.toJson(value)
             val sharedPreferences = contextShared.getSharedPreferences(MUSICA_TOCANDO, Context.MODE_PRIVATE)
-            sharedPreferences.edit { putString(MUSICA_TOCANDO, musicaJson) }
+            sharedPreferences.edit { putString(MUSICA_TOCANDO, value) }
         }
+
+    var posicaoReproducaoLista
+        get() = contextShared.getSharedPreferences(POSICAO_MUSICA_LISTA_PLAYER,Context.MODE_PRIVATE).getInt(
+            POSICAO_MUSICA_LISTA_PLAYER, -1)
+        set(value) {
+            val sharedPreferences = contextShared.getSharedPreferences(POSICAO_MUSICA_LISTA_PLAYER, Context.MODE_PRIVATE)
+            sharedPreferences.edit { putInt(POSICAO_MUSICA_LISTA_PLAYER, value) }
+        }
+
+
+    var tempoExecucaoMusica
+        get() = contextShared.getSharedPreferences(TEMPO_EXECUCAO_MUSICA,Context.MODE_PRIVATE).getLong(
+            TEMPO_EXECUCAO_MUSICA, -1)
+        private set(value) {
+            val sharedPreferences = contextShared.getSharedPreferences(TEMPO_EXECUCAO_MUSICA, Context.MODE_PRIVATE)
+            sharedPreferences.edit {
+                putLong(TEMPO_EXECUCAO_MUSICA, value)
+            }
+        }
+
+    suspend fun salvarTempoExecucao(tempo: Long){
+        withContext(Dispatchers.IO){
+            tempoExecucaoMusica = tempo
+        }
+    }
 }

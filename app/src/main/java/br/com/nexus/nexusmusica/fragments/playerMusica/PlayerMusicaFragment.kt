@@ -102,7 +102,7 @@ class PlayerMusicaFragment : Fragment() {
             }
         }
         playerMusicaViewModel.tocandoMusica.observe(viewLifecycleOwner){
-            if (it == 3){
+            if (it == PlaybackStateCompat.STATE_PLAYING){
                 binding.fabPlayPause.setImageResource(R.drawable.icon_pause)
             }else{
                 binding.fabPlayPause.setImageResource(R.drawable.icon_play)

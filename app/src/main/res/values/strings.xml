@@ -24,6 +24,4 @@
     <string name="nome_tela_album">Álbuns</string>
     <string name="nome_tela_add_recentes">Adições recentes</string>
     <string name="nome_tela_detalhamento_album">Detalhe álbum</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

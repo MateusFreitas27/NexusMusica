@@ -20,10 +20,9 @@ import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.SERVICE_TAG
 import br.com.nexus.nexusmusica.helper.EmbaralharHelper
 import br.com.nexus.nexusmusica.modelo.Musica
-import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
-import br.com.nexus.nexusmusica.repositorio.MusicasRecentesRepositorio
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -44,8 +43,6 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     private var listaMusicasOriginal: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
     private var posicaoAtualReproducao: Int = -1
     private val musicasRepositorio by inject<MusicaRepositorio>()
-    private val albumRepositorio by inject<AlbumRepositorio>()
-    private val musicasRecentesRepositorio by inject<MusicasRecentesRepositorio>()
     private var repetiTodas: Boolean = false
 
     override fun onGetRoot(
@@ -123,6 +120,9 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
                                 PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
                                 PlaybackStateCompat.ACTION_SEEK_TO
                     )
+                    serviceScope.launch {
+                        SharedPreferenceUtil.salvarTempoExecucao(mediaPlayer!!.currentPosition.toLong())
+                    }
                 }else{
                     stateBuilder.setActiveQueueItemId(posicaoAtualReproducao-1L).setState(
                         PlaybackStateCompat.STATE_PAUSED,
@@ -134,6 +134,9 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
                                 PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
                                 PlaybackStateCompat.ACTION_SEEK_TO
                     )
+                    serviceScope.launch {
+                        SharedPreferenceUtil.salvarTempoExecucao(mediaPlayer!!.currentPosition.toLong())
+                    }
                 }
                 mediaSession?.setPlaybackState(stateBuilder.build())
                 delay(500)
@@ -141,7 +144,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         }
     }
 
-    fun abrirFilaReproducao(musicas: ArrayList<MediaBrowserCompat.MediaItem>, posicaoInicial: Int, iniciarPlayer: Boolean){
+    fun abrirFilaReproducao(musicas: ArrayList<MediaBrowserCompat.MediaItem>, posicaoInicial: Int){
         if (musicas.isNotEmpty() && posicaoInicial >= 0){
             listaMusicasOriginal = ArrayList(musicas)
             listaMusicasReproducao = ArrayList(listaMusicasOriginal)
@@ -150,7 +153,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         }
     }
 
-    fun reproduzirMusica(mediaId: String?) {
+    fun reproduzirMusicaSelecionada(mediaId: String?) {
         for ( indice in listaMusicasReproducao.indices){
             if (mediaId == listaMusicasReproducao[indice].mediaId){
                 posicaoAtualReproducao = indice
@@ -187,6 +190,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
             .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, musica.duracao)
             .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, retornaBitmapCapaMusica(musica.data))
         mediaSession?.setMetadata(mediaMetada.build())
+        salvarInfoMusica(musica)
     }
 
     fun proximaFaixa(){
@@ -258,6 +262,13 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
                 posicaoAtualReproducao = posicao
             }
         }
+    }
+
+    private fun salvarInfoMusica(musica: Musica){
+        val gson = Gson()
+        val musicaJson = gson.toJson(musica)
+        SharedPreferenceUtil.musicaTocando = musicaJson
+        SharedPreferenceUtil.posicaoReproducaoLista = posicaoAtualReproducao
     }
 
     private fun retornaBitmapCapaMusica(uri: String): Bitmap {

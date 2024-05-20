@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         }
         verificarPermissoes()
         configurarNavHost()
-        exibirMiniPlayer()
     }
 
     private fun verificarPermissoes() {
@@ -78,7 +77,6 @@ class MainActivity : AppCompatActivity() {
     private fun exibirMiniPlayer() {
         if (SharedPreferenceUtil.musicaTocando!!.isNotEmpty()){
             binding.fragmentMiniPlayer.visibility = View.VISIBLE
-
         } else {
             binding.fragmentMiniPlayer.visibility = View.GONE
         }
