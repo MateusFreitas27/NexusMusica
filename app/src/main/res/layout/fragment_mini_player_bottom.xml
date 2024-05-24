@@ -86,8 +86,8 @@
 
         <ImageButton
             android:id="@+id/imgBtnMiniPlayerPausePlay"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/round_selector"

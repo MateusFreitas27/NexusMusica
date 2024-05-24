@@ -150,6 +150,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
             listaMusicasReproducao = ArrayList(listaMusicasOriginal)
             posicaoAtualReproducao = posicaoInicial
             iniciaReproducao()
+            salvarListaReproducao(listaMusicasReproducao)
         }
     }
 
@@ -232,6 +233,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         listaMusicasReproducao = novaListaReproducao
         listaMusicasOriginal = novaListaReproducao
         iniciaReproducao()
+        salvarListaReproducao(listaMusicasReproducao)
     }
 
     fun trocarModoRepeticao(modoRepeticao: Int){
@@ -269,6 +271,14 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         val musicaJson = gson.toJson(musica)
         SharedPreferenceUtil.musicaTocando = musicaJson
         SharedPreferenceUtil.posicaoReproducaoLista = posicaoAtualReproducao
+    }
+
+    private fun salvarListaReproducao(lista: MutableList<MediaBrowserCompat.MediaItem>) {
+        val gson = Gson()
+        val listaMusicas = gson.toJson(lista)
+        serviceScope.launch {
+            SharedPreferenceUtil.salvarListaReproducao(listaMusicas)
+        }
     }
 
     private fun retornaBitmapCapaMusica(uri: String): Bitmap {

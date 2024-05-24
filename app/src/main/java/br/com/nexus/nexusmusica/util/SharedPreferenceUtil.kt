@@ -9,6 +9,7 @@ import br.com.nexus.nexusmusica.APP
 import br.com.nexus.nexusmusica.FILTRO_TAMANHO
 import br.com.nexus.nexusmusica.ID_ALBUM_FILTRO
 import br.com.nexus.nexusmusica.INTERVALO_MUSICAS
+import br.com.nexus.nexusmusica.LISTA_REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.MODO_ALEATORIO
 import br.com.nexus.nexusmusica.MODO_REPETIR_MUSICA
 import br.com.nexus.nexusmusica.MODO_REPRO_ANTERIOR_ALEATORIO
@@ -152,9 +153,25 @@ object SharedPreferenceUtil {
             }
         }
 
+    var listaReproducao
+        get() = contextShared.getSharedPreferences(LISTA_REPRODUCAO_MUSICAS,Context.MODE_PRIVATE).getString(
+            LISTA_REPRODUCAO_MUSICAS, "")
+        private set(value) {
+            val sharedPreferences = contextShared.getSharedPreferences(LISTA_REPRODUCAO_MUSICAS, Context.MODE_PRIVATE)
+            sharedPreferences.edit {
+                putString(LISTA_REPRODUCAO_MUSICAS, value)
+            }
+        }
+
     suspend fun salvarTempoExecucao(tempo: Long){
         withContext(Dispatchers.IO){
             tempoExecucaoMusica = tempo
+        }
+    }
+
+    suspend fun salvarListaReproducao(lista: String){
+        withContext(Dispatchers.IO){
+            listaReproducao = lista
         }
     }
 }
