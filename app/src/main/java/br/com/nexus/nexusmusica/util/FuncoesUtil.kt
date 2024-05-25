@@ -3,6 +3,8 @@ package br.com.nexus.nexusmusica.util
 import android.content.ContentUris
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaDescriptionCompat
 import androidx.core.net.toUri
 import br.com.nexus.nexusmusica.modelo.Musica
 import java.text.SimpleDateFormat
@@ -25,5 +27,17 @@ object FuncoesUtil {
     fun formatarDuracaoMusica(duracao: Long): String{
         val duracaoFormatada = SimpleDateFormat("mm:ss", Locale.getDefault())
         return  duracaoFormatada.format(duracao)
+    }
+    fun formatarListaMusica(lista: List<Musica>): MutableList<MediaBrowserCompat.MediaItem>{
+        val musicas: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
+        lista.forEach {
+            val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
+                .setMediaId(it.id.toString())
+                .setMediaUri(it.data.toUri())
+                .setTitle(it.titulo)
+                .setSubtitle(it.artistaNome)
+            musicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
+        }
+        return musicas
     }
 }

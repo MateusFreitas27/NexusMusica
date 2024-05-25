@@ -64,6 +64,9 @@
         <argument
             android:name="musica"
             app:argType="br.com.nexus.nexusmusica.modelo.Musica" />
+        <argument
+            android:name="retormarReproducao"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/miniPlayerBottomFragment"

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.os.PowerManager
 import android.support.v4.media.MediaBrowserCompat
@@ -13,16 +14,27 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import androidx.media.MediaBrowserServiceCompat
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.SERVICE_TAG
 import br.com.nexus.nexusmusica.helper.EmbaralharHelper
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
+import br.com.nexus.nexusmusica.util.FuncoesUtil
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,6 +43,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
+import java.lang.reflect.Type
 
 class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListener, KoinComponent {
     private var mediaPlayer: MediaPlayer? = null
@@ -39,8 +52,8 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     private var serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
 
-    private var listaMusicasReproducao: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
-    private var listaMusicasOriginal: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
+    private var listaMusicasReproducao: MutableList<Musica> = arrayListOf()
+    private var listaMusicasOriginal: MutableList<Musica> = arrayListOf()
     private var posicaoAtualReproducao: Int = -1
     private val musicasRepositorio by inject<MusicaRepositorio>()
     private var repetiTodas: Boolean = false
@@ -57,7 +70,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
-        if (parentId.isNotEmpty()) result.sendResult(listaMusicasReproducao) else result.detach()
+        if (parentId.isNotEmpty()) result.sendResult(FuncoesUtil.formatarListaMusica(listaMusicasReproducao)) else result.detach()
     }
 
     override fun onCompletion(player: MediaPlayer?) {
@@ -144,10 +157,10 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         }
     }
 
-    fun abrirFilaReproducao(musicas: ArrayList<MediaBrowserCompat.MediaItem>, posicaoInicial: Int){
+    fun abrirFilaReproducao(musicas: ArrayList<Musica>, posicaoInicial: Int){
         if (musicas.isNotEmpty() && posicaoInicial >= 0){
             listaMusicasOriginal = ArrayList(musicas)
-            listaMusicasReproducao = ArrayList(listaMusicasOriginal)
+            listaMusicasReproducao = listaMusicasOriginal
             posicaoAtualReproducao = posicaoInicial
             iniciaReproducao()
             salvarListaReproducao(listaMusicasReproducao)
@@ -156,11 +169,26 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
 
     fun reproduzirMusicaSelecionada(mediaId: String?) {
         for ( indice in listaMusicasReproducao.indices){
-            if (mediaId == listaMusicasReproducao[indice].mediaId){
+            if (mediaId == listaMusicasReproducao[indice].id.toString()){
                 posicaoAtualReproducao = indice
             }
         }
         iniciaReproducao()
+    }
+
+    fun retomaReproducaoMusica(mediaId: String?){
+        val gson = Gson()
+        val lista = SharedPreferenceUtil.listaReproducao
+        val tipoObjeto = object : TypeToken<ArrayList<Musica>>() {}.type
+        listaMusicasOriginal = gson.fromJson(lista, tipoObjeto)
+        listaMusicasReproducao = listaMusicasOriginal
+        for ( indice in listaMusicasReproducao.indices){
+            if (mediaId == listaMusicasReproducao[indice].id.toString()){
+                posicaoAtualReproducao = indice
+            }
+        }
+        iniciaReproducao()
+        seek(SharedPreferenceUtil.tempoExecucaoMusica.toInt())
     }
 
     private fun iniciaReproducao(){
@@ -168,12 +196,12 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
             stop()
             release()
         }
-        mediaPlayer = MediaPlayer.create(baseContext, listaMusicasReproducao[posicaoAtualReproducao].description.mediaUri).apply {
+        mediaPlayer = MediaPlayer.create(baseContext, listaMusicasReproducao[posicaoAtualReproducao].data.toUri()).apply {
             setWakeMode(baseContext, PowerManager.PARTIAL_WAKE_LOCK)
             setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
             setVolume(1.0f,1.0f)
             start()
-            carregarMediaMetadata(musicasRepositorio.musica(listaMusicasReproducao[posicaoAtualReproducao].mediaId!!.toLong()))
+            carregarMediaMetadata(listaMusicasReproducao[posicaoAtualReproducao])
             setOnCompletionListener(this@MusicaService)
         }
         alterarVelocidadePlayer(SharedPreferenceUtil.velocidadeReproducaoMedia)
@@ -226,9 +254,9 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     }
 
     fun removeMusica(description: MediaDescriptionCompat?) {
-        val novaListaReproducao: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
+        val novaListaReproducao: MutableList<Musica> = arrayListOf()
         listaMusicasReproducao.forEach {
-            if (it.mediaId != description?.mediaId) novaListaReproducao.add(it)
+            if (it.id.toString() != description?.mediaId) novaListaReproducao.add(it)
         }
         listaMusicasReproducao = novaListaReproducao
         listaMusicasOriginal = novaListaReproducao
@@ -260,7 +288,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
             } else -> {
                 val musica = listaMusicasReproducao[posicaoAtualReproducao]
                 listaMusicasReproducao = ArrayList(listaMusicasOriginal)
-                val posicao = listaMusicasReproducao.indexOfFirst { it.description.mediaId == musica.description.mediaId }
+                val posicao = listaMusicasReproducao.indexOfFirst { it.id == musica.id }
                 posicaoAtualReproducao = posicao
             }
         }
@@ -273,7 +301,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         SharedPreferenceUtil.posicaoReproducaoLista = posicaoAtualReproducao
     }
 
-    private fun salvarListaReproducao(lista: MutableList<MediaBrowserCompat.MediaItem>) {
+    private fun salvarListaReproducao(lista: MutableList<Musica>) {
         val gson = Gson()
         val listaMusicas = gson.toJson(lista)
         serviceScope.launch {

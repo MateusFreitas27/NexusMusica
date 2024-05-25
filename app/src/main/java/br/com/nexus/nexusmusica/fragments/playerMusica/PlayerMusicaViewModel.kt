@@ -60,6 +60,7 @@ class PlayerMusicaViewModel(
     val tocandoMusica: MutableLiveData<Int> = _tocandoMusica
     var media: Musica = MusicaVazia
     private var alterarInfoMusica = false
+    private var retomaReproducao: Boolean = true
 
     private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback() {
         override fun onChildrenLoaded(
@@ -95,11 +96,13 @@ class PlayerMusicaViewModel(
 
     fun setMusica(args: PlayerMusicaFragmentArgs) {
         media = args.musica
+        retomaReproducao = args.retormarReproducao
         atualizaMediaReproducao()
     }
 
     fun iniciar() {
-        musicaConector.transportControls.prepareFromMediaId(media.id.toString(), null)
+        if (!retomaReproducao)
+            musicaConector.transportControls.prepareFromMediaId(media.id.toString(), null)
     }
 
     fun playPlause() {
@@ -153,6 +156,16 @@ class PlayerMusicaViewModel(
 
     fun removerMusicaListaReproducao(media: MediaMetadataCompat?) {
         musicaConector.removeMusica(media?.description)
+    }
+
+    fun retomaReproducaoMusica() {
+        if (retomaReproducao){
+            musicaConector.transportControls.playFromMediaId(media.id.toString(), null)
+            retomaReproducao = false
+        } else {
+            playPlause()
+        }
+
     }
 
     fun trocarModorepetirMusica() {

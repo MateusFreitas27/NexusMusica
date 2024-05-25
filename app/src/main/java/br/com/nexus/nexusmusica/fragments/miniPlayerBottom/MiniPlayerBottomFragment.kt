@@ -1,6 +1,7 @@
 package br.com.nexus.nexusmusica.fragments.miniPlayerBottom
 
 import android.os.Bundle
+import android.support.v4.media.session.PlaybackStateCompat
 import android.text.TextUtils
 import android.text.TextUtils.EllipsizeCallback
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import br.com.nexus.nexusmusica.MusicaVazia
+import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.databinding.FragmentMiniPlayerBottomBinding
 import br.com.nexus.nexusmusica.fragments.home.HomeFragmentDirections
 import br.com.nexus.nexusmusica.fragments.playerMusica.PlayerMusicaViewModel
@@ -25,6 +27,7 @@ class MiniPlayerBottomFragment : Fragment() {
     private var _binding: FragmentMiniPlayerBottomBinding? = null
     private val binding get() = _binding!!
     private val playerMusicaViewModel: PlayerMusicaViewModel by viewModel()
+    private var musica: Musica = MusicaVazia
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +36,7 @@ class MiniPlayerBottomFragment : Fragment() {
         _binding = FragmentMiniPlayerBottomBinding.inflate(inflater, container, false)
         exibirInfomacaoTela()
         configurarClicks()
+        configurarObservers()
 
         // Inflate the layout for this fragment
         return binding.root
@@ -42,7 +46,8 @@ class MiniPlayerBottomFragment : Fragment() {
         if (SharedPreferenceUtil.musicaTocando!!.isNotEmpty()){
             val gson = Gson()
             val json = SharedPreferenceUtil.musicaTocando
-            val musica = gson.fromJson(json, Musica::class.java)
+            musica = gson.fromJson(json, Musica::class.java)
+            playerMusicaViewModel.media = musica
             binding.txtNomeMusicaMiniPlayer.text = musica.titulo
             binding.txtNomeAlbumMiniPlayer.text = musica.albumNome
             Glide.with(this).load(FuncoesUtil.carregarCapaMusica(musica.data)).centerCrop().dontAnimate().into(binding.imageCapaMusicaMiniPlayer)
@@ -51,14 +56,34 @@ class MiniPlayerBottomFragment : Fragment() {
 
     private fun configurarClicks() {
         binding.cardPlayer.setOnClickListener {
-            Toast.makeText(context, "Funcionando", Toast.LENGTH_SHORT).show()
-            val musica = MusicaVazia
-            val action = MiniPlayerBottomFragmentDirections.actionMiniPlayerBottomFragmentToPlayerMusicaFragment(musica)
-            //findNavController().navigate(action)
+            val action = MiniPlayerBottomFragmentDirections.actionMiniPlayerBottomFragmentToPlayerMusicaFragment(musica, true)
+            findNavController().navigate(action)
         }
 
         binding.imgBtnMiniPlayerPausePlay.setOnClickListener {
-            Toast.makeText(context, "Play/Pause", Toast.LENGTH_SHORT).show()
+            playerMusicaViewModel.retomaReproducaoMusica()
+        }
+    }
+
+    private fun configurarObservers() {
+        playerMusicaViewModel.infoMusicaTocando.observe(viewLifecycleOwner){
+            playerMusicaViewModel.carregarDadosMusica(it)
+        }
+        playerMusicaViewModel.tocandoMusica.observe(viewLifecycleOwner){
+            if (it == PlaybackStateCompat.STATE_PLAYING){
+                binding.imgBtnMiniPlayerPausePlay.setImageResource(R.drawable.icon_pause)
+            }else{
+                binding.imgBtnMiniPlayerPausePlay.setImageResource(R.drawable.icon_play)
+            }
+        }
+        playerMusicaViewModel.nomeMusica.observe(viewLifecycleOwner){
+            binding.txtNomeMusicaMiniPlayer.text = it
+        }
+        playerMusicaViewModel.nomeAlbum.observe(viewLifecycleOwner){
+            binding.txtNomeAlbumMiniPlayer.text = it
+        }
+        playerMusicaViewModel.imgCapa.observe(viewLifecycleOwner){
+            Glide.with(this).load(it).centerCrop().dontAnimate().into(binding.imageCapaMusicaMiniPlayer)
         }
     }
 }

@@ -68,7 +68,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
 
     override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
         super.onPlayFromMediaId(mediaId, extras)
-        musicaService.reproduzirMusicaSelecionada(mediaId)
+        musicaService.retomaReproducaoMusica(mediaId)
     }
 
     override fun onSkipToQueueItem(id: Long) {
@@ -78,7 +78,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
 
     override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle?) {
         super.onPrepareFromMediaId(mediaId, extras)
-        val listaMusicas: ArrayList<MediaBrowserCompat.MediaItem> = ArrayList()
+        val listaMusicas: ArrayList<Musica> = ArrayList()
         var posicaoMusicaId = 0
         when(SharedPreferenceUtil.modoReproducaoPlayer){
             REPRODUCAO_MUSICAS -> {
@@ -88,7 +88,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
                         posicaoMusicaId = indice
                     }
                 }
-                listaMusicas.addAll(formatarListaMusica(musicas))
+                listaMusicas.addAll(musicas)
             }
             REPRODUCAO_ALBUM -> {
                 val idAlbum: Long = SharedPreferenceUtil.idAlbumMusica
@@ -98,7 +98,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
                         posicaoMusicaId = indice
                     }
                 }
-                listaMusicas.addAll(formatarListaMusica(musicas))
+                listaMusicas.addAll(musicas)
             }
             REPRODUCAO_ADICOES_RECENTES -> {
                 val musicas = ArrayList(musicasRecentesRepositorio.musicasRecentes())
@@ -107,22 +107,10 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
                         posicaoMusicaId = indice
                     }
                 }
-                listaMusicas.addAll(formatarListaMusica(musicas))
+                listaMusicas.addAll(musicas)
             }
         }
         musicaService.abrirFilaReproducao(listaMusicas, posicaoMusicaId)
     }
 
-    private fun formatarListaMusica(lista: List<Musica>): MutableList<MediaBrowserCompat.MediaItem>{
-        val musicas: MutableList<MediaBrowserCompat.MediaItem> = arrayListOf()
-        lista.forEach {
-            val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                .setMediaId(it.id.toString())
-                .setMediaUri(it.data.toUri())
-                .setTitle(it.titulo)
-                .setSubtitle(it.artistaNome)
-            musicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
-        }
-        return musicas
-    }
 }
