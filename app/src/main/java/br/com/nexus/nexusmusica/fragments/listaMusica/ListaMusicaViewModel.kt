@@ -30,7 +30,7 @@ class ListaMusicaViewModel(private val repositorio: Repositorio): ViewModel() {
     fun abrirPlayerMusica(findNavController: NavController, musica: Musica) {
         SharedPreferenceUtil.modoReproducaoPlayerAnterior = SharedPreferenceUtil.modoReproducaoPlayer
         SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_MUSICAS
-        val action = ListaMusicaFragmentDirections.actionMenuItemMusicaToPlayerMusicaFragment(musica, false)
+        val action = ListaMusicaFragmentDirections.actionMenuItemMusicaToPlayerMusicaFragment(musica, true)
         findNavController.navigate(action)
     }
 

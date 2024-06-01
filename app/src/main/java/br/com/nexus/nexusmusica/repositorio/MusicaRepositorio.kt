@@ -89,15 +89,13 @@ class RealMusicaRepositorio(private val context: Context): MusicaRepositorio {
         return musica(montarCursor(AudioColumns._ID + " =? ", arrayOf(musicaId.toString())))
     }
 
-    fun montarCursor(selecao: String?, selecaoValores: Array<String>?, ordemOrdenacao: String = MediaStore.Audio.Media.TITLE, ignoraBlackList: Boolean = false): Cursor?{
+    fun montarCursor(selecao: String?, selecaoValores: Array<String>?, ordemOrdenacao: String = MediaStore.Audio.Media.TITLE): Cursor?{
         var selecaoFinal = selecao
         val selecaoValoresFinal = selecaoValores
-        if(!ignoraBlackList){
-            selecaoFinal = if (selecao != null && selecao.trim{it <= ' '} != ""){
-                "$E_MUSICA AND $selecaoFinal"
-            }else{
-                E_MUSICA
-            }
+        selecaoFinal = if (selecao != null && selecao.trim{it <= ' '} != ""){
+            "$E_MUSICA AND $selecaoFinal"
+        }else{
+            E_MUSICA
         }
         selecaoFinal = selecaoFinal + " AND " + MediaStore.Audio.Media.DURATION + ">= " + (SharedPreferenceUtil.tamanhoMusicaFiltro * 1000)
         val uri = if (VersaoUtil.androidQ()){

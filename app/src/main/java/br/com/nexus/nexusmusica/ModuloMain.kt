@@ -4,6 +4,7 @@ import br.com.nexus.nexusmusica.fragments.detalheAlbum.DetalheAlbumFragmentViewM
 import br.com.nexus.nexusmusica.fragments.home.HomeViewModel
 import br.com.nexus.nexusmusica.fragments.listaAlbum.ListaAlbumViewModel
 import br.com.nexus.nexusmusica.fragments.listaMusica.ListaMusicaViewModel
+import br.com.nexus.nexusmusica.fragments.miniPlayerBottom.MiniPlayerBottomFragmentViewModel
 import br.com.nexus.nexusmusica.fragments.musicasRecentes.ListaMusicasrecentesViewModel
 import br.com.nexus.nexusmusica.fragments.playerMusica.PlayerMusicaViewModel
 import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
@@ -70,6 +71,13 @@ private val viewModelModulo = module {
 
     viewModel{
         PlayerMusicaViewModel(
+            get(),
+            get()
+        )
+    }
+
+    viewModel {
+        MiniPlayerBottomFragmentViewModel(
             get(),
             get()
         )

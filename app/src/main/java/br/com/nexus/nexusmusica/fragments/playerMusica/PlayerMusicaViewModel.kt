@@ -26,6 +26,7 @@ import br.com.nexus.nexusmusica.services.MusicaConector
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import br.com.nexus.nexusmusica.util.VersaoUtil
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -60,7 +61,7 @@ class PlayerMusicaViewModel(
     val tocandoMusica: MutableLiveData<Int> = _tocandoMusica
     var media: Musica = MusicaVazia
     private var alterarInfoMusica = false
-    private var retomaReproducao: Boolean = true
+    private var novaReproducao: Boolean = false
 
     private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback() {
         override fun onChildrenLoaded(
@@ -86,8 +87,8 @@ class PlayerMusicaViewModel(
             while (true) {
                 _tocandoMusica.value = playbackState.value?.state
                 val pos = playbackState.value?.position
-                if (_progressoMusica.value != pos) {
-                    _progressoMusica.value = pos!!
+                if (_progressoMusica.value != pos ) {
+                    _progressoMusica.value = pos ?: SharedPreferenceUtil.tempoExecucaoMusica
                 }
                 delay(DELAY_INTERVALO_PLAYER_POSICAO)
             }
@@ -95,21 +96,33 @@ class PlayerMusicaViewModel(
     }
 
     fun setMusica(args: PlayerMusicaFragmentArgs) {
+        var musica = MusicaVazia
         media = args.musica
-        retomaReproducao = args.retormarReproducao
+        if (SharedPreferenceUtil.musicaTocando!!.isNotEmpty()){
+            val gson = Gson()
+            val json = SharedPreferenceUtil.musicaTocando
+            musica = gson.fromJson(json, Musica::class.java)
+            _progressoMusica.value = SharedPreferenceUtil.tempoExecucaoMusica
+        }
+        novaReproducao = musica.id != media.id
         atualizaMediaReproducao()
     }
 
     fun iniciar() {
-        if (!retomaReproducao)
+        if (novaReproducao)
             musicaConector.transportControls.prepareFromMediaId(media.id.toString(), null)
     }
 
     fun playPlause() {
-        if (playbackState.value?.state == 3) {
-            musicaConector.transportControls.pause()
-        } else {
-            musicaConector.transportControls.play()
+        if (!novaReproducao){
+            musicaConector.transportControls.playFromMediaId(media.id.toString(), null)
+            novaReproducao = true
+        }else {
+            if (playbackState.value?.state == 3) {
+                musicaConector.transportControls.pause()
+            } else {
+                musicaConector.transportControls.play()
+            }
         }
     }
 
@@ -156,16 +169,6 @@ class PlayerMusicaViewModel(
 
     fun removerMusicaListaReproducao(media: MediaMetadataCompat?) {
         musicaConector.removeMusica(media?.description)
-    }
-
-    fun retomaReproducaoMusica() {
-        if (retomaReproducao){
-            musicaConector.transportControls.playFromMediaId(media.id.toString(), null)
-            retomaReproducao = false
-        } else {
-            playPlause()
-        }
-
     }
 
     fun trocarModorepetirMusica() {
