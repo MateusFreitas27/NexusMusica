@@ -6,9 +6,9 @@ import br.com.nexus.nexusmusica.MusicaVazia
 
 
 class Album(val id: Long, val musicas: List<Musica>) : Parcelable {
-    val titulo: String = obterPrimeiraMusicaSegura().albumNome
+    val titulo: String = obterPrimeiraMusicaSegura().nomeAlbum
 
-    val artistaNome: String get() = obterPrimeiraMusicaSegura().artistaNome
+    val artistaNome: String get() = obterPrimeiraMusicaSegura().nomeArtista
 
     val musicasContadas: Int get() = musicas.size
 

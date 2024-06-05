@@ -52,16 +52,16 @@ class RealMusicaRepositorio(private val context: Context): MusicaRepositorio {
         val musicas = musicas(cursor)
         return when(SharedPreferenceUtil.modoOrdenacaoMusica){
             OrdemOrdenacao.MUSICA_A_Z -> {
-                musicas.sortedWith{m1,m2 -> collator.compare(m1.titulo,m2.titulo)}
+                musicas.sortedWith{m1,m2 -> collator.compare(m1.nomeMusica,m2.nomeMusica)}
             }
             OrdemOrdenacao.MUSICA_Z_A ->{
-                musicas.sortedWith{m1,m2 -> collator.compare(m2.titulo, m1.titulo)}
+                musicas.sortedWith{m1,m2 -> collator.compare(m2.nomeMusica, m1.nomeMusica)}
             }
             OrdemOrdenacao.ALBUM_A_Z -> {
-                musicas.sortedWith{m1,m2 -> collator.compare(m1.albumNome, m2.albumNome)}
+                musicas.sortedWith{m1,m2 -> collator.compare(m1.nomeAlbum, m2.nomeAlbum)}
             }
             OrdemOrdenacao.MUSICA_ARTISTA -> {
-                musicas.sortedWith{m1,m2 -> collator.compare(m1.artistaNome, m2.artistaNome)}
+                musicas.sortedWith{m1,m2 -> collator.compare(m1.nomeArtista, m2.nomeArtista)}
             }
             OrdemOrdenacao.COMPOSICAO -> {
                 musicas.sortedWith{m1, m2 -> collator.compare(m1.composicao, m2.composicao)}

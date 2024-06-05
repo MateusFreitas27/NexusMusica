@@ -48,8 +48,8 @@ class AdapterListaMusica(
 
     override fun onBindViewHolder(holder: MusicaViewHodel, position: Int) {
         val musica = listaMusica[position]
-        holder.textTitulo.text = musica.titulo
-        holder.textNomeArtista.text = musica.artistaNome
+        holder.textTitulo.text = musica.nomeMusica
+        holder.textNomeArtista.text = musica.nomeArtista
 
         val imagem = FuncoesUtil.carregarCapaMusica(musica)
         Glide.with(holder.itemView).load(imagem).centerCrop().dontAnimate().into(holder.imagemCapa)

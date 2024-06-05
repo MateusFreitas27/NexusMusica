@@ -36,8 +36,8 @@ class MiniPlayerBottomFragmentViewModel(
     }
 
     private fun carregarDadosTela(){
-        nomeMusica.value = musica.titulo
-        nomeAlbum.value = musica.albumNome
+        nomeMusica.value = musica.nomeMusica
+        nomeAlbum.value = musica.nomeAlbum
         capaMusica.value = musica.data
     }
 

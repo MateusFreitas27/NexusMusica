@@ -3,22 +3,23 @@ package br.com.nexus.nexusmusica.modelo
 import android.os.Parcel
 import android.os.Parcelable
 
-class Musica(
-    val id: Long,
-    val nomeMusica: String,
-    val numeroFaixa: Int,
-    val ano: Int,
-    val duracao: Long,
-    val data: String,
-    val dataModificacao: Long,
-    val dataAdicao: Long,
-    val idAlbum: Long,
-    val nomeAlbum: String,
-    val idArtista: Long,
-    val nomeArtista: String,
-    val composicao: String?,
-    val albumArtista: String?
-): Parcelable{
+class HistoricoMusica(
+    var id: Long,
+    var nomeMusica: String,
+    var numeroFaixa: Int,
+    var ano: Int,
+    var duracao: Long,
+    var data: String,
+    var dataModificacao: Long,
+    var dataAdicao: Long,
+    var idAlbum: Long,
+    var nomeAlbum: String,
+    var idArtista: Long,
+    var nomeArtista: String,
+    var composicao: String?,
+    var albumArtista: String?,
+    var qtdVezesTocadas: Int
+) : Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readString().toString(),
@@ -33,7 +34,8 @@ class Musica(
         parcel.readLong(),
         parcel.readString().toString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readInt()
     ) {
     }
 
@@ -52,19 +54,21 @@ class Musica(
         parcel.writeString(nomeArtista)
         parcel.writeString(composicao)
         parcel.writeString(albumArtista)
+        parcel.writeInt(qtdVezesTocadas)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Musica> {
-        override fun createFromParcel(parcel: Parcel): Musica {
-            return Musica(parcel)
+    companion object CREATOR : Parcelable.Creator<HistoricoMusica> {
+        override fun createFromParcel(parcel: Parcel): HistoricoMusica {
+            return HistoricoMusica(parcel)
         }
 
-        override fun newArray(size: Int): Array<Musica?> {
+        override fun newArray(size: Int): Array<HistoricoMusica?> {
             return arrayOfNulls(size)
         }
     }
+
 }

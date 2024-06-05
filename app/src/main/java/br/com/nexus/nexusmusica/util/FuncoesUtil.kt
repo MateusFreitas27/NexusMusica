@@ -21,7 +21,7 @@ object FuncoesUtil {
 
     fun carregarCapaMusica(musica: Musica): Uri {
         val artWork = "content://media/external/audio/albumart".toUri()
-        return ContentUris.withAppendedId(artWork, musica.albumId)
+        return ContentUris.withAppendedId(artWork, musica.idAlbum)
     }
 
     fun formatarDuracaoMusica(duracao: Long): String{
@@ -34,8 +34,8 @@ object FuncoesUtil {
             val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
                 .setMediaId(it.id.toString())
                 .setMediaUri(it.data.toUri())
-                .setTitle(it.titulo)
-                .setSubtitle(it.artistaNome)
+                .setTitle(it.nomeMusica)
+                .setSubtitle(it.nomeArtista)
             musicas.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
         }
         return musicas

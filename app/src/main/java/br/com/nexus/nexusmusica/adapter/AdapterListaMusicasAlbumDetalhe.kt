@@ -21,7 +21,7 @@ class AdapterListaMusicasAlbumDetalhe(private val listaMusica: List<Musica>, pri
         val musica = listaMusica[position]
         val numMusica = musica.numeroFaixa.toString()
         holder.txtNumFaixaAlbum.text = if (numMusica.length >= 4) numMusica.slice(3..3) else numMusica
-        holder.txtNomeMusicaAlbum.text = musica.titulo
+        holder.txtNomeMusicaAlbum.text = musica.nomeMusica
         holder.txtDuracaoFaixaAlbum.text = FuncoesUtil.formatarDuracaoMusica(musica.duracao)
 
         holder.itemView.setOnClickListener {

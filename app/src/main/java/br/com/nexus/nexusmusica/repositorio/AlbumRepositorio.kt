@@ -44,7 +44,7 @@ class RealAlbumRepositorio(private val musicaRepositorio: RealMusicaRepositorio)
     }
 
     private fun separarAlbums(musicas: List<Musica>, ordem: Boolean = true): List<Album> {
-        val agrupado = musicas.groupBy { it.albumId }.map { Album(it.key, it.value) }
+        val agrupado = musicas.groupBy { it.idAlbum }.map { Album(it.key, it.value) }
         if(!ordem) return agrupado
         val collator = Collator.getInstance()
         return when(SharedPreferenceUtil.modoOrdenacaoAlbum){
@@ -69,10 +69,10 @@ class RealAlbumRepositorio(private val musicaRepositorio: RealMusicaRepositorio)
         val musicas = when(SharedPreferenceUtil.albumDetalheMusicaOrdemOrdenacao){
             OrdemOrdenacao.LISTA_FAIXAS_MUSICAS -> album.musicas.sortedWith{ a1, a2 -> a1.numeroFaixa.compareTo(a2.numeroFaixa)}
             OrdemOrdenacao.ALBUM_A_Z -> {
-                album.musicas.sortedWith{a1,a2 -> collator.compare(a1.titulo,a2.titulo)}
+                album.musicas.sortedWith{a1,a2 -> collator.compare(a1.nomeMusica,a2.nomeMusica)}
             }
             OrdemOrdenacao.ALBUM_Z_A ->{
-                album.musicas.sortedWith{a1,a2 -> collator.compare(a2.titulo, a1.titulo)}
+                album.musicas.sortedWith{a1,a2 -> collator.compare(a2.nomeMusica, a1.nomeMusica)}
             }
             OrdemOrdenacao.MUSICA_DURACAO ->{
                 album.musicas.sortedWith{a1,a2 -> a1.duracao.compareTo(a2.duracao)}

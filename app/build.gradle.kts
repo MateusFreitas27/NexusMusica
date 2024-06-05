@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.navigation.safeArgsNav)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -58,6 +59,12 @@ dependencies {
     implementation(libs.glide)
     implementation(libs.glide.ksp)
     implementation(libs.gson)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+
+    annotationProcessor(libs.room.compiler)
+
+    ksp(libs.room.compiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.koin.test)

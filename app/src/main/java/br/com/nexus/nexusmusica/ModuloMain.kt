@@ -1,5 +1,6 @@
 package br.com.nexus.nexusmusica
 
+import androidx.room.Room
 import br.com.nexus.nexusmusica.fragments.detalheAlbum.DetalheAlbumFragmentViewModel
 import br.com.nexus.nexusmusica.fragments.home.HomeViewModel
 import br.com.nexus.nexusmusica.fragments.listaAlbum.ListaAlbumViewModel
@@ -14,7 +15,11 @@ import br.com.nexus.nexusmusica.repositorio.RealAlbumRepositorio
 import br.com.nexus.nexusmusica.repositorio.RealMusicaRepositorio
 import br.com.nexus.nexusmusica.repositorio.RealMusicasRecentesRepositorio
 import br.com.nexus.nexusmusica.repositorio.RealRepositorio
+import br.com.nexus.nexusmusica.repositorio.RealRoomRepositorio
 import br.com.nexus.nexusmusica.repositorio.Repositorio
+import br.com.nexus.nexusmusica.repositorio.RoomRepository
+import br.com.nexus.nexusmusica.room.HistoricoDao
+import br.com.nexus.nexusmusica.room.NexusMusicaBancoDados
 import br.com.nexus.nexusmusica.services.MusicaConector
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -22,14 +27,28 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 private val mainModulo = module {
-    single{
+    single {
         androidContext().contentResolver
+    }
+}
+
+private val roomModulo = module {
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            NexusMusicaBancoDados::class.java,
+            "nexus_musica_db"
+        ).allowMainThreadQueries().fallbackToDestructiveMigration().build()
+    }
+
+    factory{
+        get<NexusMusicaBancoDados>().historicoDao()
     }
 }
 
 private val dataModulo = module {
     single {
-        RealRepositorio(get(), get(), get())
+        RealRepositorio(get(), get(), get(), get())
     } bind Repositorio::class
 
     single {
@@ -43,17 +62,22 @@ private val dataModulo = module {
     single {
         RealMusicasRecentesRepositorio(get())
     } bind MusicasRecentesRepositorio::class
-    single <MusicaConector> {
+
+    single {
+        RealRoomRepositorio(get())
+    } bind RoomRepository::class
+
+    single<MusicaConector> {
         MusicaConector(get())
     }
 }
 
 private val viewModelModulo = module {
-    viewModel{
+    viewModel {
         ListaMusicaViewModel(get())
     }
 
-    viewModel{
+    viewModel {
         ListaAlbumViewModel(get())
     }
 
@@ -61,15 +85,15 @@ private val viewModelModulo = module {
         HomeViewModel()
     }
 
-    viewModel{
+    viewModel {
         ListaMusicasrecentesViewModel(get())
     }
 
-    viewModel{
+    viewModel {
         DetalheAlbumFragmentViewModel()
     }
 
-    viewModel{
+    viewModel {
         PlayerMusicaViewModel(
             get(),
             get()
@@ -86,4 +110,4 @@ private val viewModelModulo = module {
 }
 
 
-val appModulos = listOf(mainModulo, dataModulo, viewModelModulo)
+val appModulos = listOf(mainModulo, dataModulo, viewModelModulo, roomModulo)

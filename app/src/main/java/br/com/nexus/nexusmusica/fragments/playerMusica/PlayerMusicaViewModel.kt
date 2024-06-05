@@ -150,8 +150,8 @@ class PlayerMusicaViewModel(
 
     private fun atualizaMediaReproducao() {
         _duracaoMusica.value = media.duracao.toInt()
-        _nomeMusica.value = media.titulo
-        _nomeAlbum.value = media.albumNome
+        _nomeMusica.value = media.nomeMusica
+        _nomeAlbum.value = media.nomeAlbum
         _imgCapa.value = FuncoesUtil.carregarCapaMusica(media.data)
     }
 

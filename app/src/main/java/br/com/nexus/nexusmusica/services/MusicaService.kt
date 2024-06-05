@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.media.AudioAttributes
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.os.PowerManager
 import android.support.v4.media.MediaBrowserCompat
@@ -14,7 +13,6 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
@@ -24,16 +22,11 @@ import br.com.nexus.nexusmusica.SERVICE_TAG
 import br.com.nexus.nexusmusica.helper.EmbaralharHelper
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
+import br.com.nexus.nexusmusica.repositorio.Repositorio
+import br.com.nexus.nexusmusica.room.toHistoricoMusica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +36,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
-import java.lang.reflect.Type
 
 class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListener, KoinComponent {
     private var mediaPlayer: MediaPlayer? = null
@@ -55,7 +47,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     private var listaMusicasReproducao: MutableList<Musica> = arrayListOf()
     private var listaMusicasOriginal: MutableList<Musica> = arrayListOf()
     private var posicaoAtualReproducao: Int = -1
-    private val musicasRepositorio by inject<MusicaRepositorio>()
+    private val repositorio by inject<Repositorio>()
     private var repetiTodas: Boolean = false
 
     override fun onGetRoot(
@@ -207,14 +199,17 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         alterarVelocidadePlayer(SharedPreferenceUtil.velocidadeReproducaoMedia)
         iniciaNotificacao()
         atualizarPlaybackState()
+        CoroutineScope(Dispatchers.IO).launch {
+            repositorio.salvarHistorico(listaMusicasReproducao[posicaoAtualReproducao].toHistoricoMusica())
+        }
     }
 
     private fun carregarMediaMetadata(musica: Musica) {
         val mediaMetada = MediaMetadataCompat.Builder()
             .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, musica.id.toString())
-            .putText(MediaMetadataCompat.METADATA_KEY_TITLE, musica.titulo)
-            .putText(MediaMetadataCompat.METADATA_KEY_ALBUM, musica.albumNome)
-            .putText(MediaMetadataCompat.METADATA_KEY_ARTIST, musica.artistaNome)
+            .putText(MediaMetadataCompat.METADATA_KEY_TITLE, musica.nomeMusica)
+            .putText(MediaMetadataCompat.METADATA_KEY_ALBUM, musica.nomeAlbum)
+            .putText(MediaMetadataCompat.METADATA_KEY_ARTIST, musica.nomeArtista)
             .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_URI, musica.data)
             .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, musica.duracao)
             .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, retornaBitmapCapaMusica(musica.data))

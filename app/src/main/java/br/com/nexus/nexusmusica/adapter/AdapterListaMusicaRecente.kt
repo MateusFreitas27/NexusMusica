@@ -1,7 +1,6 @@
 package br.com.nexus.nexusmusica.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -28,8 +27,8 @@ class AdapterListaMusicaRecente(private val clickListenerAdicoesRecentes: Interf
     override fun getItemCount(): Int = listaMusica.size
 
     override fun onBindViewHolder(holder: viewHodel, position: Int) {
-        holder.textNomeMusicaRecente.text = listaMusica[position].titulo
-        holder.textNomeAlbumMusicaRecente.text = listaMusica[position].albumNome
+        holder.textNomeMusicaRecente.text = listaMusica[position].nomeMusica
+        holder.textNomeAlbumMusicaRecente.text = listaMusica[position].nomeAlbum
 
         val imagem = FuncoesUtil.carregarCapaMusica(listaMusica[position])
         Glide.with(holder.itemView).load(imagem).error(R.drawable.sem_album).into(holder.imagemCapa)

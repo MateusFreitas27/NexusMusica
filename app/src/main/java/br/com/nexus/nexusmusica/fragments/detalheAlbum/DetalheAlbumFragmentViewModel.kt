@@ -28,7 +28,7 @@ class DetalheAlbumFragmentViewModel: ViewModel() {
     fun abrirTelaPlayer(navController: NavController, musica: Musica) {
         SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ALBUM
         SharedPreferenceUtil.modoReproducaoPlayerAnterior = SharedPreferenceUtil.modoReproducaoPlayer
-        SharedPreferenceUtil.idAlbumMusica = musica.albumId
+        SharedPreferenceUtil.idAlbumMusica = musica.idAlbum
         val action = DetalheAlbumFragmentDirections.actionDetalheAlbumFragmentToPlayerMusicaFragment(musica, true)
         navController.navigate(action)
     }
