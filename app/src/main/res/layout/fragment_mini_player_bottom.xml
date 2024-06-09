@@ -5,6 +5,7 @@
     android:id="@+id/cardPlayer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="2dp"
     app:cardCornerRadius="17dp"
     tools:context=".fragments.miniPlayerBottom.MiniPlayerBottomFragment">
 

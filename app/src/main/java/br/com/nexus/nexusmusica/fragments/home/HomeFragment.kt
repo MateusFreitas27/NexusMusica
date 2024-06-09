@@ -36,8 +36,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun eventoToqueTela() {
-        binding.btnAdicoesRecentes.setOnClickListener {
-            homeViewModel.abrirTelaMusicasRecentes(findNavController())
+        with(binding){
+            btnAdicoesRecentes.setOnClickListener {
+                homeViewModel.abrirTelaMusicasRecentes(findNavController())
+            }
+            btnHistoricoMusicas.setOnClickListener {
+                homeViewModel.abrirTelaHistoricoMusicas(findNavController())
+            }
         }
     }
 }

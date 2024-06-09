@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_miniPlayerBottomFragment_to_playerMusicaFragment"
             app:destination="@id/playerMusicaFragment" />
+        <action
+            android:id="@+id/action_menu_item_home_to_historicoMusicaFragment"
+            app:destination="@id/historicoMusicaFragment" />
     </fragment>
     <fragment
         android:id="@+id/menu_item_musica"
@@ -89,4 +92,9 @@
             android:id="@+id/action_miniPlayerBottomFragment_to_playerMusicaFragment"
             app:destination="@id/playerMusicaFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/historicoMusicaFragment"
+        android:name="br.com.nexus.nexusmusica.fragments.historicoMusica.HistoricoMusicaFragment"
+        android:label="fragment_historico_musica"
+        tools:layout="@layout/fragment_historico_musica" />
 </navigation>
