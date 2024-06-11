@@ -2,6 +2,7 @@ package br.com.nexus.nexusmusica
 
 import androidx.room.Room
 import br.com.nexus.nexusmusica.fragments.detalheAlbum.DetalheAlbumFragmentViewModel
+import br.com.nexus.nexusmusica.fragments.historicoMusica.HistoricoMusicaViewModel
 import br.com.nexus.nexusmusica.fragments.home.HomeViewModel
 import br.com.nexus.nexusmusica.fragments.listaAlbum.ListaAlbumViewModel
 import br.com.nexus.nexusmusica.fragments.listaMusica.ListaMusicaViewModel
@@ -107,6 +108,11 @@ private val viewModelModulo = module {
         )
     }
 
+    viewModel {
+        HistoricoMusicaViewModel(
+            get()
+        )
+    }
 }
 
 

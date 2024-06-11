@@ -5,13 +5,14 @@ import br.com.nexus.nexusmusica.modelo.HistoricoMusica
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.room.toHistoricoEntity
 import br.com.nexus.nexusmusica.room.toHistoricoMusica
+import br.com.nexus.nexusmusica.room.toMusica
 
 interface Repositorio {
     suspend fun listaMusicas(): List<Musica>
     suspend fun listaMusicasRecentes(): List<Musica>
     suspend fun listaTodosAlbums(): List<Album>
     suspend fun consultaMusica(id:Long): Musica
-    suspend fun listaHistorico(): List<HistoricoMusica>
+    suspend fun listaHistorico(): List<Musica>
     suspend fun salvarHistorico(musica: HistoricoMusica)
 }
 
@@ -37,11 +38,11 @@ class RealRepositorio(
         return musicaRepositorio.musica(id)
     }
 
-    override suspend fun listaHistorico(): List<HistoricoMusica> {
+    override suspend fun listaHistorico(): List<Musica> {
         val listaHistorico = roomRepositorio.listaHistorico()
-        val listaMusica: MutableList<HistoricoMusica> = arrayListOf()
+        val listaMusica: MutableList<Musica> = arrayListOf()
         listaHistorico.forEach { historico ->
-            listaMusica.add(historico.toHistoricoMusica())
+            listaMusica.add(historico.toMusica())
         }
         return listaMusica.toList()
     }

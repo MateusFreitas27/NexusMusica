@@ -1,6 +1,5 @@
 package br.com.nexus.nexusmusica.fragments.listaMusica
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,6 @@ import androidx.navigation.NavController
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.Repositorio
-import br.com.nexus.nexusmusica.room.toHistoricoMusica
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

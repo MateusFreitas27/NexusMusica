@@ -67,6 +67,25 @@ fun HistoricoEntity.toHistoricoMusica(): HistoricoMusica{
     )
 }
 
+fun HistoricoEntity.toMusica(): Musica{
+    return Musica (
+        id = this.id,
+        nomeMusica = this.nomeMusica,
+        numeroFaixa = this.numeroFaixa,
+        ano = this.ano,
+        duracao = this.duracao,
+        data = this.data,
+        dataModificacao = this.dataModificacao,
+        dataAdicao = this.dataAdicao,
+        idAlbum = this.idAlbum,
+        nomeAlbum = this.nomeAlbum,
+        idArtista = this.idArtista,
+        nomeArtista = this.nomeArtista,
+        composicao = this.composicao,
+        albumArtista = this.albumArtista
+    )
+}
+
 fun Musica.toHistoricoMusica(): HistoricoMusica{
     return HistoricoMusica(
         id = this.id,
