@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.listaMusica
+package br.com.nexus.nexusmusica.ui.fragments.listaMusica
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,7 +32,11 @@ class ListaMusicaViewModel(
     fun abrirPlayerMusica(findNavController: NavController, musica: Musica) {
         SharedPreferenceUtil.modoReproducaoPlayerAnterior = SharedPreferenceUtil.modoReproducaoPlayer
         SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_MUSICAS
-        val action = ListaMusicaFragmentDirections.actionMenuItemMusicaToPlayerMusicaFragment(musica, true)
+        val action =
+            ListaMusicaFragmentDirections.actionMenuItemMusicaToPlayerMusicaFragment(
+                musica,
+                true
+            )
         findNavController.navigate(action)
     }
 

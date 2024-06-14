@@ -1,14 +1,14 @@
-package br.com.nexus.nexusmusica
+package br.com.nexus.nexusmusica.di
 
 import androidx.room.Room
-import br.com.nexus.nexusmusica.fragments.detalheAlbum.DetalheAlbumFragmentViewModel
-import br.com.nexus.nexusmusica.fragments.historicoMusica.HistoricoMusicaViewModel
-import br.com.nexus.nexusmusica.fragments.home.HomeViewModel
-import br.com.nexus.nexusmusica.fragments.listaAlbum.ListaAlbumViewModel
-import br.com.nexus.nexusmusica.fragments.listaMusica.ListaMusicaViewModel
-import br.com.nexus.nexusmusica.fragments.miniPlayerBottom.MiniPlayerBottomFragmentViewModel
-import br.com.nexus.nexusmusica.fragments.musicasRecentes.ListaMusicasrecentesViewModel
-import br.com.nexus.nexusmusica.fragments.playerMusica.PlayerMusicaViewModel
+import br.com.nexus.nexusmusica.ui.fragments.detalheAlbum.DetalheAlbumFragmentViewModel
+import br.com.nexus.nexusmusica.ui.fragments.historicoMusica.HistoricoMusicaViewModel
+import br.com.nexus.nexusmusica.ui.fragments.home.HomeViewModel
+import br.com.nexus.nexusmusica.ui.fragments.listaAlbum.ListaAlbumViewModel
+import br.com.nexus.nexusmusica.ui.fragments.listaMusica.ListaMusicaViewModel
+import br.com.nexus.nexusmusica.ui.fragments.miniPlayerBottom.MiniPlayerBottomFragmentViewModel
+import br.com.nexus.nexusmusica.ui.fragments.musicasRecentes.ListaMusicasrecentesViewModel
+import br.com.nexus.nexusmusica.ui.fragments.playerMusica.PlayerMusicaViewModel
 import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicasRecentesRepositorio
@@ -19,7 +19,6 @@ import br.com.nexus.nexusmusica.repositorio.RealRepositorio
 import br.com.nexus.nexusmusica.repositorio.RealRoomRepositorio
 import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.repositorio.RoomRepository
-import br.com.nexus.nexusmusica.room.HistoricoDao
 import br.com.nexus.nexusmusica.room.NexusMusicaBancoDados
 import br.com.nexus.nexusmusica.services.MusicaConector
 import org.koin.android.ext.koin.androidContext

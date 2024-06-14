@@ -8,7 +8,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.adapter.AdapterFilaReproducao
 import br.com.nexus.nexusmusica.databinding.FragmentBottomFilaReproducaoBinding
-import br.com.nexus.nexusmusica.fragments.playerMusica.PlayerMusicaViewModel
+import br.com.nexus.nexusmusica.ui.fragments.playerMusica.PlayerMusicaViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel

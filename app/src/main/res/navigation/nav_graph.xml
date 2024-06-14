@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/menu_item_home"
-        android:name="br.com.nexus.nexusmusica.fragments.home.HomeFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/menu_item_musica"
-        android:name="br.com.nexus.nexusmusica.fragments.listaMusica.ListaMusicaFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.listaMusica.ListaMusicaFragment"
         android:label="Musicas"
         tools:layout="@layout/fragment_lista_musica" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/menu_item_album"
-        android:name="br.com.nexus.nexusmusica.fragments.listaAlbum.ListaAlbumFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.listaAlbum.ListaAlbumFragment"
         android:label="Album"
         tools:layout="@layout/fragment_lista_album" >
         <action
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/listaMusicasRecentesFragment"
-        android:name="br.com.nexus.nexusmusica.fragments.musicasRecentes.ListaMusicasRecentesFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.musicasRecentes.ListaMusicasRecentesFragment"
         android:label="fragment_lista_musicas_recentes"
         tools:layout="@layout/fragment_lista_musicas_recentes" >
         <action
@@ -58,7 +58,7 @@
     </fragment>
     <fragment
         android:id="@+id/detalheAlbumFragment"
-        android:name="br.com.nexus.nexusmusica.fragments.detalheAlbum.DetalheAlbumFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.detalheAlbum.DetalheAlbumFragment"
         android:label="fragment_detalhe_album"
         tools:layout="@layout/fragment_detalhe_album" >
         <argument
@@ -73,7 +73,7 @@
     </fragment>
     <fragment
         android:id="@+id/playerMusicaFragment"
-        android:name="br.com.nexus.nexusmusica.fragments.playerMusica.PlayerMusicaFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.playerMusica.PlayerMusicaFragment"
         android:label="fragment_player_musica"
         tools:layout="@layout/fragment_player_musica" >
         <argument
@@ -85,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/miniPlayerBottomFragment"
-        android:name="br.com.nexus.nexusmusica.fragments.miniPlayerBottom.MiniPlayerBottomFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.miniPlayerBottom.MiniPlayerBottomFragment"
         android:label="fragment_mini_player_bottom"
         tools:layout="@layout/fragment_mini_player_bottom" >
         <action
@@ -94,7 +94,7 @@
     </fragment>
     <fragment
         android:id="@+id/historicoMusicaFragment"
-        android:name="br.com.nexus.nexusmusica.fragments.historicoMusica.HistoricoMusicaFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.historicoMusica.HistoricoMusicaFragment"
         android:label="fragment_historico_musica"
         tools:layout="@layout/fragment_historico_musica" />
 </navigation>

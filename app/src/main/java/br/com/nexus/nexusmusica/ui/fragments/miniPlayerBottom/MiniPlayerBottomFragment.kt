@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.miniPlayerBottom
+package br.com.nexus.nexusmusica.ui.fragments.miniPlayerBottom
 
 import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat
@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import br.com.nexus.nexusmusica.MusicaVazia
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.databinding.FragmentMiniPlayerBottomBinding
-import br.com.nexus.nexusmusica.fragments.playerMusica.PlayerMusicaViewModel
+import br.com.nexus.nexusmusica.ui.fragments.playerMusica.PlayerMusicaViewModel
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
@@ -45,7 +45,11 @@ class MiniPlayerBottomFragment : Fragment() {
     private fun configurarClicks() {
         binding.cardPlayer.setOnClickListener {
             miniPlayerBottomFragmentViewModel.recomecaReproducao = false
-            val action = MiniPlayerBottomFragmentDirections.actionMiniPlayerBottomFragmentToPlayerMusicaFragment(miniPlayerBottomFragmentViewModel.musica, false)
+            val action =
+                MiniPlayerBottomFragmentDirections.actionMiniPlayerBottomFragmentToPlayerMusicaFragment(
+                    miniPlayerBottomFragmentViewModel.musica,
+                    false
+                )
             findNavController().navigate(action)
         }
 

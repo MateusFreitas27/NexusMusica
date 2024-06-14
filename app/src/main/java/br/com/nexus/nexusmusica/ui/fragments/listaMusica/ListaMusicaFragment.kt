@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.listaMusica
+package br.com.nexus.nexusmusica.ui.fragments.listaMusica
 
 import android.app.Activity
 import android.os.Bundle

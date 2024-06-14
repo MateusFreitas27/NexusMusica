@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.historicoMusica
+package br.com.nexus.nexusmusica.ui.fragments.historicoMusica
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.detalheAlbum
+package br.com.nexus.nexusmusica.ui.fragments.detalheAlbum
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -58,7 +58,7 @@ class DetalheAlbumFragment : Fragment(), InterfaceClickListernerDetalheAlbum {
         detalheViewModel.listaMusica.observe(viewLifecycleOwner) {
             val recyclerView = binding.recyclerViewListaMusicaDetalhe
             recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = AdapterListaMusicasAlbumDetalhe(it, this)
+           recyclerView.adapter = AdapterListaMusicasAlbumDetalhe(it, this)
         }
     }
 

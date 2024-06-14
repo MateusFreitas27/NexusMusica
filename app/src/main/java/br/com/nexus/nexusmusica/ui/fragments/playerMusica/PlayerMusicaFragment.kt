@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.playerMusica
+package br.com.nexus.nexusmusica.ui.fragments.playerMusica
 
 import android.app.Activity
 import android.os.Bundle
@@ -46,7 +46,7 @@ class PlayerMusicaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerMusicaBinding.inflate(layoutInflater, container, false)
-        playerMusicaViewModel.setMusica(args)
+        //playerMusicaViewModel.setMusica(args)
         configurarOnClicks()
         configurarObservers()
         return binding.root
@@ -154,7 +154,7 @@ class PlayerMusicaFragment : Fragment() {
         menuPopUp.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.menu_player_musica_excluir -> {
-                    playerMusicaViewModel.deletarMusicaDispositivo(playerMusicaViewModel.media, intentSLDeletarArquivo)
+                    //playerMusicaViewModel.deletarMusicaDispositivo(playerMusicaViewModel.media, intentSLDeletarArquivo)
                     true
                 }
                 R.id.menu_player_velocidade_reproducao -> {

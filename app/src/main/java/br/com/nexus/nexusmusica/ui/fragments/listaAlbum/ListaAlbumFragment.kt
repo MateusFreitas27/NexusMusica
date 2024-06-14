@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.listaAlbum
+package br.com.nexus.nexusmusica.ui.fragments.listaAlbum
 
 import android.os.Bundle
 import android.view.LayoutInflater

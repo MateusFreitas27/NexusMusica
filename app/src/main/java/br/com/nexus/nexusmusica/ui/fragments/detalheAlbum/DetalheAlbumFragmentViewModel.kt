@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.detalheAlbum
+package br.com.nexus.nexusmusica.ui.fragments.detalheAlbum
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -29,8 +29,11 @@ class DetalheAlbumFragmentViewModel: ViewModel() {
         SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ALBUM
         SharedPreferenceUtil.modoReproducaoPlayerAnterior = SharedPreferenceUtil.modoReproducaoPlayer
         SharedPreferenceUtil.idAlbumMusica = musica.idAlbum
-        val action = DetalheAlbumFragmentDirections.actionDetalheAlbumFragmentToPlayerMusicaFragment(musica, true)
+        val action =
+            DetalheAlbumFragmentDirections.actionDetalheAlbumFragmentToPlayerMusicaFragment(
+                musica,
+                true
+            )
         navController.navigate(action)
     }
-
 }

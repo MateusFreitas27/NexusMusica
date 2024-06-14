@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.miniPlayerBottom
+package br.com.nexus.nexusmusica.ui.fragments.miniPlayerBottom
 
 import android.support.v4.media.MediaMetadataCompat
 import androidx.lifecycle.MutableLiveData

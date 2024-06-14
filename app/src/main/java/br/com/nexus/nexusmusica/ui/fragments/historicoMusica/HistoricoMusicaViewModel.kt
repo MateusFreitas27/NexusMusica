@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.historicoMusica
+package br.com.nexus.nexusmusica.ui.fragments.historicoMusica
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

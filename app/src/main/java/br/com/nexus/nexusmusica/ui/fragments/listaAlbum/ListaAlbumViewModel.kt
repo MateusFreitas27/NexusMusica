@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.listaAlbum
+package br.com.nexus.nexusmusica.ui.fragments.listaAlbum
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,7 +26,10 @@ class ListaAlbumViewModel(private val repositorio: Repositorio) : ViewModel() {
     }
 
     fun abrirTelaDetalheAlbum(navController: NavController, album: Album) {
-        val action = ListaAlbumFragmentDirections.actionMenuItemAlbumToDetalheAlbumFragment(album)
+        val action =
+            ListaAlbumFragmentDirections.actionMenuItemAlbumToDetalheAlbumFragment(
+                album
+            )
         navController.navigate(action)
     }
 

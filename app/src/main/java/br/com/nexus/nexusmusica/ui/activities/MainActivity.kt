@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.activities
+package br.com.nexus.nexusmusica.ui.activities
 
 import android.Manifest
 import android.content.pm.PackageManager

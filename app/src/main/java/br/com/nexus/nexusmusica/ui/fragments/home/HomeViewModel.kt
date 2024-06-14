@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.fragments.home
+package br.com.nexus.nexusmusica.ui.fragments.home
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController

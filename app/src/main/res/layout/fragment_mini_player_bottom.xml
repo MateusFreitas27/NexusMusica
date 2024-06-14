@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
     app:cardCornerRadius="17dp"
-    tools:context=".fragments.miniPlayerBottom.MiniPlayerBottomFragment">
+    tools:context=".ui.fragments.miniPlayerBottom.MiniPlayerBottomFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
