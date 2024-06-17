@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import br.com.nexus.nexusmusica.MusicaVazia
 import br.com.nexus.nexusmusica.databinding.FragmentHomeBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -42,6 +40,9 @@ class HomeFragment : Fragment() {
             }
             btnHistoricoMusicas.setOnClickListener {
                 homeViewModel.abrirTelaHistoricoMusicas(findNavController())
+            }
+            btnMusicasMaisOuvidas.setOnClickListener {
+                homeViewModel.abrirTelaMaisOuvidas(findNavController())
             }
         }
     }

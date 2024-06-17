@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.adapter.AdapterListaMusicasAlbumDetalhe
 import br.com.nexus.nexusmusica.databinding.FragmentDetalheAlbumBinding
-import br.com.nexus.nexusmusica.interfaces.InterfaceClickListernerDetalheAlbum
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DetalheAlbumFragment : Fragment(), InterfaceClickListernerDetalheAlbum {
+class DetalheAlbumFragment : Fragment() {
     private var _binding: FragmentDetalheAlbumBinding? = null
     private val binding get() = _binding!!
     private val detalheViewModel: DetalheAlbumFragmentViewModel by viewModel()
@@ -58,11 +57,9 @@ class DetalheAlbumFragment : Fragment(), InterfaceClickListernerDetalheAlbum {
         detalheViewModel.listaMusica.observe(viewLifecycleOwner) {
             val recyclerView = binding.recyclerViewListaMusicaDetalhe
             recyclerView.layoutManager = LinearLayoutManager(context)
-           recyclerView.adapter = AdapterListaMusicasAlbumDetalhe(it, this)
+            recyclerView.adapter = AdapterListaMusicasAlbumDetalhe(it){ musica ->
+                detalheViewModel.abrirTelaPlayer(findNavController(),musica)
+            }
         }
-    }
-
-    override fun onClick(musica: Musica) {
-        detalheViewModel.abrirTelaPlayer(findNavController(),musica)
     }
 }

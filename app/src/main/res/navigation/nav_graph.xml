@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_menu_item_home_to_historicoMusicaFragment"
             app:destination="@id/historicoMusicaFragment" />
+        <action
+            android:id="@+id/action_menu_item_home_to_maisOuvidasFragment"
+            app:destination="@id/maisOuvidasFragment" />
     </fragment>
     <fragment
         android:id="@+id/menu_item_musica"
@@ -97,4 +100,9 @@
         android:name="br.com.nexus.nexusmusica.ui.fragments.historicoMusica.HistoricoMusicaFragment"
         android:label="fragment_historico_musica"
         tools:layout="@layout/fragment_historico_musica" />
+    <fragment
+        android:id="@+id/maisOuvidasFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.musicasMaisOuvidas.MusicasMaisOuvidasFragment"
+        android:label="fragment_mais_ouvidas"
+        tools:layout="@layout/fragment_mais_ouvidas" />
 </navigation>

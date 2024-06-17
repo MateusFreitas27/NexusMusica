@@ -25,4 +25,5 @@
     <string name="nome_tela_add_recentes">Adições recentes</string>
     <string name="nome_tela_detalhamento_album">Detalhe álbum</string>
     <string name="nome_tela_historico">Histórico</string>
+    <string name="nome_tela_mais_ouvidas">Mais ouvidas</string>
 </resources>

@@ -83,7 +83,7 @@ class PlayerMusicaViewModel(
     }
 
     private fun atualizaPosicaoMediaPlayer() {
-        /*viewModelScope.launch {
+        viewModelScope.launch {
             while (true) {
                 _tocandoMusica.value = playbackState.value?.state
                 val pos = playbackState.value?.position
@@ -92,10 +92,10 @@ class PlayerMusicaViewModel(
                 }
                 delay(DELAY_INTERVALO_PLAYER_POSICAO)
             }
-        }*/
+        }
     }
 
-    /*fun setMusica(args: PlayerMusicaFragmentArgs) {
+    fun setMusica(args: PlayerMusicaFragmentArgs) {
         var musica = MusicaVazia
         media = args.musica
         if (SharedPreferenceUtil.musicaTocando!!.isNotEmpty()){
@@ -106,7 +106,7 @@ class PlayerMusicaViewModel(
         }
         novaReproducao = musica.id != media.id
         atualizaMediaReproducao()
-    }*/
+    }
 
     fun iniciar() {
         if (novaReproducao)
@@ -135,7 +135,7 @@ class PlayerMusicaViewModel(
     }
 
     fun carregarDadosMusica(infoMedia: MediaMetadataCompat?) {
-        /*if (infoMedia?.description?.mediaId != media.id.toString() && alterarInfoMusica) {
+        if (infoMedia?.description?.mediaId != media.id.toString() && alterarInfoMusica) {
             CoroutineScope(Dispatchers.IO).launch {
                 val musica =
                     repositorio.consultaMusica(infoMedia!!.description!!.mediaId!!.toLong())
@@ -144,7 +144,7 @@ class PlayerMusicaViewModel(
                     atualizaMediaReproducao()
                 }
             }
-        } else alterarInfoMusica = true*/
+        } else alterarInfoMusica = true
 
     }
 
@@ -226,7 +226,7 @@ class PlayerMusicaViewModel(
         musica: Musica,
         intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
     ) {
-        /*val uri: Uri =
+        val uri: Uri =
             ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, musica.id)
         val contentResolver = APP.getContext().contentResolver
         try {
@@ -249,6 +249,6 @@ class PlayerMusicaViewModel(
                     IntentSenderRequest.Builder(sender).build()
                 )
             }
-        }*/
+        }
     }
 }

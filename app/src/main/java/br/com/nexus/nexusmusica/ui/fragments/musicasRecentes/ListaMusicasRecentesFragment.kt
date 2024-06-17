@@ -9,12 +9,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.adapter.AdapterListaMusicaRecente
 import br.com.nexus.nexusmusica.databinding.FragmentListaMusicasRecentesBinding
-import br.com.nexus.nexusmusica.interfaces.InterfaceClickListenerAdicoesRecentes
 import br.com.nexus.nexusmusica.modelo.Musica
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ListaMusicasRecentesFragment : Fragment(), InterfaceClickListenerAdicoesRecentes {
+class ListaMusicasRecentesFragment : Fragment() {
     private var _binding: FragmentListaMusicasRecentesBinding? = null
     private val binding get() = _binding!!
     private val musicasRecentesViewModel: ListaMusicasrecentesViewModel by viewModel()
@@ -24,7 +23,6 @@ class ListaMusicasRecentesFragment : Fragment(), InterfaceClickListenerAdicoesRe
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListaMusicasRecentesBinding.inflate(inflater, container, false)
-        // Inflate the layout for this fragment
         return binding.root
     }
 
@@ -48,15 +46,12 @@ class ListaMusicasRecentesFragment : Fragment(), InterfaceClickListenerAdicoesRe
 
     private fun iniciarObservers() {
         musicasRecentesViewModel.listaMusicarecente.observe(viewLifecycleOwner) {
-            val adapter = AdapterListaMusicaRecente(this)
+            val adapter = AdapterListaMusicaRecente(it){ musica ->
+                musicasRecentesViewModel.irParaReproducaoMusica(findNavController(), musica)
+            }
             val recycler = binding.recyclerViewListaMusicaRecentes
-            adapter.atualizarDados(it)
             recycler.layoutManager = LinearLayoutManager(context)
             recycler.adapter = adapter
         }
-    }
-
-    override fun onClick(musica: Musica) {
-        musicasRecentesViewModel.irParaReproducaoMusica(findNavController(), musica)
     }
 }

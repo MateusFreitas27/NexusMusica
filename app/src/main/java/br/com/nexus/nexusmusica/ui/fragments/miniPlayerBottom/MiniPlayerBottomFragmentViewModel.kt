@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.nexus.nexusmusica.MusicaVazia
 import br.com.nexus.nexusmusica.modelo.Musica
+import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
 import br.com.nexus.nexusmusica.repositorio.RealMusicaRepositorio
+import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.services.MusicaConector
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import com.google.gson.Gson
@@ -15,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class MiniPlayerBottomFragmentViewModel(
     private val musicaConector: MusicaConector,
-    private val musicaRepositorio: RealMusicaRepositorio
+    private val musicaRepositorio: Repositorio
 ): ViewModel() {
     val plabackState = musicaConector.playbackState
     //val conector = musicaConector.conectado
@@ -43,7 +45,7 @@ class MiniPlayerBottomFragmentViewModel(
 
     fun buscarMusica(media: MediaMetadataCompat?) {
         CoroutineScope(Dispatchers.Main).launch{
-            musica = musicaRepositorio.musica(media!!.description!!.mediaId!!.toLong())
+            musica = musicaRepositorio.consultaMusica(media!!.description!!.mediaId!!.toLong())
             carregarDadosTela()
         }
     }

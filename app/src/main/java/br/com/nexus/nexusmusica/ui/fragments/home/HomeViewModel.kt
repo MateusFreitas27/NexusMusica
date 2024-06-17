@@ -14,4 +14,8 @@ class HomeViewModel: ViewModel() {
     fun abrirTelaHistoricoMusicas(findNavController: NavController){
         findNavController.navigate(R.id.action_menu_item_home_to_historicoMusicaFragment)
     }
+
+    fun abrirTelaMaisOuvidas(findNavController: NavController) {
+        findNavController.navigate(R.id.action_menu_item_home_to_maisOuvidasFragment)
+    }
 }

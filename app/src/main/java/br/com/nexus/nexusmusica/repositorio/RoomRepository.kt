@@ -7,6 +7,7 @@ interface RoomRepository {
     fun listaHistorico(): List<HistoricoEntity>
     fun SalvarHistorico(musica: HistoricoEntity)
     fun consultarMusica(idMusica: Long): HistoricoEntity?
+    fun listarMaisOuvidas(): List<HistoricoEntity>
 }
 
 class RealRoomRepositorio(
@@ -22,5 +23,9 @@ class RealRoomRepositorio(
 
     override fun consultarMusica(idMusica: Long): HistoricoEntity? {
         return historicoDao.consultarMusicaHistorico(idMusica)
+    }
+
+    override fun listarMaisOuvidas(): List<HistoricoEntity> {
+        return historicoDao.recuperarHistorico()
     }
 }

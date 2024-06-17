@@ -36,7 +36,6 @@ class ListaMusicaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListaMusicaBinding.inflate(inflater, container, false)
-        // Inflate the layout for this fragment
         return binding.root
     }
 

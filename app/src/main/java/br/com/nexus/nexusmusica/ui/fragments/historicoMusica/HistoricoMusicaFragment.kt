@@ -43,6 +43,11 @@ class HistoricoMusicaFragment : Fragment() {
         historicoMusicaViewModel.carregarListaHistorico()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun iniciarObservers(){
         historicoMusicaViewModel.listaMusica.observe(viewLifecycleOwner){
             adapterHistoricoMusicas?.setLista(it)
