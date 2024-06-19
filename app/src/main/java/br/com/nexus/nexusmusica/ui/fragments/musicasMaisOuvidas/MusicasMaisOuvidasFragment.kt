@@ -46,7 +46,6 @@ class MusicasMaisOuvidasFragment : Fragment() {
             with(binding.recyclerListaMusicasMaisOuvidas){
                 layoutManager = LinearLayoutManager(context)
                 adapter = AdapterListaMaisOuvidas(lista){
-
                 }
             }
         }

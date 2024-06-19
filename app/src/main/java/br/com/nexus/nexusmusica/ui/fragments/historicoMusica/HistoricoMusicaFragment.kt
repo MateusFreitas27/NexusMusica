@@ -14,7 +14,6 @@ class HistoricoMusicaFragment : Fragment() {
     private var _binding: FragmentHistoricoMusicaBinding? = null
     private val binding get() = _binding!!
     private val historicoMusicaViewModel: HistoricoMusicaViewModel by viewModel()
-    private var adapterHistoricoMusicas: AdapterHistoricoMusicas? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,12 +28,6 @@ class HistoricoMusicaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapterHistoricoMusicas = AdapterHistoricoMusicas()
-        with(binding.recyclerListaHistoricoMusicas){
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = adapterHistoricoMusicas
-        }
         iniciarObservers()
     }
 
@@ -50,7 +43,11 @@ class HistoricoMusicaFragment : Fragment() {
 
     private fun iniciarObservers(){
         historicoMusicaViewModel.listaMusica.observe(viewLifecycleOwner){
-            adapterHistoricoMusicas?.setLista(it)
+            with(binding.recyclerListaHistoricoMusicas){
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context)
+                adapter = AdapterHistoricoMusicas(it)
+            }
         }
     }
 }

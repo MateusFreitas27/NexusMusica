@@ -20,20 +20,15 @@ import br.com.nexus.nexusmusica.util.VersaoUtil
 import com.bumptech.glide.Glide
 
 class AdapterListaMusica(
+    lista: MutableList<Musica>,
     private val intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>,
     private val reproduzirMusica: (Musica) -> Unit
 ): RecyclerView.Adapter<AdapterListaMusica.MusicaViewHodel>() {
     private var posicao: Int = -1
-    private var listaMusica: MutableList<Musica> = mutableListOf()
+    private var listaMusica: MutableList<Musica> = lista
 
     init {
         setHasStableIds(true)
-    }
-
-    fun atualizarListaDados(lista: MutableList<Musica>){
-        listaMusica.clear()
-        listaMusica.addAll(lista)
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicaViewHodel {

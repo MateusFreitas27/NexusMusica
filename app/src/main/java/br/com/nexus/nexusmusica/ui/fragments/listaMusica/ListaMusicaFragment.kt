@@ -41,14 +41,7 @@ class ListaMusicaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapterListaMusica = AdapterListaMusica(intentSLDeletarArquivo) {musica ->
-            listaMusicaViewModel.abrirPlayerMusica(findNavController(), musica)
-        }
-        with(binding.recyclerViewListaMusica){
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter= adapterListaMusica
-        }
+
         iniciarObservers()
     }
 
@@ -65,7 +58,13 @@ class ListaMusicaFragment : Fragment() {
 
     private fun iniciarObservers() {
         listaMusicaViewModel.listaMusicas.observe(viewLifecycleOwner) {lista ->
-            adapterListaMusica?.atualizarListaDados(lista)
+            with(binding.recyclerViewListaMusica){
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context)
+                adapter= AdapterListaMusica(lista, intentSLDeletarArquivo) {musica ->
+                    listaMusicaViewModel.abrirPlayerMusica(findNavController(), musica)
+                }
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BottomFilaReproducao : BottomSheetDialogFragment() {
     private var binding: FragmentBottomFilaReproducaoBinding? = null
-    private val playerMusicaViewModel: PlayerMusicaViewModel by viewModel();
+    private val playerMusicaViewModel: PlayerMusicaViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +25,7 @@ class BottomFilaReproducao : BottomSheetDialogFragment() {
 
         playerMusicaViewModel.carregarListaMusica()
         playerMusicaViewModel.listaMusica.observe(viewLifecycleOwner){
-            val adapterFilaReproducao = AdapterFilaReproducao(){
+            val adapterFilaReproducao = AdapterFilaReproducao{
                 playerMusicaViewModel.reproduzirMusicaSelecionada(it.description.mediaId!!.toLong())
             }
             with(binding?.recyclerListaFilaReproducao){

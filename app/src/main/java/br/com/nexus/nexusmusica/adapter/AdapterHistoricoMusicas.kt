@@ -10,18 +10,15 @@ import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
 
-class AdapterHistoricoMusicas(): RecyclerView.Adapter<AdapterHistoricoMusicas.HistoricoMusicaViewHodel>() {
-    private var listaMusica: MutableList<Musica> = mutableListOf()
+class AdapterHistoricoMusicas(
+    lista: MutableList<Musica>
+): RecyclerView.Adapter<AdapterHistoricoMusicas.HistoricoMusicaViewHodel>() {
+    private var listaMusica: MutableList<Musica> = lista
 
     init {
         setHasStableIds(true)
     }
 
-    fun setLista(lista: MutableList<Musica>){
-        listaMusica.clear()
-        listaMusica.addAll(lista)
-        notifyDataSetChanged()
-    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoricoMusicaViewHodel {
         return HistoricoMusicaViewHodel(AdapterListaHistoricoMusicaBinding.inflate(LayoutInflater.from(parent.context),parent,false))
     }

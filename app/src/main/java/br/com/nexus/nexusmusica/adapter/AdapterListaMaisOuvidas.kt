@@ -16,6 +16,10 @@ class AdapterListaMaisOuvidas(
 ) : RecyclerView.Adapter<AdapterListaMaisOuvidas.ViewHodel>() {
     private var listaMaisOuvidas: MutableList<HistoricoMusica> = listaMusica.toMutableList()
 
+    init {
+        setHasStableIds(true)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHodel {
         return ViewHodel(
             AdapterListaMaisOuvidasBinding.inflate(
@@ -24,6 +28,11 @@ class AdapterListaMaisOuvidas(
                 false
             )
         )
+    }
+
+    override fun getItemId(position: Int): Long {
+        val musica = listaMaisOuvidas[position]
+        return musica.id
     }
 
     override fun getItemCount(): Int = listaMaisOuvidas.size

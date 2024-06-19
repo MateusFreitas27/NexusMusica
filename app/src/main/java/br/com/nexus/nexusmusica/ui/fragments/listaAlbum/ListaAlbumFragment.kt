@@ -42,10 +42,12 @@ class ListaAlbumFragment : Fragment() {
 
     private fun iniciarObservers() {
         listaAlbumViewModel.listaAlbums.observe(viewLifecycleOwner) {
-            val recyclerView = binding.recyclerViewListaAlbums
-            recyclerView.layoutManager = GridLayoutManager(context, 2)
-            recyclerView.adapter = AdapterListaAlbums(it){album ->
-                listaAlbumViewModel.abrirTelaDetalheAlbum(findNavController(), album)
+            with(binding.recyclerViewListaAlbums){
+                setHasFixedSize(true)
+                layoutManager = GridLayoutManager(context, 2)
+                adapter = AdapterListaAlbums(it){album ->
+                    listaAlbumViewModel.abrirTelaDetalheAlbum(findNavController(), album)
+                }
             }
         }
     }

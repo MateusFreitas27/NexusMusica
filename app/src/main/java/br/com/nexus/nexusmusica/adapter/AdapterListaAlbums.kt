@@ -12,12 +12,22 @@ import com.bumptech.glide.Glide
 
 
 class AdapterListaAlbums(
-    private val listaAlbums: List<Album>,
+    private val lista: List<Album>,
     private val abrirTelaDetalhamento: (Album) -> Unit
 ): RecyclerView.Adapter<AdapterListaAlbums.ViewHodel>() {
+    private val listaAlbums: MutableList<Album> = lista.toMutableList()
+
+    init {
+        setHasStableIds(true)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHodel {
         return ViewHodel(AdapterListaAlbunsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+    }
+
+    override fun getItemId(position: Int): Long {
+        val album = listaAlbums[position]
+        return album.id
     }
 
     override fun getItemCount(): Int = listaAlbums.size
