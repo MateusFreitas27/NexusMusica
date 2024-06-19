@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import br.com.nexus.nexusmusica.adapter.AdapterListaMusicaRecente
+import br.com.nexus.nexusmusica.adapter.AdapterListaAdicaoRecente
 import br.com.nexus.nexusmusica.databinding.FragmentAdicaoRecenteBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -45,7 +45,7 @@ class AdicaoRecenteFragment : Fragment() {
 
     private fun iniciarObservers() {
         musicasRecentesViewModel.listaMusicarecente.observe(viewLifecycleOwner) {
-            val adapter = AdapterListaMusicaRecente(it){ musica ->
+            val adapter = AdapterListaAdicaoRecente(it){ musica ->
                 musicasRecentesViewModel.irParaReproducaoMusica(findNavController(), musica)
             }
             val recycler = binding.recyclerViewListaMusicaRecentes

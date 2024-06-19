@@ -11,10 +11,10 @@ import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
 
-class AdapterListaMusicaRecente(
+class AdapterListaAdicaoRecente(
     listaMusica: List<Musica>,
     private val reproduzirMusica: (Musica) -> Unit
-) : RecyclerView.Adapter<AdapterListaMusicaRecente.viewHodel>() {
+): RecyclerView.Adapter<AdapterListaAdicaoRecente.viewHodel>() {
     private var listaMusica: MutableList<Musica> = listaMusica.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHodel {

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import br.com.nexus.nexusmusica.adapter.AdapterListaMaisOuvidas
 import br.com.nexus.nexusmusica.databinding.FragmentMaisOuvidasBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,6 +28,7 @@ class MusicasMaisOuvidasFragment : Fragment() {
         binding.toolbarMaisOuvidas.setNavigationOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
+        iniciarObservers()
     }
 
     override fun onResume() {
@@ -36,5 +39,16 @@ class MusicasMaisOuvidasFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun iniciarObservers() {
+        musicasMaisOuvidasViewModel.listaMusica.observe(viewLifecycleOwner){ lista ->
+            with(binding.recyclerListaMusicasMaisOuvidas){
+                layoutManager = LinearLayoutManager(context)
+                adapter = AdapterListaMaisOuvidas(lista){
+
+                }
+            }
+        }
     }
 }
