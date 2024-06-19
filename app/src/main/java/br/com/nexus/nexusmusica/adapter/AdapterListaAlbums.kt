@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 
 
 class AdapterListaAlbums(
-    private val lista: List<Album>,
+    lista: List<Album>,
     private val abrirTelaDetalhamento: (Album) -> Unit
 ): RecyclerView.Adapter<AdapterListaAlbums.ViewHodel>() {
     private val listaAlbums: MutableList<Album> = lista.toMutableList()
