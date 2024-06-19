@@ -49,9 +49,9 @@
     </fragment>
     <fragment
         android:id="@+id/listaMusicasRecentesFragment"
-        android:name="br.com.nexus.nexusmusica.ui.fragments.musicasRecentes.ListaMusicasRecentesFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.adicaoRecente.AdicaoRecenteFragment"
         android:label="fragment_lista_musicas_recentes"
-        tools:layout="@layout/fragment_lista_musicas_recentes" >
+        tools:layout="@layout/fragment_adicao_recente" >
         <action
             android:id="@+id/action_listaMusicasRecentesFragment_to_playerMusicaFragment"
             app:destination="@id/playerMusicaFragment" />

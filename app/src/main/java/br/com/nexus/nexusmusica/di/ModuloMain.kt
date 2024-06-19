@@ -7,7 +7,7 @@ import br.com.nexus.nexusmusica.ui.fragments.home.HomeViewModel
 import br.com.nexus.nexusmusica.ui.fragments.listaAlbum.ListaAlbumViewModel
 import br.com.nexus.nexusmusica.ui.fragments.listaMusica.ListaMusicaViewModel
 import br.com.nexus.nexusmusica.ui.fragments.miniPlayerBottom.MiniPlayerBottomFragmentViewModel
-import br.com.nexus.nexusmusica.ui.fragments.musicasRecentes.ListaMusicasrecentesViewModel
+import br.com.nexus.nexusmusica.ui.fragments.adicaoRecente.AdicaoRecenteViewModel
 import br.com.nexus.nexusmusica.ui.fragments.playerMusica.PlayerMusicaViewModel
 import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
@@ -87,7 +87,7 @@ private val viewModelModulo = module {
     }
 
     viewModel {
-        ListaMusicasrecentesViewModel(get())
+        AdicaoRecenteViewModel(get())
     }
 
     viewModel {

@@ -6,7 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nexus.nexusmusica.R
-import br.com.nexus.nexusmusica.databinding.AdapterListaMusicaRecenteBinding
+import br.com.nexus.nexusmusica.databinding.AdapterListaAdicaoRecenteBinding
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
@@ -19,7 +19,7 @@ class AdapterListaMusicaRecente(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHodel {
         return viewHodel(
-            AdapterListaMusicaRecenteBinding.inflate(
+            AdapterListaAdicaoRecenteBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -41,7 +41,7 @@ class AdapterListaMusicaRecente(
         }
     }
 
-    inner class viewHodel(binding: AdapterListaMusicaRecenteBinding) :
+    inner class viewHodel(binding: AdapterListaAdicaoRecenteBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val imagemCapa: ImageView = binding.imgCapaMusicaRecente
         val textNomeMusicaRecente: TextView = binding.textNomeMusicaRecente

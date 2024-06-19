@@ -1,11 +1,10 @@
-package br.com.nexus.nexusmusica.ui.fragments.musicasRecentes
+package br.com.nexus.nexusmusica.ui.fragments.adicaoRecente
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
-import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
@@ -14,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListaMusicasrecentesViewModel(private val repositorio: Repositorio): ViewModel() {
+class AdicaoRecenteViewModel(private val repositorio: Repositorio): ViewModel() {
     private val _listaMusicarecente = MutableLiveData<List<Musica>>()
     val listaMusicarecente: LiveData<List<Musica>> = _listaMusicarecente
 
@@ -31,7 +30,7 @@ class ListaMusicasrecentesViewModel(private val repositorio: Repositorio): ViewM
         SharedPreferenceUtil.modoReproducaoPlayerAnterior = SharedPreferenceUtil.modoReproducaoPlayer
         SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ADICOES_RECENTES
         val action =
-            ListaMusicasRecentesFragmentDirections.actionListaMusicasRecentesFragmentToPlayerMusicaFragment(
+            AdicaoRecenteFragmentDirections.actionListaMusicasRecentesFragmentToPlayerMusicaFragment(
                 musica,
                 true
             )

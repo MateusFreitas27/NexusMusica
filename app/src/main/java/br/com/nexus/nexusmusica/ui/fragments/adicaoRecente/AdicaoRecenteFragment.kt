@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica.ui.fragments.musicasRecentes
+package br.com.nexus.nexusmusica.ui.fragments.adicaoRecente
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,21 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.adapter.AdapterListaMusicaRecente
-import br.com.nexus.nexusmusica.databinding.FragmentListaMusicasRecentesBinding
-import br.com.nexus.nexusmusica.modelo.Musica
+import br.com.nexus.nexusmusica.databinding.FragmentAdicaoRecenteBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class ListaMusicasRecentesFragment : Fragment() {
-    private var _binding: FragmentListaMusicasRecentesBinding? = null
+class AdicaoRecenteFragment : Fragment() {
+    private var _binding: FragmentAdicaoRecenteBinding? = null
     private val binding get() = _binding!!
-    private val musicasRecentesViewModel: ListaMusicasrecentesViewModel by viewModel()
+    private val musicasRecentesViewModel: AdicaoRecenteViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentListaMusicasRecentesBinding.inflate(inflater, container, false)
+        _binding = FragmentAdicaoRecenteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
