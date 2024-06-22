@@ -21,7 +21,6 @@ import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.SERVICE_TAG
 import br.com.nexus.nexusmusica.helper.EmbaralharHelper
 import br.com.nexus.nexusmusica.modelo.Musica
-import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
 import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.room.toHistoricoMusica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
@@ -49,6 +48,14 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
     private var posicaoAtualReproducao: Int = -1
     private val repositorio by inject<Repositorio>()
     private var repetiTodas: Boolean = false
+
+    init {
+        val gson = Gson()
+        val lista = SharedPreferenceUtil.listaReproducao
+        val tipoObjeto = object : TypeToken<ArrayList<Musica>>() {}.type
+        listaMusicasOriginal = gson.fromJson(lista, tipoObjeto)
+        listaMusicasReproducao = listaMusicasOriginal
+    }
 
     override fun onGetRoot(
         clientPackageName: String,

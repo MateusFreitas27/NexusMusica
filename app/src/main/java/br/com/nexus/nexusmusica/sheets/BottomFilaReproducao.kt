@@ -14,47 +14,40 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class BottomFilaReproducao : BottomSheetDialogFragment() {
-    private var binding: FragmentBottomFilaReproducaoBinding? = null
+    private var _binding: FragmentBottomFilaReproducaoBinding? = null
+    private val binding get() = _binding!!
+
     private val playerMusicaViewModel: PlayerMusicaViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBottomFilaReproducaoBinding.inflate(inflater, container, false)
+        _binding = FragmentBottomFilaReproducaoBinding.inflate(inflater, container, false)
 
         playerMusicaViewModel.carregarListaMusica()
         playerMusicaViewModel.listaMusica.observe(viewLifecycleOwner){
-            val adapterFilaReproducao = AdapterFilaReproducao{
-                playerMusicaViewModel.reproduzirMusicaSelecionada(it.description.mediaId!!.toLong())
+            with(binding.recyclerListaFilaReproducao){
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context)
+                adapter = AdapterFilaReproducao(it){
+                    playerMusicaViewModel.reproduzirMusicaSelecionada(it.description.mediaId!!.toLong())
+                }
             }
-            with(binding?.recyclerListaFilaReproducao){
-                this?.setHasFixedSize(true)
-                this?.setItemViewCacheSize(20)
-                adapterFilaReproducao.atualizarListaDados(it)
-                this?.layoutManager = LinearLayoutManager(context)
-                this?.adapter = adapterFilaReproducao
-            }
-
         }
-        return binding!!.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheet: FrameLayout = dialog!!.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-
         bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-
         val behavior = BottomSheetBehavior.from(bottomSheet)
-        behavior.apply {
-            peekHeight = resources.displayMetrics.heightPixels
-            state = BottomSheetBehavior.STATE_EXPANDED
-        }
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        binding = null
+        _binding = null
     }
 }

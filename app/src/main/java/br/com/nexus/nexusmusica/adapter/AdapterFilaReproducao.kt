@@ -12,17 +12,12 @@ import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
 
-class AdapterFilaReproducao(private val reproduzirMusica: (MediaBrowserCompat.MediaItem) -> Unit) :
+class AdapterFilaReproducao(lista: MutableList<MediaBrowserCompat.MediaItem>, private val reproduzirMusica: (MediaBrowserCompat.MediaItem) -> Unit) :
     RecyclerView.Adapter<AdapterFilaReproducao.ViewHodel>() {
-    private var listaMusica: MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
+    private var listaMusica: MutableList<MediaBrowserCompat.MediaItem> = lista
 
     init {
         this.setHasStableIds(true)
-    }
-
-    fun atualizarListaDados(lista: MutableList<MediaBrowserCompat.MediaItem>) {
-        listaMusica.clear()
-        listaMusica.addAll(lista)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHodel {
