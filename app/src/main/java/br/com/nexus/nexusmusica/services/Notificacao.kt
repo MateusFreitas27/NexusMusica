@@ -1,8 +1,10 @@
 package br.com.nexus.nexusmusica.services
 
 import android.content.pm.ServiceInfo
+import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
+import androidx.navigation.NavDeepLinkBuilder
 import br.com.nexus.nexusmusica.NOTIFICACAO_MUSICA_CANAL_ID
 import br.com.nexus.nexusmusica.NOTIFICACAO_MUSICA_ID
 import br.com.nexus.nexusmusica.R
@@ -10,9 +12,18 @@ import br.com.nexus.nexusmusica.util.VersaoUtil
 
 object Notificacao {
     fun criarNotificacao(musicaService: MusicaService, mediaSession: MediaSessionCompat.Token){
+        val args = Bundle()
+        args.putParcelable("musica", musicaService.retornaMusicaAtual())
+        args.putBoolean("novaReproducao", false)
+        val intent = NavDeepLinkBuilder(musicaService).apply {
+            setGraph(R.navigation.nav_graph)
+            setDestination(R.id.playerMusicaFragment)
+            setArguments(args)
+        }
         val notification = NotificationCompat.Builder(musicaService, NOTIFICACAO_MUSICA_CANAL_ID)
             .setSmallIcon(R.drawable.icon_play)
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession))
+            .setContentIntent(intent.createPendingIntent())
             .build()
         musicaService.apply {
             if (VersaoUtil.androidQ()) {

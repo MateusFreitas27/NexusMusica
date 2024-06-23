@@ -78,13 +78,16 @@
         android:id="@+id/playerMusicaFragment"
         android:name="br.com.nexus.nexusmusica.ui.fragments.playerMusica.PlayerMusicaFragment"
         android:label="fragment_player_musica"
-        tools:layout="@layout/fragment_player_musica" >
+        tools:layout="@layout/fragment_player_musica">
         <argument
             android:name="musica"
             app:argType="br.com.nexus.nexusmusica.modelo.Musica" />
         <argument
             android:name="novaReproducao"
             app:argType="boolean" />
+        <deepLink
+            android:id="@+id/deepLink3"
+            app:uri="myapp:playermusica/musica/{musica}/{novaReproducao}" />
     </fragment>
     <fragment
         android:id="@+id/miniPlayerBottomFragment"

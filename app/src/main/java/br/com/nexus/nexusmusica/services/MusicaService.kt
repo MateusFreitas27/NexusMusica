@@ -296,6 +296,8 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         }
     }
 
+    fun retornaMusicaAtual(): Musica = listaMusicasReproducao[posicaoAtualReproducao]
+
     private fun salvarInfoMusica(musica: Musica){
         val gson = Gson()
         val musicaJson = gson.toJson(musica)
