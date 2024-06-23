@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.databinding.AdapterListaFilaReproducaoBinding
-import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
 

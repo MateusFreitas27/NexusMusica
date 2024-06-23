@@ -1,5 +1,6 @@
 package br.com.nexus.nexusmusica.sheets
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,16 +17,23 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class BottomFilaReproducao : BottomSheetDialogFragment() {
     private var _binding: FragmentBottomFilaReproducaoBinding? = null
     private val binding get() = _binding!!
-
     private val playerMusicaViewModel: PlayerMusicaViewModel by viewModel()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBottomFilaReproducaoBinding.inflate(inflater, container, false)
-
+        val behavior = BottomSheetBehavior.from(binding.standardBottomSheet)
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        behavior.isDraggable = false
         playerMusicaViewModel.carregarListaMusica()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         playerMusicaViewModel.listaMusica.observe(viewLifecycleOwner){
             with(binding.recyclerListaFilaReproducao){
                 setHasFixedSize(true)
@@ -35,15 +43,6 @@ class BottomFilaReproducao : BottomSheetDialogFragment() {
                 }
             }
         }
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val bottomSheet: FrameLayout = dialog!!.findViewById(com.google.android.material.R.id.design_bottom_sheet)
-        bottomSheet.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        val behavior = BottomSheetBehavior.from(bottomSheet)
-        behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun onDestroy() {
