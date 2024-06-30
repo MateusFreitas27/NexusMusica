@@ -85,9 +85,6 @@
         <argument
             android:name="novaReproducao"
             app:argType="boolean" />
-        <deepLink
-            android:id="@+id/deepLink3"
-            app:uri="myapp:playermusica/musica/{musica}/{novaReproducao}" />
     </fragment>
     <fragment
         android:id="@+id/miniPlayerBottomFragment"
