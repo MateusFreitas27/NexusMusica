@@ -13,7 +13,6 @@
     <string name="btn_home_aleatorio">Aleatório</string>
     <string name="btn_home_mais_ouvidas">Mais Ouvidas</string>
     <string name="txt_musicas_detalhe_album">Músicas</string>
-    <string name="txt_fila_reproducao">Fila de reprodução atual</string>
     <string name="txt_titulo_dialog_velocidade_reproducao">Velocidade de Reprodução</string>
     <string name="btn_positivo_dialog_controle">Aplicar</string>
     <string name="btn_negativo_dialog_controle">Cancelar</string>
@@ -26,4 +25,5 @@
     <string name="nome_tela_detalhamento_album">Detalhe álbum</string>
     <string name="nome_tela_historico">Histórico</string>
     <string name="nome_tela_mais_ouvidas">Mais ouvidas</string>
+    <string name="nome_tela_lista_reproducao">Lista Reprodução Atual</string>
 </resources>

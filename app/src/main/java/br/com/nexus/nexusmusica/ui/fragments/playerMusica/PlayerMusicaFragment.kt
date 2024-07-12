@@ -12,11 +12,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import br.com.nexus.nexusmusica.R
-import br.com.nexus.nexusmusica.TAG_MODAL_LISTA_MUSICAS
 import br.com.nexus.nexusmusica.databinding.FragmentPlayerMusicaBinding
-import br.com.nexus.nexusmusica.sheets.BottomFilaReproducao
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import br.com.nexus.nexusmusica.util.VersaoUtil
 import com.bumptech.glide.Glide
@@ -52,8 +51,8 @@ class PlayerMusicaFragment : Fragment() {
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
@@ -139,8 +138,7 @@ class PlayerMusicaFragment : Fragment() {
                 override fun onStopTrackingTouch(p0: SeekBar?) {}
             })
             btnImageListaMusica.setOnClickListener {
-                val modalBottomSheet = BottomFilaReproducao()
-                modalBottomSheet.show(parentFragmentManager, TAG_MODAL_LISTA_MUSICAS)
+                playerMusicaViewModel.abrirListaReproducaoAtual(findNavController())
             }
             btnMenuPlayermusica.setOnClickListener{
                 abrirMenuPlayerMusica(it)

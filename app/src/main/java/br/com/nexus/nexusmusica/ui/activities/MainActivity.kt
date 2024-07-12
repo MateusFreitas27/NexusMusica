@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                     binding.bottomNavigationView.visibility = View.VISIBLE
                     exibirMiniPlayer()
                 }
-                R.id.playerMusicaFragment -> {
+                R.id.playerMusicaFragment, R.id.listaReproducaoAtualFragment -> {
                     binding.bottomNavigationView.visibility = View.GONE
                     binding.fragmentMiniPlayer.visibility = View.GONE
                 }

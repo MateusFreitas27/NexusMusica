@@ -21,6 +21,7 @@ import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.repositorio.RoomRepository
 import br.com.nexus.nexusmusica.room.NexusMusicaBancoDados
 import br.com.nexus.nexusmusica.services.MusicaConector
+import br.com.nexus.nexusmusica.ui.fragments.listaReproducaoAtual.ListaReproducaoAtualViewModel
 import br.com.nexus.nexusmusica.ui.fragments.musicasMaisOuvidas.MusicasMaisOuvidasViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -116,6 +117,10 @@ private val viewModelModulo = module {
 
     viewModel{
         MusicasMaisOuvidasViewModel(get())
+    }
+
+    viewModel{
+        ListaReproducaoAtualViewModel(get())
     }
 }
 

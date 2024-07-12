@@ -85,6 +85,9 @@
         <argument
             android:name="novaReproducao"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_playerMusicaFragment_to_listaReproducaoAtualFragment"
+            app:destination="@id/listaReproducaoAtualFragment" />
     </fragment>
     <fragment
         android:id="@+id/miniPlayerBottomFragment"
@@ -105,4 +108,9 @@
         android:name="br.com.nexus.nexusmusica.ui.fragments.musicasMaisOuvidas.MusicasMaisOuvidasFragment"
         android:label="fragment_mais_ouvidas"
         tools:layout="@layout/fragment_mais_ouvidas" />
+    <fragment
+        android:id="@+id/listaReproducaoAtualFragment"
+        android:name="br.com.nexus.nexusmusica.ui.fragments.listaReproducaoAtual.ListaReproducaoAtualFragment"
+        android:label="fragment_lista_reproducao_atual"
+        tools:layout="@layout/fragment_lista_reproducao_atual" />
 </navigation>

@@ -4,8 +4,6 @@ import android.app.RecoverableSecurityException
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaBrowserCompat.SubscriptionCallback
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.result.ActivityResultLauncher
@@ -13,13 +11,11 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import br.com.nexus.nexusmusica.APP
 import br.com.nexus.nexusmusica.DELAY_INTERVALO_PLAYER_POSICAO
 import br.com.nexus.nexusmusica.MusicaVazia
-import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
-import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
 import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
-import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.services.MusicaConector
@@ -54,23 +50,11 @@ class PlayerMusicaViewModel(
     val modoRepeticao: MutableLiveData<Int> = _modoRepeticao
     private var _modoAleatorio: MutableLiveData<Int> = MutableLiveData<Int>()
     val modoAleatorio: MutableLiveData<Int> = _modoAleatorio
-    private var _listaMusicas: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> =
-        MutableLiveData()
-    val listaMusica: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> = _listaMusicas
     private val _tocandoMusica: MutableLiveData<Int> = MutableLiveData<Int>()
     val tocandoMusica: MutableLiveData<Int> = _tocandoMusica
     var media: Musica = MusicaVazia
     private var alterarInfoMusica = false
     private var novaReproducao: Boolean = false
-
-    private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback() {
-        override fun onChildrenLoaded(
-            parentId: String,
-            children: MutableList<MediaBrowserCompat.MediaItem>
-        ) {
-            _listaMusicas.value = children
-        }
-    }
 
     init {
         atualizaPosicaoMediaPlayer()
@@ -163,10 +147,6 @@ class PlayerMusicaViewModel(
         musicaConector.transportControls.setPlaybackSpeed(valorSlider)
     }
 
-    fun reproduzirMusicaSelecionada(mediaId: Long) {
-        musicaConector.transportControls.skipToQueueItem(mediaId)
-    }
-
     fun removerMusicaListaReproducao(media: MediaMetadataCompat?) {
         musicaConector.removeMusica(media?.description)
     }
@@ -194,32 +174,6 @@ class PlayerMusicaViewModel(
             _modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
             musicaConector.transportControls.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_ALL)
         }
-    }
-
-    fun carregarListaMusica() {
-        when (SharedPreferenceUtil.modoReproducaoPlayer) {
-            REPRODUCAO_MUSICAS -> musicaConector.subcribe(REPRODUCAO_MUSICAS, subcribeCallback)
-            REPRODUCAO_ALBUM -> musicaConector.subcribe(REPRODUCAO_ALBUM, subcribeCallback)
-            REPRODUCAO_ADICOES_RECENTES -> musicaConector.subcribe(
-                REPRODUCAO_ADICOES_RECENTES,
-                subcribeCallback
-            )
-
-            REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
-        }
-    }
-
-    override fun onCleared() {
-        when (SharedPreferenceUtil.modoReproducaoPlayer) {
-            REPRODUCAO_MUSICAS -> musicaConector.unsubscribe(REPRODUCAO_MUSICAS, subcribeCallback)
-            REPRODUCAO_ALBUM -> musicaConector.unsubscribe(REPRODUCAO_ALBUM, subcribeCallback)
-            REPRODUCAO_ADICOES_RECENTES -> musicaConector.unsubscribe(
-                REPRODUCAO_ADICOES_RECENTES,
-                subcribeCallback
-            )
-            REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
-        }
-        super.onCleared()
     }
 
     fun deletarMusicaDispositivo(
@@ -250,5 +204,10 @@ class PlayerMusicaViewModel(
                 )
             }
         }
+    }
+
+    fun abrirListaReproducaoAtual(findNavController: NavController) {
+        val action = PlayerMusicaFragmentDirections.actionPlayerMusicaFragmentToListaReproducaoAtualFragment()
+        findNavController.navigate(action)
     }
 }
