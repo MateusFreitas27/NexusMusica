@@ -13,14 +13,12 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.databinding.FragmentPlayerMusicaBinding
-import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
+import br.com.nexus.nexusmusica.dialog.VelocidadePlaybackDialog
+import br.com.nexus.nexusmusica.util.FuncoesUtil
 import br.com.nexus.nexusmusica.util.VersaoUtil
 import com.bumptech.glide.Glide
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.slider.Slider
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -29,13 +27,12 @@ class PlayerMusicaFragment : Fragment() {
     private var _binding: FragmentPlayerMusicaBinding? = null
     private val binding get() = _binding!!
     private val playerMusicaViewModel: PlayerMusicaViewModel by viewModel()
-    private val args: PlayerMusicaFragmentArgs by navArgs()
     private val intentSLDeletarArquivo: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()){
         if (it.resultCode == Activity.RESULT_OK){
             if (VersaoUtil.androidQ()){
                 //listaMusicaViewModel.carregarListaMusica()
-                playerMusicaViewModel.removerMusicaListaReproducao(playerMusicaViewModel.infoMusicaTocando.value)
+                //playerMusicaViewModel.removerMusicaListaReproducao(playerMusicaViewModel.infoMusicaTocando.value)
             }
         }
     }
@@ -45,7 +42,6 @@ class PlayerMusicaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPlayerMusicaBinding.inflate(layoutInflater, container, false)
-        playerMusicaViewModel.setMusica(args)
         configurarOnClicks()
         configurarObservers()
         return binding.root
@@ -57,36 +53,30 @@ class PlayerMusicaFragment : Fragment() {
     }
 
     private fun configurarObservers() {
-        playerMusicaViewModel.conectado.observe(viewLifecycleOwner){
+        /*playerMusicaViewModel.conectado.observe(viewLifecycleOwner){
             playerMusicaViewModel.iniciar()
-        }
+        }*/
         playerMusicaViewModel.infoMusicaTocando.observe(viewLifecycleOwner){
             playerMusicaViewModel.carregarDadosMusica(it)
         }
-        playerMusicaViewModel.duracaoMusica.observe(viewLifecycleOwner){
-            binding.seekBarProgressoMusica.max = it
+        playerMusicaViewModel.media.observe(viewLifecycleOwner){musica ->
+            binding.seekBarProgressoMusica.max = musica.duracao.toInt()
             val dataFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
-            binding.txtPlayerDuracaoMusica.text = dataFormat.format(it)
-        }
-        playerMusicaViewModel.nomeMusica.observe(viewLifecycleOwner){
-            binding.txtPlayerNomeMusica.text = it
-        }
-        playerMusicaViewModel.nomeAlbum.observe(viewLifecycleOwner){
-            binding.txtPlayerNomeAlbum.text = it
-        }
-        playerMusicaViewModel.imgCapa.observe(viewLifecycleOwner){
-            if (it != null){
-                Glide.with(this).load(it).into(binding.imgPlayerCapaMusica)
-            }else{
+            val imagem = FuncoesUtil.carregarCapaMusica(musica.data)
+            binding.txtPlayerDuracaoMusica.text = dataFormat.format(musica.duracao)
+            binding.txtPlayerNomeMusica.text = musica.nomeMusica
+            binding.txtPlayerNomeAlbum.text = musica.nomeAlbum
+            if (imagem != null )
+                Glide.with(this).load(imagem).into(binding.imgPlayerCapaMusica)
+            else
                 Glide.with(this).load(R.drawable.sem_album).into(binding.imgPlayerCapaMusica)
-            }
         }
         playerMusicaViewModel.progressoMusica.observe(viewLifecycleOwner){
             val dataFormat = SimpleDateFormat("mm:ss", Locale.getDefault())
             binding.txtProgressoMusica.text = dataFormat.format(it)
             binding.seekBarProgressoMusica.progress = it.toInt()
         }
-        playerMusicaViewModel.modoRepeticao.observe(viewLifecycleOwner){
+        /*playerMusicaViewModel.modoRepeticao.observe(viewLifecycleOwner){
             if (it == PlaybackStateCompat.REPEAT_MODE_ALL){
                 binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_todas)
             } else {
@@ -99,8 +89,8 @@ class PlayerMusicaFragment : Fragment() {
             } else {
                 binding.imgBtnAleatorio.setImageResource(R.drawable.icon_aleatorio_desativado)
             }
-        }
-        playerMusicaViewModel.tocandoMusica.observe(viewLifecycleOwner){
+        }*/
+        playerMusicaViewModel.estadoReproducao.observe(viewLifecycleOwner){
             if (it == PlaybackStateCompat.STATE_PLAYING){
                 binding.fabPlayPause.setImageResource(R.drawable.icon_pause)
             }else{
@@ -122,12 +112,12 @@ class PlayerMusicaFragment : Fragment() {
                 fabPlayPause.setImageResource(R.drawable.icon_pause)
                 playerMusicaViewModel.musicaAnterior()
             }
-            imgBtnAleatorio.setOnClickListener {
+            /*imgBtnAleatorio.setOnClickListener {
                 playerMusicaViewModel.modoAleatorio()
             }
             imgBtnRepetir.setOnClickListener{
                 playerMusicaViewModel.trocarModorepetirMusica()
-            }
+            }*/
             seekBarProgressoMusica.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
                 override fun onProgressChanged(seekBar: SeekBar?, position: Int, fromUser: Boolean) {
                     if (fromUser){
@@ -152,11 +142,13 @@ class PlayerMusicaFragment : Fragment() {
         menuPopUp.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.menu_player_musica_excluir -> {
-                    playerMusicaViewModel.deletarMusicaDispositivo(playerMusicaViewModel.media, intentSLDeletarArquivo)
+                    //playerMusicaViewModel.deletarMusicaDispositivo(playerMusicaViewModel.media, intentSLDeletarArquivo)
                     true
                 }
                 R.id.menu_player_velocidade_reproducao -> {
-                    abrirSheetListaMusica()
+                    //abrirSheetListaMusica()
+                    val dialogFragment = VelocidadePlaybackDialog()
+                    dialogFragment.show(parentFragmentManager, "velocidade")
                     true
                 }
                 else -> false
@@ -164,29 +156,4 @@ class PlayerMusicaFragment : Fragment() {
         }
         menuPopUp.show()
     }
-
-    private fun abrirSheetListaMusica() {
-        MaterialAlertDialogBuilder(requireContext()).apply {
-            var valorSlider: Float = SharedPreferenceUtil.velocidadeReproducaoMedia
-            val view = layoutInflater.inflate(R.layout.fragment_controle_velocidade_media, null)
-            val slide = view.findViewById<Slider>(R.id.slider_controle_velocidade)
-            slide.value = valorSlider
-            slide.addOnChangeListener { _, value, _ ->
-                valorSlider = value
-            }
-            setTitle(R.string.txt_titulo_dialog_velocidade_reproducao)
-            setView(view)
-            setCancelable(false)
-            setPositiveButton(R.string.btn_positivo_dialog_controle) { _, _ ->
-                playerMusicaViewModel.alterarVelocidadePlayer(valorSlider)
-            }
-            setNegativeButton(R.string.btn_negativo_dialog_controle){ _, _ ->}
-            setNeutralButton(R.string.btn_redefinir_dialog_controle){ _, _ ->
-                playerMusicaViewModel.alterarVelocidadePlayer(1.0f)
-            }
-            create()
-            show()
-        }
-    }
-
 }

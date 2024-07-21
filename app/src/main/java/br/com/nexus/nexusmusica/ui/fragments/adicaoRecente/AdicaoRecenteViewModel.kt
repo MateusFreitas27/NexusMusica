@@ -30,10 +30,7 @@ class AdicaoRecenteViewModel(private val repositorio: Repositorio): ViewModel() 
         SharedPreferenceUtil.modoReproducaoPlayerAnterior = SharedPreferenceUtil.modoReproducaoPlayer
         SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ADICOES_RECENTES
         val action =
-            AdicaoRecenteFragmentDirections.actionListaMusicasRecentesFragmentToPlayerMusicaFragment(
-                musica,
-                true
-            )
+            AdicaoRecenteFragmentDirections.actionListaMusicasRecentesFragmentToPlayerMusicaFragment()
         findNavController.navigate(action)
     }
 }

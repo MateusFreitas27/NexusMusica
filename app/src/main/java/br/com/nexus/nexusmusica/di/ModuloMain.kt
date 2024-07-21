@@ -21,6 +21,7 @@ import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.repositorio.RoomRepository
 import br.com.nexus.nexusmusica.room.NexusMusicaBancoDados
 import br.com.nexus.nexusmusica.services.MusicaConector
+import br.com.nexus.nexusmusica.services.PlayerControle
 import br.com.nexus.nexusmusica.ui.fragments.listaReproducaoAtual.ListaReproducaoAtualViewModel
 import br.com.nexus.nexusmusica.ui.fragments.musicasMaisOuvidas.MusicasMaisOuvidasViewModel
 import org.koin.android.ext.koin.androidContext
@@ -69,14 +70,18 @@ private val dataModulo = module {
         RealRoomRepositorio(get())
     } bind RoomRepository::class
 
-    single<MusicaConector> {
+    factory {
         MusicaConector(get())
-    }
+    } bind MusicaConector::class
+
+    single{
+        PlayerControle(get())
+    } bind PlayerControle::class
 }
 
 private val viewModelModulo = module {
     viewModel {
-        ListaMusicaViewModel(get())
+        ListaMusicaViewModel(get(), get())
     }
 
     viewModel {

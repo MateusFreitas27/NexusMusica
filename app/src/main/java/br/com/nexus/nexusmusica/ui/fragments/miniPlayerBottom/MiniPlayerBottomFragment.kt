@@ -47,10 +47,7 @@ class MiniPlayerBottomFragment : Fragment() {
         binding.cardPlayer.setOnClickListener {
             miniPlayerBottomFragmentViewModel.recomecaReproducao = false
             val action =
-                MiniPlayerBottomFragmentDirections.actionMiniPlayerBottomFragmentToPlayerMusicaFragment(
-                    miniPlayerBottomFragmentViewModel.musica,
-                    false
-                )
+                MiniPlayerBottomFragmentDirections.actionMiniPlayerBottomFragmentToPlayerMusicaFragment()
             findNavController().navigate(action)
         }
 

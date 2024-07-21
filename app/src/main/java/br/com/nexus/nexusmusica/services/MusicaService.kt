@@ -21,6 +21,7 @@ import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.SERVICE_TAG
 import br.com.nexus.nexusmusica.helper.EmbaralharHelper
 import br.com.nexus.nexusmusica.modelo.Musica
+import br.com.nexus.nexusmusica.notificacao.Notificacao
 import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.room.toHistoricoMusica
 import br.com.nexus.nexusmusica.util.FuncoesUtil
