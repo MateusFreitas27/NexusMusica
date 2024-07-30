@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +33,7 @@ class PlayerMusicaFragment : Fragment() {
         if (it.resultCode == Activity.RESULT_OK){
             if (VersaoUtil.androidQ()){
                 //listaMusicaViewModel.carregarListaMusica()
-                //playerMusicaViewModel.removerMusicaListaReproducao(playerMusicaViewModel.infoMusicaTocando.value)
+                playerMusicaViewModel.removerMusicaListaReproducao(playerMusicaViewModel.infoMusicaTocando.value)
             }
         }
     }
@@ -53,9 +54,6 @@ class PlayerMusicaFragment : Fragment() {
     }
 
     private fun configurarObservers() {
-        /*playerMusicaViewModel.conectado.observe(viewLifecycleOwner){
-            playerMusicaViewModel.iniciar()
-        }*/
         playerMusicaViewModel.infoMusicaTocando.observe(viewLifecycleOwner){
             playerMusicaViewModel.carregarDadosMusica(it)
         }
@@ -76,7 +74,7 @@ class PlayerMusicaFragment : Fragment() {
             binding.txtProgressoMusica.text = dataFormat.format(it)
             binding.seekBarProgressoMusica.progress = it.toInt()
         }
-        /*playerMusicaViewModel.modoRepeticao.observe(viewLifecycleOwner){
+        playerMusicaViewModel.modoRepeticao.observe(viewLifecycleOwner){
             if (it == PlaybackStateCompat.REPEAT_MODE_ALL){
                 binding.imgBtnRepetir.setImageResource(R.drawable.icon_repetir_todas)
             } else {
@@ -89,7 +87,7 @@ class PlayerMusicaFragment : Fragment() {
             } else {
                 binding.imgBtnAleatorio.setImageResource(R.drawable.icon_aleatorio_desativado)
             }
-        }*/
+        }
         playerMusicaViewModel.estadoReproducao.observe(viewLifecycleOwner){
             if (it == PlaybackStateCompat.STATE_PLAYING){
                 binding.fabPlayPause.setImageResource(R.drawable.icon_pause)
@@ -112,12 +110,12 @@ class PlayerMusicaFragment : Fragment() {
                 fabPlayPause.setImageResource(R.drawable.icon_pause)
                 playerMusicaViewModel.musicaAnterior()
             }
-            /*imgBtnAleatorio.setOnClickListener {
+            imgBtnAleatorio.setOnClickListener {
                 playerMusicaViewModel.modoAleatorio()
             }
             imgBtnRepetir.setOnClickListener{
                 playerMusicaViewModel.trocarModorepetirMusica()
-            }*/
+            }
             seekBarProgressoMusica.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
                 override fun onProgressChanged(seekBar: SeekBar?, position: Int, fromUser: Boolean) {
                     if (fromUser){
@@ -142,7 +140,7 @@ class PlayerMusicaFragment : Fragment() {
         menuPopUp.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.menu_player_musica_excluir -> {
-                    //playerMusicaViewModel.deletarMusicaDispositivo(playerMusicaViewModel.media, intentSLDeletarArquivo)
+                    playerMusicaViewModel.deletarMusicaDispositivo(intentSLDeletarArquivo)
                     true
                 }
                 R.id.menu_player_velocidade_reproducao -> {

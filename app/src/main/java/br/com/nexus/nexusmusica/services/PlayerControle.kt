@@ -47,7 +47,7 @@ class PlayerControle(private val conector: MusicaConector) {
         conector.removeMusica(description)
     }
 
-    fun modoRepetica(modo: Int){
+    fun modoRepeticao(modo: Int){
         conector.transportControls.setRepeatMode(modo)
     }
 

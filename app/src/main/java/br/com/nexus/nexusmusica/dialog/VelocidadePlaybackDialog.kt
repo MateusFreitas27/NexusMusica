@@ -30,11 +30,11 @@ class VelocidadePlaybackDialog: DialogFragment() {
             setTitle(R.string.txt_titulo_dialog_velocidade_reproducao)
             setCancelable(false)
             setPositiveButton(R.string.btn_positivo_dialog_controle) { _, _ ->
-                //playerMusicaViewModel.alterarVelocidadePlayer(valorSlider)
+                playerMusicaViewModel.alterarVelocidadePlayer(valorSlider)
             }
             setNegativeButton(R.string.btn_negativo_dialog_controle){ _, _ ->}
             setNeutralButton(R.string.btn_redefinir_dialog_controle){ _, _ ->
-               //playerMusicaViewModel.alterarVelocidadePlayer(1.0f)
+               playerMusicaViewModel.alterarVelocidadePlayer(1.0f)
             }
             setView(binding.root)
         }

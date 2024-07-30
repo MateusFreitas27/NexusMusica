@@ -1,15 +1,25 @@
 package br.com.nexus.nexusmusica.ui.fragments.playerMusica
 
+import android.app.RecoverableSecurityException
+import android.content.ContentUris
+import android.net.Uri
+import android.provider.MediaStore
 import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.PlaybackStateCompat
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import br.com.nexus.nexusmusica.APP
 import br.com.nexus.nexusmusica.DELAY_INTERVALO_PLAYER_POSICAO
+import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.services.PlayerControle
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
+import br.com.nexus.nexusmusica.util.VersaoUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -23,15 +33,13 @@ class PlayerMusicaViewModel(
     /*private val playbackState = musicaConector.playbackState
     val conectado = musicaConector.conectado*/
     val infoMusicaTocando = playerControle.musicaReproduzindo
-    val media: MutableLiveData<Musica> = MutableLiveData()
+    var media: MutableLiveData<Musica> = MutableLiveData()
     val progressoMusica: MutableLiveData<Long> = MutableLiveData()
     val estadoReproducao: MutableLiveData<Int> = MutableLiveData()
-    /*private var _modoRepeticao: MutableLiveData<Int> = MutableLiveData<Int>()
-    val modoRepeticao: MutableLiveData<Int> = _modoRepeticao
-    private var _modoAleatorio: MutableLiveData<Int> = MutableLiveData<Int>()
-    val modoAleatorio: MutableLiveData<Int> = _modoAleatorio
+    var modoRepeticao: MutableLiveData<Int> = MutableLiveData<Int>()
+    var modoAleatorio: MutableLiveData<Int> = MutableLiveData<Int>()
 
-    private var alterarInfoMusica = false
+    /*private var alterarInfoMusica = false
     private var novaReproducao: Boolean = false*/
 
     init {
@@ -40,8 +48,8 @@ class PlayerMusicaViewModel(
     }
 
     private fun inicializarModos() {
-        //_modoRepeticao.value = SharedPreferenceUtil.modoRepeticaoMusica
-        //_modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
+        modoRepeticao.value = SharedPreferenceUtil.modoRepeticaoMusica
+        modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
     }
 
     private fun atualizaPosicaoMediaPlayer() {
@@ -97,44 +105,44 @@ class PlayerMusicaViewModel(
         playerControle.alterarTempo(posicao)
     }
 
-    /*fun alterarVelocidadePlayer(valorSlider: Float) {
+    fun alterarVelocidadePlayer(valorSlider: Float) {
+        playerControle.alterarVelocidadeReproducao(valorSlider)
     }
 
     fun removerMusicaListaReproducao(media: MediaMetadataCompat?) {
-        //musicaConector.removeMusica(media?.description)
+        playerControle.removerListaReproducao(media?.description)
     }
 
     fun trocarModorepetirMusica() {
-        if (_modoRepeticao.value == PlaybackStateCompat.REPEAT_MODE_ALL) {
+        if (modoRepeticao.value == PlaybackStateCompat.REPEAT_MODE_ALL) {
             SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_NONE
-            _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_NONE
-            //musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE)
+            modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_NONE
+            playerControle.modoRepeticao(PlaybackStateCompat.REPEAT_MODE_NONE)
         } else {
             SharedPreferenceUtil.modoRepeticaoMusica = PlaybackStateCompat.REPEAT_MODE_ALL
-            _modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ALL
-            //musicaConector.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ALL)
+            modoRepeticao.value = PlaybackStateCompat.REPEAT_MODE_ALL
+            playerControle.modoRepeticao(PlaybackStateCompat.REPEAT_MODE_ALL)
         }
     }
 
     fun modoAleatorio() {
-        if (_modoAleatorio.value == PlaybackStateCompat.SHUFFLE_MODE_ALL) {
+        if (modoAleatorio.value == PlaybackStateCompat.SHUFFLE_MODE_ALL) {
             SharedPreferenceUtil.modoAleatorio = PlaybackStateCompat.SHUFFLE_MODE_NONE
-            _modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
-            SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ALEATORIO
-            //musicaConector.transportControls.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_NONE)
+            modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
+            playerControle.modoAleatorio(PlaybackStateCompat.SHUFFLE_MODE_NONE)
         } else {
             SharedPreferenceUtil.modoAleatorio = PlaybackStateCompat.SHUFFLE_MODE_ALL
-            _modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
-            //musicaConector.transportControls.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_ALL)
+            SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ALEATORIO
+            modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
+            playerControle.modoRepeticao(PlaybackStateCompat.SHUFFLE_MODE_ALL)
         }
     }
 
     fun deletarMusicaDispositivo(
-        musica: Musica,
         intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>
     ) {
         val uri: Uri =
-            ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, musica.id)
+            ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, media.value!!.id)
         val contentResolver = APP.getContext().contentResolver
         try {
             contentResolver.delete(uri, null, null)
@@ -157,7 +165,7 @@ class PlayerMusicaViewModel(
                 )
             }
         }
-    }*/
+    }
 
     fun abrirListaReproducaoAtual(findNavController: NavController) {
         val action = PlayerMusicaFragmentDirections.actionPlayerMusicaFragmentToListaReproducaoAtualFragment()
