@@ -20,6 +20,7 @@ import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.services.PlayerControle
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import br.com.nexus.nexusmusica.util.VersaoUtil
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -30,21 +31,28 @@ class PlayerMusicaViewModel(
    private val playerControle: PlayerControle,
     private val repositorio: Repositorio
 ) : ViewModel() {
-    /*private val playbackState = musicaConector.playbackState
-    val conectado = musicaConector.conectado*/
+    val plabackState = playerControle.playbackState
     val infoMusicaTocando = playerControle.musicaReproduzindo
     var media: MutableLiveData<Musica> = MutableLiveData()
     val progressoMusica: MutableLiveData<Long> = MutableLiveData()
-    val estadoReproducao: MutableLiveData<Int> = MutableLiveData()
     var modoRepeticao: MutableLiveData<Int> = MutableLiveData<Int>()
     var modoAleatorio: MutableLiveData<Int> = MutableLiveData<Int>()
-
-    /*private var alterarInfoMusica = false
-    private var novaReproducao: Boolean = false*/
+    private var retomarReproducao: Boolean = false
 
     init {
         atualizaPosicaoMediaPlayer()
         inicializarModos()
+        buscarDadosMusica()
+    }
+
+    private fun buscarDadosMusica(){
+        if (SharedPreferenceUtil.musicaTocando!!.isNotEmpty()){
+            val gson = Gson()
+            val json = SharedPreferenceUtil.musicaTocando
+            val musica = gson.fromJson(json, Musica::class.java)
+            media.value = musica
+            progressoMusica.value = SharedPreferenceUtil.tempoExecucaoMusica
+        }
     }
 
     private fun inicializarModos() {
@@ -55,13 +63,11 @@ class PlayerMusicaViewModel(
     private fun atualizaPosicaoMediaPlayer() {
         viewModelScope.launch {
             while (true) {
-                estadoReproducao.value = playerControle.estadoReproducao()
                 val pos = playerControle.tempoExecucao()
                 if (progressoMusica.value != pos){
                     progressoMusica.value = pos ?: SharedPreferenceUtil.tempoExecucaoMusica
                 }
                 delay(DELAY_INTERVALO_PLAYER_POSICAO)
-
             }
         }
     }
@@ -76,21 +82,13 @@ class PlayerMusicaViewModel(
         }
     }
 
-    /*fun setMusica(args: PlayerMusicaFragmentArgs) {
-        var musica = MusicaVazia
-        media = args.musica
-        if (SharedPreferenceUtil.musicaTocando!!.isNotEmpty()){
-            val gson = Gson()
-            val json = SharedPreferenceUtil.musicaTocando
-            musica = gson.fromJson(json, Musica::class.java)
-            _progressoMusica.value = SharedPreferenceUtil.tempoExecucaoMusica
-        }
-        novaReproducao = musica.id != media.id
-        atualizaMediaReproducao()
-    }*/
-
     fun playPlause() {
-        playerControle.playPause()
+        if (plabackState.value == null){
+            playerControle.retomarReproducao(media.value!!)
+            retomarReproducao = false
+        } else {
+            playerControle.playPause()
+        }
     }
 
     fun proximaMusica() {
@@ -134,7 +132,7 @@ class PlayerMusicaViewModel(
             SharedPreferenceUtil.modoAleatorio = PlaybackStateCompat.SHUFFLE_MODE_ALL
             SharedPreferenceUtil.modoReproducaoPlayer = REPRODUCAO_ALEATORIO
             modoAleatorio.value = SharedPreferenceUtil.modoAleatorio
-            playerControle.modoRepeticao(PlaybackStateCompat.SHUFFLE_MODE_ALL)
+            playerControle.modoAleatorio(PlaybackStateCompat.SHUFFLE_MODE_ALL)
         }
     }
 

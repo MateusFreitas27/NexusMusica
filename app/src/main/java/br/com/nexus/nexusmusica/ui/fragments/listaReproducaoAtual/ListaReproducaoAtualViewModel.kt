@@ -11,9 +11,10 @@ import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.services.MusicaConector
+import br.com.nexus.nexusmusica.services.PlayerControle
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 
-class ListaReproducaoAtualViewModel(private val musicaConector: MusicaConector): ViewModel(){
+class ListaReproducaoAtualViewModel(private val playerControle: PlayerControle): ViewModel(){
     var listaMusicas: MutableLiveData<MutableList<MediaBrowserCompat.MediaItem>> = MutableLiveData()
 
     private val subcribeCallback: SubscriptionCallback = object : SubscriptionCallback() {
@@ -26,32 +27,15 @@ class ListaReproducaoAtualViewModel(private val musicaConector: MusicaConector):
     }
 
     fun reproduzirMusicaSelecionada(mediaId: Long) {
-        musicaConector.transportControls.skipToQueueItem(mediaId)
+        playerControle.reproduzirMusicaSelecionada(mediaId)
     }
 
     fun carregarListaMusica() {
-        when (SharedPreferenceUtil.modoReproducaoPlayer) {
-            REPRODUCAO_MUSICAS -> musicaConector.subcribe(REPRODUCAO_MUSICAS, subcribeCallback)
-            REPRODUCAO_ALBUM -> musicaConector.subcribe(REPRODUCAO_ALBUM, subcribeCallback)
-            REPRODUCAO_ADICOES_RECENTES -> musicaConector.subcribe(
-                REPRODUCAO_ADICOES_RECENTES,
-                subcribeCallback
-            )
-
-            REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
-        }
+        playerControle.criarOuvinteListaMusica(subcribeCallback)
     }
 
     override fun onCleared() {
-        when (SharedPreferenceUtil.modoReproducaoPlayer) {
-            REPRODUCAO_MUSICAS -> musicaConector.unsubscribe(REPRODUCAO_MUSICAS, subcribeCallback)
-            REPRODUCAO_ALBUM -> musicaConector.unsubscribe(REPRODUCAO_ALBUM, subcribeCallback)
-            REPRODUCAO_ADICOES_RECENTES -> musicaConector.unsubscribe(
-                REPRODUCAO_ADICOES_RECENTES,
-                subcribeCallback
-            )
-            REPRODUCAO_ALEATORIO -> musicaConector.subcribe(REPRODUCAO_ALEATORIO, subcribeCallback)
-        }
+        playerControle.removeOuvinteListaMusica(subcribeCallback)
         super.onCleared()
     }
 }

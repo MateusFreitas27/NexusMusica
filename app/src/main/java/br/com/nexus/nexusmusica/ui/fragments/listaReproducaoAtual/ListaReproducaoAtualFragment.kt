@@ -33,7 +33,6 @@ class ListaReproducaoAtualFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listaReproducaoAtualViewModel.listaMusicas.observe(viewLifecycleOwner){
-            Log.d("lista", "onViewCreated: ${it.size}")
             with(binding.recyclerListaFilaReproducao){
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)

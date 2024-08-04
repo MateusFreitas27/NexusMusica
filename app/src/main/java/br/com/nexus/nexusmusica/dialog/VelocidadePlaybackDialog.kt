@@ -2,16 +2,12 @@ package br.com.nexus.nexusmusica.dialog
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.databinding.FragmentControleVelocidadeMediaBinding
 import br.com.nexus.nexusmusica.ui.fragments.playerMusica.PlayerMusicaViewModel
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class VelocidadePlaybackDialog: DialogFragment() {

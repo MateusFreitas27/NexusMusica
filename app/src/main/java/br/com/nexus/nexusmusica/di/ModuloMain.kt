@@ -70,7 +70,7 @@ private val dataModulo = module {
         RealRoomRepositorio(get())
     } bind RoomRepository::class
 
-    factory {
+    single {
         MusicaConector(get())
     } bind MusicaConector::class
 

@@ -5,10 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.nexus.nexusmusica.MusicaVazia
 import br.com.nexus.nexusmusica.modelo.Musica
-import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
-import br.com.nexus.nexusmusica.repositorio.RealMusicaRepositorio
 import br.com.nexus.nexusmusica.repositorio.Repositorio
-import br.com.nexus.nexusmusica.services.MusicaConector
+import br.com.nexus.nexusmusica.services.PlayerControle
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -16,12 +14,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MiniPlayerBottomFragmentViewModel(
-    private val musicaConector: MusicaConector,
+    private val playerControle: PlayerControle,
     private val musicaRepositorio: Repositorio
 ): ViewModel() {
-    val plabackState = musicaConector.playbackState
-    //val conector = musicaConector.conectado
-    val infoMusicaTocando = musicaConector.infoMusicaTocando
+    val plabackState = playerControle.playbackState
+    val infoMusicaTocando = playerControle.musicaReproduzindo
     val nomeMusica: MutableLiveData<String> = MutableLiveData<String>()
     val nomeAlbum: MutableLiveData<String> = MutableLiveData<String>()
     val capaMusica: MutableLiveData<String> = MutableLiveData<String>()
@@ -51,15 +48,10 @@ class MiniPlayerBottomFragmentViewModel(
     }
 
     fun retomarReproducao() {
-        if (recomecaReproducao){
-            musicaConector.transportControls.playFromMediaId(musica.id.toString(),null)
-            recomecaReproducao = false
+        if (plabackState.value == null){
+            playerControle.retomarReproducao(musica)
         } else {
-            if (plabackState.value?.state == 3){
-                musicaConector.transportControls.pause()
-            }else {
-                musicaConector.transportControls.play()
-            }
+            playerControle.playPause()
         }
     }
 }

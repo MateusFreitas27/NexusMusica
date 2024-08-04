@@ -31,7 +31,7 @@ class MusicaConector(val context: Context) {
         mediaController.removeQueueItem(description)
     }
 
-    fun subcribe(parentId: String, callback: MediaBrowserCompat.SubscriptionCallback){
+    fun subcribe(parentId: String, callback: SubscriptionCallback){
         mediaBrowser.subscribe(parentId, callback)
     }
 
@@ -45,7 +45,6 @@ class MusicaConector(val context: Context) {
             mediaController = MediaControllerCompat(context,mediaBrowser.sessionToken).apply {
                 registerCallback(mediaControllerCallback)
             }
-            _conectado.value = true
         }
 
         override fun onConnectionSuspended() {

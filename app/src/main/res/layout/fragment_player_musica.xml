@@ -74,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:clickable="true"
-        android:src="@drawable/icon_pause"
+        android:src="@drawable/icon_play"
         app:fabSize="normal"
         app:layout_constraintEnd_toStartOf="@+id/imgBtnProximaMusica"
         app:layout_constraintHorizontal_bias="0.5"

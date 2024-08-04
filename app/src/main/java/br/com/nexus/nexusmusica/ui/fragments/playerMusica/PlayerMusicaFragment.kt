@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -88,8 +87,8 @@ class PlayerMusicaFragment : Fragment() {
                 binding.imgBtnAleatorio.setImageResource(R.drawable.icon_aleatorio_desativado)
             }
         }
-        playerMusicaViewModel.estadoReproducao.observe(viewLifecycleOwner){
-            if (it == PlaybackStateCompat.STATE_PLAYING){
+        playerMusicaViewModel.plabackState.observe(viewLifecycleOwner){
+            if (it?.state == PlaybackStateCompat.STATE_PLAYING){
                 binding.fabPlayPause.setImageResource(R.drawable.icon_pause)
             }else{
                 binding.fabPlayPause.setImageResource(R.drawable.icon_play)
@@ -144,7 +143,6 @@ class PlayerMusicaFragment : Fragment() {
                     true
                 }
                 R.id.menu_player_velocidade_reproducao -> {
-                    //abrirSheetListaMusica()
                     val dialogFragment = VelocidadePlaybackDialog()
                     dialogFragment.show(parentFragmentManager, "velocidade")
                     true
