@@ -96,7 +96,11 @@
         android:id="@+id/historicoMusicaFragment"
         android:name="br.com.nexus.nexusmusica.ui.fragments.historicoMusica.HistoricoMusicaFragment"
         android:label="fragment_historico_musica"
-        tools:layout="@layout/fragment_historico_musica" />
+        tools:layout="@layout/fragment_historico_musica" >
+        <action
+            android:id="@+id/action_historicoMusicaFragment_to_playerMusicaFragment"
+            app:destination="@id/playerMusicaFragment" />
+    </fragment>
     <fragment
         android:id="@+id/maisOuvidasFragment"
         android:name="br.com.nexus.nexusmusica.ui.fragments.musicasMaisOuvidas.MusicasMaisOuvidasFragment"

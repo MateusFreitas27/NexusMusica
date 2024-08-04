@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import br.com.nexus.nexusmusica.APP
-import br.com.nexus.nexusmusica.DELAY_INTERVALO_PLAYER_POSICAO
-import br.com.nexus.nexusmusica.REPRODUCAO_ALEATORIO
+import br.com.nexus.nexusmusica.di.DELAY_INTERVALO_PLAYER_POSICAO
+import br.com.nexus.nexusmusica.di.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.services.PlayerControle

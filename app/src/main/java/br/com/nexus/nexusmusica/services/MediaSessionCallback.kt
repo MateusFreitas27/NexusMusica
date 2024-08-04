@@ -1,17 +1,18 @@
 package br.com.nexus.nexusmusica.services
 
 import android.os.Bundle
-import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
-import androidx.core.net.toUri
-import br.com.nexus.nexusmusica.REPRODUCAO_ADICOES_RECENTES
-import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
-import br.com.nexus.nexusmusica.REPRODUCAO_MUSICAS
+import br.com.nexus.nexusmusica.di.REPRODUCAO_ADICOES_RECENTES
+import br.com.nexus.nexusmusica.di.REPRODUCAO_ALBUM
+import br.com.nexus.nexusmusica.di.REPRODUCAO_HISTORICO
+import br.com.nexus.nexusmusica.di.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicaRepositorio
 import br.com.nexus.nexusmusica.repositorio.MusicasRecentesRepositorio
+import br.com.nexus.nexusmusica.repositorio.RoomRepository
+import br.com.nexus.nexusmusica.room.toMusica
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -21,6 +22,7 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
     private val musicaRepositorio by inject<MusicaRepositorio>()
     private val albumRepositorio by inject<AlbumRepositorio>()
     private val musicasRecentesRepositorio by inject<MusicasRecentesRepositorio>()
+    private val roomRepositorio by inject<RoomRepository>()
 
     override fun onPlay() {
         super.onPlay()
@@ -82,32 +84,41 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
         var posicaoMusicaId = 0
         when(SharedPreferenceUtil.modoReproducaoPlayer){
             REPRODUCAO_MUSICAS -> {
-                val musicas = ArrayList(musicaRepositorio.musicas())
-                for ( indice in musicas.indices){
-                    if (mediaId == musicas[indice].id.toString()){
+                val lista = ArrayList(musicaRepositorio.musicas())
+                for ((indice, musica) in lista.withIndex()){
+                    if (mediaId == musica.id.toString()){
                         posicaoMusicaId = indice
                     }
+                    listaMusicas.add(musica)
                 }
-                listaMusicas.addAll(musicas)
             }
             REPRODUCAO_ALBUM -> {
                 val idAlbum: Long = SharedPreferenceUtil.idAlbumMusica
-                val musicas = ArrayList(albumRepositorio.album(idAlbum).musicas)
-                for ( indice in musicas.indices){
-                    if (mediaId == musicas[indice].id.toString()){
+                val lista = ArrayList(albumRepositorio.album(idAlbum).musicas)
+                for ((indice, musica) in lista.withIndex()) {
+                    if (mediaId == musica.id.toString()) {
                         posicaoMusicaId = indice
                     }
+                    listaMusicas.add(musica)
                 }
-                listaMusicas.addAll(musicas)
             }
             REPRODUCAO_ADICOES_RECENTES -> {
-                val musicas = ArrayList(musicasRecentesRepositorio.musicasRecentes())
-                for ( indice in musicas.indices){
-                    if (mediaId == musicas[indice].id.toString()){
+                val lista = ArrayList(musicasRecentesRepositorio.musicasRecentes())
+                for ((indice, musica) in lista.withIndex()){
+                    if (mediaId == musica.id.toString()){
                         posicaoMusicaId = indice
                     }
+                    listaMusicas.add(musica)
                 }
-                listaMusicas.addAll(musicas)
+            }
+            REPRODUCAO_HISTORICO -> {
+                val lista = ArrayList(roomRepositorio.listaHistorico())
+                for ((indice, musica) in lista.withIndex()){
+                    if (mediaId == musica.id.toString()){
+                        posicaoMusicaId = indice
+                    }
+                    listaMusicas.add(musica.toMusica())
+                }
             }
         }
         musicaService.abrirFilaReproducao(listaMusicas, posicaoMusicaId)

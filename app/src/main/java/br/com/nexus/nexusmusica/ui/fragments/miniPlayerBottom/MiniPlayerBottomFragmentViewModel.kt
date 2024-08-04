@@ -3,7 +3,7 @@ package br.com.nexus.nexusmusica.ui.fragments.miniPlayerBottom
 import android.support.v4.media.MediaMetadataCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import br.com.nexus.nexusmusica.MusicaVazia
+import br.com.nexus.nexusmusica.di.MusicaVazia
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.Repositorio
 import br.com.nexus.nexusmusica.services.PlayerControle

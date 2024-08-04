@@ -1,4 +1,4 @@
-package br.com.nexus.nexusmusica
+package br.com.nexus.nexusmusica.di
 
 const val ALBUM_ORDENADO = "album_ordem_ordenacao"
 const val ALBUM_DETALHE_MUSICA_ORDEM_ORDENACAO = "album_detalhe_musica_ordem_ordenacao"

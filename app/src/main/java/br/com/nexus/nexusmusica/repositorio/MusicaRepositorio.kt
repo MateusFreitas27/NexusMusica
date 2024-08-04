@@ -5,9 +5,9 @@ import android.database.Cursor
 import android.provider.MediaStore
 import android.provider.MediaStore.Audio.AudioColumns
 import androidx.core.database.getStringOrNull
-import br.com.nexus.nexusmusica.E_MUSICA
-import br.com.nexus.nexusmusica.MusicaVazia
-import br.com.nexus.nexusmusica.baseProjecao
+import br.com.nexus.nexusmusica.di.E_MUSICA
+import br.com.nexus.nexusmusica.di.MusicaVazia
+import br.com.nexus.nexusmusica.di.baseProjecao
 import br.com.nexus.nexusmusica.helper.OrdemOrdenacao
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
@@ -17,7 +17,6 @@ import java.text.Collator
 
 interface MusicaRepositorio{
     fun musicas(): List<Musica>
-
     fun musicasAleatorias(): List<Musica>
     fun musicas(cursor: Cursor?): List<Musica>
     fun musicasOrdenadas(cursor: Cursor?): List<Musica>

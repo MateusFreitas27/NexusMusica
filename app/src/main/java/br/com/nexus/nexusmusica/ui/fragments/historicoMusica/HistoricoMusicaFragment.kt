@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.adapter.AdapterHistoricoMusicas
 import br.com.nexus.nexusmusica.databinding.FragmentHistoricoMusicaBinding
@@ -46,7 +47,9 @@ class HistoricoMusicaFragment : Fragment() {
             with(binding.recyclerListaHistoricoMusicas){
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
-                adapter = AdapterHistoricoMusicas(it)
+                adapter = AdapterHistoricoMusicas(it){
+                    historicoMusicaViewModel.abrirPlayerMusica(findNavController(), it)
+                }
             }
         }
     }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import br.com.nexus.nexusmusica.REPRODUCAO_ALBUM
+import br.com.nexus.nexusmusica.di.REPRODUCAO_ALBUM
 import br.com.nexus.nexusmusica.modelo.Album
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil

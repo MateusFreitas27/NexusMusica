@@ -18,7 +18,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.media.MediaBrowserServiceCompat
 import br.com.nexus.nexusmusica.R
-import br.com.nexus.nexusmusica.SERVICE_TAG
+import br.com.nexus.nexusmusica.di.SERVICE_TAG
 import br.com.nexus.nexusmusica.helper.EmbaralharHelper
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.notificacao.Notificacao

@@ -1,12 +1,11 @@
 package br.com.nexus.nexusmusica.notificacao
 
 import android.content.pm.ServiceInfo
-import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 import androidx.navigation.NavDeepLinkBuilder
-import br.com.nexus.nexusmusica.NOTIFICACAO_MUSICA_CANAL_ID
-import br.com.nexus.nexusmusica.NOTIFICACAO_MUSICA_ID
+import br.com.nexus.nexusmusica.di.NOTIFICACAO_MUSICA_CANAL_ID
+import br.com.nexus.nexusmusica.di.NOTIFICACAO_MUSICA_ID
 import br.com.nexus.nexusmusica.R
 import br.com.nexus.nexusmusica.services.MusicaService
 import br.com.nexus.nexusmusica.util.VersaoUtil

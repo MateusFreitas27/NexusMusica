@@ -4,6 +4,7 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import br.com.nexus.nexusmusica.di.NOTIFICACAO_MUSICA_CANAL_ID
 import br.com.nexus.nexusmusica.di.appModulos
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin

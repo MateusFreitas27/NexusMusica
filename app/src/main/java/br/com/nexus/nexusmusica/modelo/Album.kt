@@ -2,7 +2,7 @@ package br.com.nexus.nexusmusica.modelo
 
 import android.os.Parcel
 import android.os.Parcelable
-import br.com.nexus.nexusmusica.MusicaVazia
+import br.com.nexus.nexusmusica.di.MusicaVazia
 
 
 class Album(val id: Long, val musicas: List<Musica>) : Parcelable {

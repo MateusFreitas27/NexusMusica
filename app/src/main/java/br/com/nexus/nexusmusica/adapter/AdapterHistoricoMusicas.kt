@@ -11,7 +11,8 @@ import br.com.nexus.nexusmusica.util.FuncoesUtil
 import com.bumptech.glide.Glide
 
 class AdapterHistoricoMusicas(
-    lista: MutableList<Musica>
+    lista: MutableList<Musica>,
+    private val reproduzirMusica: (Musica) -> Unit
 ): RecyclerView.Adapter<AdapterHistoricoMusicas.HistoricoMusicaViewHodel>() {
     private var listaMusica: MutableList<Musica> = lista
 
@@ -36,6 +37,10 @@ class AdapterHistoricoMusicas(
         holder.txtNomeAlbumHistorico.text = musica.nomeAlbum
         val imagem = FuncoesUtil.carregarCapaMusica(musica)
         Glide.with(holder.itemView).load(imagem).centerCrop().dontAnimate().into(holder.imagemCapaHistorico)
+
+        holder.itemView.setOnClickListener {
+            reproduzirMusica(musica)
+        }
     }
 
     inner class HistoricoMusicaViewHodel(binding: AdapterListaHistoricoMusicaBinding) :

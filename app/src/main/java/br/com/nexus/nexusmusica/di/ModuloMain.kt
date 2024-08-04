@@ -116,6 +116,7 @@ private val viewModelModulo = module {
 
     viewModel {
         HistoricoMusicaViewModel(
+            get(),
             get()
         )
     }
