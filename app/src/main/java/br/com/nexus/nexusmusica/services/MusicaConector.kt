@@ -12,8 +12,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class MusicaConector(val context: Context) {
-    private val _conectado = MutableLiveData<Boolean>()
-    val conectado: LiveData<Boolean> = _conectado
+    val conectado = MutableLiveData<Boolean>()
     private val _playbackState = MutableLiveData<PlaybackStateCompat?>()
     val playbackState: LiveData<PlaybackStateCompat?> = _playbackState
     private val _infoMusicaTocando = MutableLiveData<MediaMetadataCompat?>()
@@ -49,12 +48,12 @@ class MusicaConector(val context: Context) {
 
         override fun onConnectionSuspended() {
             super.onConnectionSuspended()
-            _conectado.value = false
+            this@MusicaConector.conectado.value = false
         }
 
         override fun onConnectionFailed() {
             super.onConnectionFailed()
-            _conectado.value = false
+            this@MusicaConector.conectado.value = false
         }
     }
 

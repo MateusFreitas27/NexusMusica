@@ -23,7 +23,6 @@ class MiniPlayerBottomFragmentViewModel(
     val nomeAlbum: MutableLiveData<String> = MutableLiveData<String>()
     val capaMusica: MutableLiveData<String> = MutableLiveData<String>()
     var musica: Musica = MusicaVazia
-    var recomecaReproducao: Boolean = true
 
     fun init(){
         if (SharedPreferenceUtil.musicaTocando!!.isNotEmpty()){

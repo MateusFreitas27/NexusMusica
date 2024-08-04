@@ -1,14 +1,11 @@
 package br.com.nexus.nexusmusica.ui.fragments.listaReproducaoAtual
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import br.com.nexus.nexusmusica.MusicaVazia
 import br.com.nexus.nexusmusica.adapter.AdapterFilaReproducao
 import br.com.nexus.nexusmusica.databinding.FragmentListaReproducaoAtualBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel

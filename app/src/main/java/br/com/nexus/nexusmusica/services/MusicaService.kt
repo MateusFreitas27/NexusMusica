@@ -56,6 +56,7 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
         val tipoObjeto = object : TypeToken<ArrayList<Musica>>() {}.type
         listaMusicasOriginal = gson.fromJson(lista, tipoObjeto)
         listaMusicasReproducao = listaMusicasOriginal
+        posicaoAtualReproducao = SharedPreferenceUtil.posicaoReproducaoLista
     }
 
     override fun onGetRoot(
