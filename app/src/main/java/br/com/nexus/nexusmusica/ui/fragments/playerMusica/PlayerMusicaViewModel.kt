@@ -17,6 +17,7 @@ import br.com.nexus.nexusmusica.di.DELAY_INTERVALO_PLAYER_POSICAO
 import br.com.nexus.nexusmusica.di.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.Repositorio
+import br.com.nexus.nexusmusica.room.toHistoricoMusica
 import br.com.nexus.nexusmusica.services.PlayerControle
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import br.com.nexus.nexusmusica.util.VersaoUtil
@@ -168,5 +169,11 @@ class PlayerMusicaViewModel(
     fun abrirListaReproducaoAtual(findNavController: NavController) {
         val action = PlayerMusicaFragmentDirections.actionPlayerMusicaFragmentToListaReproducaoAtualFragment()
         findNavController.navigate(action)
+    }
+
+    fun apagarHistoricoMusica(){
+        CoroutineScope(Dispatchers.IO).launch {
+            repositorio.excluirMediaTabela(media.value!!.toHistoricoMusica())
+        }
     }
 }

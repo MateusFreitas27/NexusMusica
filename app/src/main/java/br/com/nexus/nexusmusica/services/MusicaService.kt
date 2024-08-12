@@ -52,11 +52,13 @@ class MusicaService: MediaBrowserServiceCompat(), MediaPlayer.OnCompletionListen
 
     init {
         val gson = Gson()
-        val lista = SharedPreferenceUtil.listaReproducao
+        val lista = SharedPreferenceUtil.listaReproducao.toString()
         val tipoObjeto = object : TypeToken<ArrayList<Musica>>() {}.type
-        listaMusicasOriginal = gson.fromJson(lista, tipoObjeto)
-        listaMusicasReproducao = listaMusicasOriginal
-        posicaoAtualReproducao = SharedPreferenceUtil.posicaoReproducaoLista
+        if (lista.isNotEmpty()){
+            listaMusicasOriginal = gson.fromJson(lista, tipoObjeto)
+            listaMusicasReproducao = listaMusicasOriginal
+            posicaoAtualReproducao = SharedPreferenceUtil.posicaoReproducaoLista
+        }
     }
 
     override fun onGetRoot(

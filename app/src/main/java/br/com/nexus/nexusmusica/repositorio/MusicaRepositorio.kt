@@ -110,19 +110,19 @@ class RealMusicaRepositorio(private val context: Context): MusicaRepositorio {
     }
 
     private fun recuperarInformacaoMusica(cursor: Cursor): Musica {
-        val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns._ID))
-        val titulo = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE))
-        val numMusica = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TRACK))
-        val anoMusica = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.YEAR))
-        val duracao = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DURATION))
-        val caminhoMusica = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DATA))
-        val dataModificacao = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DATE_MODIFIED))
-        val dataAdicao = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DATE_ADDED))
-        val albumid = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ALBUM_ID))
-        val nomeAlbum = cursor.getStringOrNull(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ALBUM))
-        val artistaId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST_ID))
-        val nomeArtista = cursor.getStringOrNull(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.ARTIST))
-        val composicao = cursor.getStringOrNull(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.COMPOSER))
+        val id = cursor.getLong(cursor.getColumnIndexOrThrow(AudioColumns._ID))
+        val titulo = cursor.getString(cursor.getColumnIndexOrThrow(AudioColumns.TITLE))
+        val numMusica = cursor.getInt(cursor.getColumnIndexOrThrow(AudioColumns.TRACK))
+        val anoMusica = cursor.getInt(cursor.getColumnIndexOrThrow(AudioColumns.YEAR))
+        val duracao = cursor.getLong(cursor.getColumnIndexOrThrow(AudioColumns.DURATION))
+        val caminhoMusica = cursor.getString(cursor.getColumnIndexOrThrow(AudioColumns.DATA))
+        val dataModificacao = cursor.getLong(cursor.getColumnIndexOrThrow(AudioColumns.DATE_MODIFIED))
+        val dataAdicao = cursor.getLong(cursor.getColumnIndexOrThrow(AudioColumns.DATE_ADDED))
+        val albumid = cursor.getLong(cursor.getColumnIndexOrThrow(AudioColumns.ALBUM_ID))
+        val nomeAlbum = cursor.getStringOrNull(cursor.getColumnIndexOrThrow(AudioColumns.ALBUM))
+        val artistaId = cursor.getLong(cursor.getColumnIndexOrThrow(AudioColumns.ARTIST_ID))
+        val nomeArtista = cursor.getStringOrNull(cursor.getColumnIndexOrThrow(AudioColumns.ARTIST))
+        val composicao = cursor.getStringOrNull(cursor.getColumnIndexOrThrow(AudioColumns.COMPOSER))
         val albumArtista = "album_artista"
         return Musica(id, titulo, numMusica, anoMusica, duracao, caminhoMusica, dataModificacao, dataAdicao, albumid, nomeAlbum?: "", artistaId, nomeArtista ?:"", composicao, albumArtista)
     }

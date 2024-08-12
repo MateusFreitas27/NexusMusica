@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.adapter.AdapterListaMusica
 import br.com.nexus.nexusmusica.databinding.FragmentListaMusicaBinding
+import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.VersaoUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,15 +21,17 @@ class ListaMusicaFragment : Fragment() {
     private var _binding: FragmentListaMusicaBinding? = null
     private val binding get() = _binding!!
     private val listaMusicaViewModel: ListaMusicaViewModel by viewModel()
-    private val intentSLDeletarArquivo: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(
-        ActivityResultContracts.StartIntentSenderForResult()){
-        if (it.resultCode == Activity.RESULT_OK){
-            if (VersaoUtil.androidQ()){
-                listaMusicaViewModel.carregarListaMusica()
+    private var adapterListaMusica: AdapterListaMusica? = null
+    private val intentSLDeletarArquivo: ActivityResultLauncher<IntentSenderRequest> =
+        registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                if (VersaoUtil.androidQ()) {
+                    listaMusicaViewModel.carregarListaMusica()
+                }
             }
         }
-    }
-    private var adapterListaMusica: AdapterListaMusica? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,14 +59,22 @@ class ListaMusicaFragment : Fragment() {
     }
 
     private fun iniciarObservers() {
-        listaMusicaViewModel.listaMusicas.observe(viewLifecycleOwner) {lista ->
-            with(binding.recyclerViewListaMusica){
+        listaMusicaViewModel.listaMusicas.observe(viewLifecycleOwner) { lista ->
+            with(binding.recyclerViewListaMusica) {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
-                adapter= AdapterListaMusica(lista, intentSLDeletarArquivo) {musica ->
-                    listaMusicaViewModel.abrirPlayerMusica(findNavController(), musica)
-                }
+                adapter = AdapterListaMusica(
+                    lista,
+                    intentSLDeletarArquivo,
+                    reproduzirMusica = {musica ->
+                        listaMusicaViewModel.abrirPlayerMusica(findNavController(), musica)
+                    },
+                    deletarMediaHistorico = {musica ->
+                        listaMusicaViewModel.apagarMediaHistorico(musica)
+                    }
+                )
             }
         }
     }
+
 }

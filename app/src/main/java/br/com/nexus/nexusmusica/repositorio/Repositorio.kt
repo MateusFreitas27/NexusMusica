@@ -15,6 +15,7 @@ interface Repositorio {
     suspend fun listaHistorico(): List<Musica>
     suspend fun salvarHistorico(musica: HistoricoMusica)
     suspend fun listarMaisOuvidas(): List<HistoricoMusica>
+    suspend fun excluirMediaTabela(musica: HistoricoMusica)
 }
 
 class RealRepositorio(
@@ -45,7 +46,7 @@ class RealRepositorio(
         listaHistorico.forEach { historico ->
             listaMusica.add(historico.toMusica())
         }
-        return listaMusica.toList()
+        return listaMusica.toList().reversed()
     }
 
     override suspend fun salvarHistorico(musica: HistoricoMusica) {
@@ -62,5 +63,9 @@ class RealRepositorio(
             listaMaisOuvidas.add(musica.toHistoricoMusica())
         }
         return listaMaisOuvidas.sortedByDescending { it.qtdVezesTocadas }.toList()
+    }
+
+    override suspend fun excluirMediaTabela(musica: HistoricoMusica) {
+        roomRepositorio.apagarMediaHistorico(musica.toHistoricoEntity())
     }
 }

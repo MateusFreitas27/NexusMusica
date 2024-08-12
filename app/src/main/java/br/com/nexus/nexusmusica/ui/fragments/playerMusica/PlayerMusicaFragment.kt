@@ -31,8 +31,8 @@ class PlayerMusicaFragment : Fragment() {
         ActivityResultContracts.StartIntentSenderForResult()){
         if (it.resultCode == Activity.RESULT_OK){
             if (VersaoUtil.androidQ()){
-                //listaMusicaViewModel.carregarListaMusica()
                 playerMusicaViewModel.removerMusicaListaReproducao(playerMusicaViewModel.infoMusicaTocando.value)
+                playerMusicaViewModel.apagarHistoricoMusica()
             }
         }
     }

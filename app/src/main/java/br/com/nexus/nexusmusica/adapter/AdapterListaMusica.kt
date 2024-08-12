@@ -22,7 +22,8 @@ import com.bumptech.glide.Glide
 class AdapterListaMusica(
     lista: MutableList<Musica>,
     private val intentSenderLauncher: ActivityResultLauncher<IntentSenderRequest>,
-    private val reproduzirMusica: (Musica) -> Unit
+    private val reproduzirMusica: (Musica) -> Unit,
+    private val deletarMediaHistorico: (Musica) -> Unit
 ): RecyclerView.Adapter<AdapterListaMusica.MusicaViewHodel>() {
     private var posicao: Int = -1
     private var listaMusica: MutableList<Musica> = lista
@@ -83,6 +84,7 @@ class AdapterListaMusica(
                 contentResolver.delete(uri, null, null)
                 listaMusica.removeAt(posicao)
                 notifyItemRemoved(posicao)
+                deletarMediaHistorico(musica)
             }catch (e: SecurityException){
                 val intentSender = when{
                     VersaoUtil.androidR() -> {
@@ -97,8 +99,8 @@ class AdapterListaMusica(
                 intentSender?.let {sender ->
                     intentSenderLauncher.launch(
                         IntentSenderRequest.Builder(sender).build()
-
                     )
+                    deletarMediaHistorico(musica)
                 }
             }
         }

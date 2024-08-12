@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import br.com.nexus.nexusmusica.di.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.Repositorio
+import br.com.nexus.nexusmusica.room.toHistoricoMusica
 import br.com.nexus.nexusmusica.services.PlayerControle
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +40,12 @@ class ListaMusicaViewModel(
         val action =
             ListaMusicaFragmentDirections.actionMenuItemMusicaToPlayerMusicaFragment()
         findNavController.navigate(action)
+    }
+
+    fun apagarMediaHistorico(musica: Musica) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repositorio.excluirMediaTabela(musica.toHistoricoMusica())
+        }
     }
 
 }
