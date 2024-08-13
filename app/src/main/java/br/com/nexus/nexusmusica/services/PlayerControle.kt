@@ -7,6 +7,7 @@ import br.com.nexus.nexusmusica.di.REPRODUCAO_ADICOES_RECENTES
 import br.com.nexus.nexusmusica.di.REPRODUCAO_ALBUM
 import br.com.nexus.nexusmusica.di.REPRODUCAO_ALEATORIO
 import br.com.nexus.nexusmusica.di.REPRODUCAO_HISTORICO
+import br.com.nexus.nexusmusica.di.REPRODUCAO_MAIS_OUVIDAS
 import br.com.nexus.nexusmusica.di.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.SharedPreferenceUtil
@@ -77,6 +78,7 @@ class PlayerControle(private val conectorServiceMusica: MusicaConector) {
             REPRODUCAO_ADICOES_RECENTES -> conectorServiceMusica.subcribe(REPRODUCAO_ADICOES_RECENTES, callback)
             REPRODUCAO_ALEATORIO -> conectorServiceMusica.subcribe(REPRODUCAO_ALEATORIO, callback)
             REPRODUCAO_HISTORICO -> conectorServiceMusica.subcribe(REPRODUCAO_HISTORICO, callback)
+            REPRODUCAO_MAIS_OUVIDAS -> conectorServiceMusica.subcribe(REPRODUCAO_MAIS_OUVIDAS, callback)
         }
     }
 
@@ -87,6 +89,7 @@ class PlayerControle(private val conectorServiceMusica: MusicaConector) {
             REPRODUCAO_ADICOES_RECENTES -> conectorServiceMusica.unsubscribe(REPRODUCAO_ADICOES_RECENTES, callback)
             REPRODUCAO_ALEATORIO -> conectorServiceMusica.unsubscribe(REPRODUCAO_ALEATORIO, callback)
             REPRODUCAO_HISTORICO -> conectorServiceMusica.unsubscribe(REPRODUCAO_HISTORICO, callback)
+            REPRODUCAO_MAIS_OUVIDAS -> conectorServiceMusica.subcribe(REPRODUCAO_MAIS_OUVIDAS, callback)
         }
     }
 }

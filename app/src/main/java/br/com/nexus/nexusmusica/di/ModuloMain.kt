@@ -122,7 +122,10 @@ private val viewModelModulo = module {
     }
 
     viewModel{
-        MusicasMaisOuvidasViewModel(get())
+        MusicasMaisOuvidasViewModel(
+            get(),
+            get()
+        )
     }
 
     viewModel{

@@ -105,7 +105,11 @@
         android:id="@+id/maisOuvidasFragment"
         android:name="br.com.nexus.nexusmusica.ui.fragments.musicasMaisOuvidas.MusicasMaisOuvidasFragment"
         android:label="fragment_mais_ouvidas"
-        tools:layout="@layout/fragment_mais_ouvidas" />
+        tools:layout="@layout/fragment_mais_ouvidas" >
+        <action
+            android:id="@+id/action_maisOuvidasFragment_to_playerMusicaFragment"
+            app:destination="@id/playerMusicaFragment" />
+    </fragment>
     <fragment
         android:id="@+id/listaReproducaoAtualFragment"
         android:name="br.com.nexus.nexusmusica.ui.fragments.listaReproducaoAtual.ListaReproducaoAtualFragment"

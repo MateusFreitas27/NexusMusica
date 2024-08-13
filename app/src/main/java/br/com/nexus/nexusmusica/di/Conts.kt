@@ -15,6 +15,7 @@ const val REPRODUCAO_ALBUM = "album"
 const val REPRODUCAO_ALEATORIO = "aleatorio"
 const val REPRODUCAO_ADICOES_RECENTES = "adicoesRecentes"
 const val REPRODUCAO_HISTORICO = "historico"
+const val REPRODUCAO_MAIS_OUVIDAS = "maisOuvidas"
 const val TAG_MODAL_LISTA_MUSICAS = "modal_lista_musica_player"
 const val TAG_MODAL_VELOCIDADE_MEDIA = "modal_controle_velocidade_media"
 val baseProjecao = arrayOf(

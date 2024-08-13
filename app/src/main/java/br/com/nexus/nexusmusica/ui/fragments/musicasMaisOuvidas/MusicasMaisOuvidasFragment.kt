@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.adapter.AdapterListaMaisOuvidas
 import br.com.nexus.nexusmusica.databinding.FragmentMaisOuvidasBinding
@@ -45,7 +46,8 @@ class MusicasMaisOuvidasFragment : Fragment() {
         musicasMaisOuvidasViewModel.listaMusica.observe(viewLifecycleOwner){ lista ->
             with(binding.recyclerListaMusicasMaisOuvidas){
                 layoutManager = LinearLayoutManager(context)
-                adapter = AdapterListaMaisOuvidas(lista){
+                adapter = AdapterListaMaisOuvidas(lista){musica ->
+                    musicasMaisOuvidasViewModel.abrirPlayer(findNavController(),musica)
                 }
             }
         }

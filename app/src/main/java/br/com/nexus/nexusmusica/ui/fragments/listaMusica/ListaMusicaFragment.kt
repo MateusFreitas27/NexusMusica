@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.nexus.nexusmusica.adapter.AdapterListaMusica
 import br.com.nexus.nexusmusica.databinding.FragmentListaMusicaBinding
-import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.util.VersaoUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

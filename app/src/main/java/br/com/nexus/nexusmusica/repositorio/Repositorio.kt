@@ -14,7 +14,7 @@ interface Repositorio {
     suspend fun consultaMusica(id:Long): Musica
     suspend fun listaHistorico(): List<Musica>
     suspend fun salvarHistorico(musica: HistoricoMusica)
-    suspend fun listarMaisOuvidas(): List<HistoricoMusica>
+    suspend fun listarMaisOuvidas(): List<Musica>
     suspend fun excluirMediaTabela(musica: HistoricoMusica)
 }
 
@@ -56,13 +56,14 @@ class RealRepositorio(
         roomRepositorio.SalvarHistorico(musica.toHistoricoEntity())
     }
 
-    override suspend fun listarMaisOuvidas(): List<HistoricoMusica> {
+    override suspend fun listarMaisOuvidas(): List<Musica> {
         val lista = roomRepositorio.listarMaisOuvidas()
-        val listaMaisOuvidas: MutableList<HistoricoMusica> = arrayListOf()
+        val listaMaisOuvidas: MutableList<Musica> = arrayListOf()
+        lista.sortedByDescending { it.qtdVezesTocadas }
         lista.forEach { musica ->
-            listaMaisOuvidas.add(musica.toHistoricoMusica())
+            listaMaisOuvidas.add(musica.toMusica())
         }
-        return listaMaisOuvidas.sortedByDescending { it.qtdVezesTocadas }.toList()
+        return listaMaisOuvidas
     }
 
     override suspend fun excluirMediaTabela(musica: HistoricoMusica) {

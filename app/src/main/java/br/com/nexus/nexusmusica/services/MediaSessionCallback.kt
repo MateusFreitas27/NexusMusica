@@ -6,6 +6,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import br.com.nexus.nexusmusica.di.REPRODUCAO_ADICOES_RECENTES
 import br.com.nexus.nexusmusica.di.REPRODUCAO_ALBUM
 import br.com.nexus.nexusmusica.di.REPRODUCAO_HISTORICO
+import br.com.nexus.nexusmusica.di.REPRODUCAO_MAIS_OUVIDAS
 import br.com.nexus.nexusmusica.di.REPRODUCAO_MUSICAS
 import br.com.nexus.nexusmusica.modelo.Musica
 import br.com.nexus.nexusmusica.repositorio.AlbumRepositorio
@@ -113,6 +114,15 @@ class MediaSessionCallback(private val musicaService: MusicaService): MediaSessi
             }
             REPRODUCAO_HISTORICO -> {
                 val lista = ArrayList(roomRepositorio.listaHistorico())
+                for ((indice, musica) in lista.withIndex()){
+                    if (mediaId == musica.id.toString()){
+                        posicaoMusicaId = indice
+                    }
+                    listaMusicas.add(musica.toMusica())
+                }
+            }
+            REPRODUCAO_MAIS_OUVIDAS -> {
+                val lista = ArrayList(roomRepositorio.listarMaisOuvidas())
                 for ((indice, musica) in lista.withIndex()){
                     if (mediaId == musica.id.toString()){
                         posicaoMusicaId = indice
